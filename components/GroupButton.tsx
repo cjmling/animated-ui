@@ -19,9 +19,11 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   selectedIndex,
 }) => {
   const GAP = 2; // Gap between container and button
+  const BUTTONS_CONTAINER_HEIGHT = 200;
   const BUTTONS_CONTAINER_WIDTH = 350;
   const BACKGROUND_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length - GAP * 2;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
+  const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT - GAP * 2;
 
   const translateX = useSharedValue<number>(0);
 
@@ -37,10 +39,16 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
     width: BUTTON_WIDTH,
+    height: BUTTON_HEIGHT,
   }));
 
   return (
-    <View style={[styles.container, { width: BUTTONS_CONTAINER_WIDTH }]}>
+    <View
+      style={[
+        styles.container,
+        { width: BUTTONS_CONTAINER_WIDTH, height: BUTTONS_CONTAINER_HEIGHT },
+      ]}
+    >
       <Animated.View style={[styles.slidingBackground, animatedStyles]} />
       {buttons.map((button, index) => (
         <TouchableOpacity
@@ -49,6 +57,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
             styles.button,
             {
               width: BUTTON_WIDTH,
+              height: BUTTON_HEIGHT,
             },
           ]}
           onPress={() => handlePress(index)}
@@ -71,6 +80,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 20,
+    justifyContent: "center",
   },
   unselectedButton: {
     backgroundColor: "transparent",
@@ -81,7 +91,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   slidingBackground: {
-    height: 200,
+    height: 50,
     backgroundColor: "blue",
     position: "absolute",
   },
