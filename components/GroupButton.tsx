@@ -19,8 +19,8 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   selectedIndex,
 }) => {
   const GAP = 10; // Gap between container and button
-  const BORDER_RADIUS = 10;
-  const BUTTONS_CONTAINER_HEIGHT = 200;
+  const BORDER_RADIUS = 8;
+  const BUTTONS_CONTAINER_HEIGHT = 50;
   const BUTTONS_CONTAINER_WIDTH = 350;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
   const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT;
@@ -32,8 +32,6 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
       damping: 10,
       stiffness: 100,
     });
-
-    console.log("translateX.value", translateX.value);
   };
 
   const animatedStyles = useAnimatedStyle(() => ({
@@ -100,6 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "black",
+    textAlign: "center",
   },
   slidingBackground: {
     backgroundColor: "blue",
