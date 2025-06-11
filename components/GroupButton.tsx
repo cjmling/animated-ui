@@ -20,7 +20,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   selectedIndex,
   onSelect,
 }) => {
-  const CONTAINER_PADDING = 5; // Gap between container and button
+  const CONTAINER_PADDING = 3; // Gap between container and button
   const BORDER_RADIUS = 8;
   const BORDER_WIDTH = 1;
   const BUTTONS_CONTAINER_HEIGHT = 40;
@@ -29,15 +29,15 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT;
   const SELECTED_BUTTON_TEXT_COLOR = "white";
   const UNSELECTED_BUTTON_TEXT_COLOR = "black";
-  const SELECTED_BUTTON_BACKGROUND_COLOR = "blue";
-  const BUTTONS_CONTAINER_BORDER_COLOR = "blue";
+  const SELECTED_BUTTON_BACKGROUND_COLOR = "black";
+  const BUTTONS_CONTAINER_BORDER_COLOR = "black";
 
   const translateX = useSharedValue<number>(0);
 
   const handlePress = (index: number) => {
     translateX.value = withSpring(BUTTON_WIDTH * index, {
-      damping: 10,
-      stiffness: 100,
+      damping: 20,
+      stiffness: 150,
     });
     onSelect(index);
   };
