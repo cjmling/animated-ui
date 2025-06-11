@@ -18,17 +18,17 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   buttons,
   selectedIndex,
 }) => {
-  const GAP = 2; // Gap between container and button
+  const GAP = 10; // Gap between container and button
+  const BORDER_RADIUS = 10;
   const BUTTONS_CONTAINER_HEIGHT = 200;
   const BUTTONS_CONTAINER_WIDTH = 350;
-  const BACKGROUND_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length - GAP * 2;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
-  const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT - GAP * 2;
+  const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT;
 
   const translateX = useSharedValue<number>(0);
 
   const handlePress = (index: number) => {
-    translateX.value = withSpring(BACKGROUND_WIDTH * index, {
+    translateX.value = withSpring(BUTTON_WIDTH * index, {
       damping: 10,
       stiffness: 100,
     });
@@ -40,31 +40,46 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
     transform: [{ translateX: translateX.value }],
     width: BUTTON_WIDTH,
     height: BUTTON_HEIGHT,
+    borderRadius: BORDER_RADIUS,
   }));
 
   return (
     <View
-      style={[
-        styles.container,
-        { width: BUTTONS_CONTAINER_WIDTH, height: BUTTONS_CONTAINER_HEIGHT },
-      ]}
+      style={{
+        alignItems: "center",
+        padding: GAP,
+        borderWidth: 1,
+        borderColor: "red",
+        borderRadius: BORDER_RADIUS,
+        overflow: "hidden",
+      }}
     >
-      <Animated.View style={[styles.slidingBackground, animatedStyles]} />
-      {buttons.map((button, index) => (
-        <TouchableOpacity
-          key={index}
-          style={[
-            styles.button,
-            {
-              width: BUTTON_WIDTH,
-              height: BUTTON_HEIGHT,
-            },
-          ]}
-          onPress={() => handlePress(index)}
-        >
-          <Text style={[styles.buttonText]}>{button.label}</Text>
-        </TouchableOpacity>
-      ))}
+      <View
+        style={[
+          styles.container,
+          {
+            width: BUTTONS_CONTAINER_WIDTH,
+            height: BUTTONS_CONTAINER_HEIGHT,
+          },
+        ]}
+      >
+        <Animated.View style={[styles.slidingBackground, animatedStyles]} />
+        {buttons.map((button, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.button,
+              {
+                width: BUTTON_WIDTH,
+                height: BUTTON_HEIGHT,
+              },
+            ]}
+            onPress={() => handlePress(index)}
+          >
+            <Text style={[styles.buttonText]}>{button.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
@@ -72,10 +87,6 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    borderWidth: 1,
-    borderColor: "#007AFF",
-    borderRadius: 10,
-    overflow: "hidden",
   },
   button: {
     paddingVertical: 10,
@@ -91,7 +102,6 @@ const styles = StyleSheet.create({
     color: "black",
   },
   slidingBackground: {
-    height: 50,
     backgroundColor: "blue",
     position: "absolute",
   },
