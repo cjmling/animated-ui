@@ -1,5 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 interface GroupButtonProps {
   buttons: {
@@ -13,31 +18,30 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   buttons,
   selectedIndex,
 }) => {
+  const BUTTONS_CONTAINER_WIDTH = 350;
+  const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
+
+  const translateX = useSharedValue<number>(0);
+
+  const handlePress = (index: number) => {
+    translateX.value = withSpring(BUTTON_WIDTH * index);
+  };
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+    width: BUTTON_WIDTH,
+  }));
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { width: BUTTONS_CONTAINER_WIDTH }]}>
+      <Animated.View style={[styles.slidingBackground, animatedStyles]} />
       {buttons.map((button, index) => (
         <TouchableOpacity
           key={index}
-          style={[
-            styles.button,
-            index === 0 && styles.firstButton,
-            index === buttons.length - 1 && styles.lastButton,
-            index === selectedIndex
-              ? styles.selectedButton
-              : styles.unselectedButton,
-          ]}
-          onPress={button.onPress}
+          style={[styles.button]}
+          onPress={() => handlePress(index)}
         >
-          <Text
-            style={[
-              styles.buttonText,
-              index === selectedIndex
-                ? styles.selectedText
-                : styles.unselectedText,
-            ]}
-          >
-            {button.label}
-          </Text>
+          <Text style={[styles.buttonText]}>{button.label}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -52,7 +56,8 @@ const styles = StyleSheet.create({
     borderColor: "#007AFF",
     borderRadius: 10,
     overflow: "hidden",
-    padding: 2,
+    padding: 20,
+    // backgroundColor: "red",
   },
   button: {
     paddingVertical: 10,
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
   },
   selectedButton: {
-    backgroundColor: "#007AFF",
+    // backgroundColor: "#007AFF",
   },
   unselectedButton: {
     backgroundColor: "transparent",
@@ -82,5 +87,18 @@ const styles = StyleSheet.create({
   },
   unselectedText: {
     color: "#007AFF",
+  },
+  slidingBackground: {
+    // width: 100,
+    height: 200,
+    backgroundColor: "blue",
+    position: "absolute",
+    // left: 200,
+    // backgroundColor: "#007AFF",
+    // borderRadius: 8,
+    // top: 2,
+    // bottom: 2,
+    // left: 2,
+    // right: 2,
   },
 });
