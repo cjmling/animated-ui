@@ -12,11 +12,13 @@ interface GroupButtonProps {
     onPress: () => void;
   }[];
   selectedIndex: number;
+  onSelect: (index: number) => void;
 }
 
 export const GroupButton: React.FC<GroupButtonProps> = ({
   buttons,
   selectedIndex,
+  onSelect,
 }) => {
   const GAP = 10; // Gap between container and button
   const BORDER_RADIUS = 8;
@@ -33,6 +35,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
       damping: 10,
       stiffness: 100,
     });
+    onSelect(index);
   };
 
   const animatedStyles = useAnimatedStyle(() => ({

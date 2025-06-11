@@ -16,7 +16,11 @@ export default function GroupButtonScreen() {
 
   return (
     <View style={styles.container}>
-      <GroupButton buttons={buttons} selectedIndex={selectedIndex} />
+      <GroupButton
+        buttons={buttons}
+        selectedIndex={selectedIndex}
+        onSelect={handlePress}
+      />
     </View>
   );
 }
