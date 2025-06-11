@@ -20,10 +20,10 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   selectedIndex,
   onSelect,
 }) => {
-  const GAP = 10; // Gap between container and button
+  const CONTAINER_PADDING = 5; // Gap between container and button
   const BORDER_RADIUS = 8;
   const BORDER_WIDTH = 1;
-  const BUTTONS_CONTAINER_HEIGHT = 50;
+  const BUTTONS_CONTAINER_HEIGHT = 40;
   const BUTTONS_CONTAINER_WIDTH = 350;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
   const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT;
@@ -54,7 +54,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
     <View
       style={{
         alignItems: "center",
-        padding: GAP,
+        padding: CONTAINER_PADDING,
         borderWidth: BORDER_WIDTH,
         borderColor: BUTTONS_CONTAINER_BORDER_COLOR,
         borderRadius: BORDER_RADIUS,
