@@ -27,6 +27,10 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   const BUTTONS_CONTAINER_WIDTH = 350;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
   const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT;
+  const SELECTED_BUTTON_TEXT_COLOR = "white";
+  const UNSELECTED_BUTTON_TEXT_COLOR = "black";
+  const SELECTED_BUTTON_BACKGROUND_COLOR = "blue";
+  const BUTTONS_CONTAINER_BORDER_COLOR = "blue";
 
   const translateX = useSharedValue<number>(0);
 
@@ -43,6 +47,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
     width: BUTTON_WIDTH,
     height: BUTTON_HEIGHT,
     borderRadius: BORDER_RADIUS,
+    backgroundColor: SELECTED_BUTTON_BACKGROUND_COLOR,
   }));
 
   return (
@@ -51,7 +56,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
         alignItems: "center",
         padding: GAP,
         borderWidth: BORDER_WIDTH,
-        borderColor: "red",
+        borderColor: BUTTONS_CONTAINER_BORDER_COLOR,
         borderRadius: BORDER_RADIUS,
         overflow: "hidden",
       }}
@@ -78,7 +83,19 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
             ]}
             onPress={() => handlePress(index)}
           >
-            <Text style={[styles.buttonText]}>{button.label}</Text>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  color:
+                    index === selectedIndex
+                      ? SELECTED_BUTTON_TEXT_COLOR
+                      : UNSELECTED_BUTTON_TEXT_COLOR,
+                },
+              ]}
+            >
+              {button.label}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -105,7 +122,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   slidingBackground: {
-    backgroundColor: "blue",
     position: "absolute",
   },
 });
