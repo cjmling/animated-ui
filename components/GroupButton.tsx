@@ -15,34 +15,31 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      {buttons.map((button, index) => {
-        const isSelected = index === selectedIndex;
-        return (
-          <TouchableOpacity
-            key={index}
+      {buttons.map((button, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[
+            styles.button,
+            index === 0 && styles.firstButton,
+            index === buttons.length - 1 && styles.lastButton,
+            index === selectedIndex
+              ? styles.selectedButton
+              : styles.unselectedButton,
+          ]}
+          onPress={button.onPress}
+        >
+          <Text
             style={[
-              styles.button,
-              index === 0 && styles.firstButton,
-              index === buttons.length - 1 && styles.lastButton,
-              isSelected && styles.selectedButton,
-              index !== 0 && styles.notFirstButton,
+              styles.buttonText,
+              index === selectedIndex
+                ? styles.selectedText
+                : styles.unselectedText,
             ]}
-            onPress={button.onPress}
-            activeOpacity={0.8}
           >
-            <Text
-              style={[
-                styles.buttonText,
-                isSelected
-                  ? styles.selectedButtonText
-                  : styles.unselectedButtonText,
-              ]}
-            >
-              {button.label}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
+            {button.label}
+          </Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
@@ -51,43 +48,35 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "#D0D7DE",
-    borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: "#fff",
   },
   button: {
-    flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "transparent",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  notFirstButton: {
-    borderLeftWidth: 1,
-    borderLeftColor: "#D0D7DE",
+    borderWidth: 1,
+    borderColor: "#007AFF",
   },
   firstButton: {
-    borderTopLeftRadius: 12,
-    borderBottomLeftRadius: 12,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   lastButton: {
-    borderTopRightRadius: 12,
-    borderBottomRightRadius: 12,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
   },
   selectedButton: {
-    backgroundColor: "#0050FF",
+    backgroundColor: "#007AFF",
+  },
+  unselectedButton: {
+    backgroundColor: "transparent",
   },
   buttonText: {
     fontSize: 16,
     fontWeight: "600",
   },
-  selectedButtonText: {
-    color: "#fff",
+  selectedText: {
+    color: "white",
   },
-  unselectedButtonText: {
-    color: "#6E7781",
+  unselectedText: {
+    color: "#007AFF",
   },
 });
