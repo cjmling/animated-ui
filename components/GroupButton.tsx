@@ -20,13 +20,13 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
 }) => {
   const GAP = 2; // Gap between container and button
   const BUTTONS_CONTAINER_WIDTH = 350;
-  const BACKGROUND_WIDTH = BUTTONS_CONTAINER_WIDTH - GAP * 2;
+  const BACKGROUND_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length - GAP * 2;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
 
   const translateX = useSharedValue<number>(0);
 
   const handlePress = (index: number) => {
-    translateX.value = withSpring(BUTTON_WIDTH * index, {
+    translateX.value = withSpring(BACKGROUND_WIDTH * index, {
       damping: 10,
       stiffness: 100,
     });
