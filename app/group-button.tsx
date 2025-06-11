@@ -15,7 +15,7 @@ export default function GroupButtonScreen() {
 
   return (
     <View style={styles.container}>
-      <GroupButton buttons={buttons} />
+      <GroupButton buttons={buttons} selectedIndex={0} />
     </View>
   );
 }
