@@ -48,12 +48,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     marginVertical: 10,
+    borderWidth: 1,
+    borderColor: "#007AFF",
+    borderRadius: 10,
+    overflow: "hidden",
+    padding: 2,
   },
   button: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: "#007AFF",
+    borderRadius: 10,
   },
   firstButton: {
     borderTopLeftRadius: 8,

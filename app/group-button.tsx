@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { GroupButton } from "../components/GroupButton";
 
 export default function GroupButtonScreen() {
-  const handlePress = (label: string) => {
-    console.log(`Pressed ${label}`);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const handlePress = (index: number) => {
+    setSelectedIndex(index);
   };
 
   const buttons = [
-    { label: "Option 1", onPress: () => handlePress("Option 1") },
-    { label: "Option 2", onPress: () => handlePress("Option 2") },
-    { label: "Option 3", onPress: () => handlePress("Option 3") },
+    { label: "Option 1", onPress: () => handlePress(0) },
+    { label: "Option 2", onPress: () => handlePress(1) },
+    { label: "Option 3", onPress: () => handlePress(2) },
   ];
 
   return (
     <View style={styles.container}>
-      <GroupButton buttons={buttons} selectedIndex={1} />
+      <GroupButton buttons={buttons} selectedIndex={selectedIndex} />
     </View>
   );
 }
