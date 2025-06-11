@@ -18,13 +18,20 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   buttons,
   selectedIndex,
 }) => {
+  const GAP = 2; // Gap between container and button
   const BUTTONS_CONTAINER_WIDTH = 350;
+  const BACKGROUND_WIDTH = BUTTONS_CONTAINER_WIDTH - GAP * 2;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
 
   const translateX = useSharedValue<number>(0);
 
   const handlePress = (index: number) => {
-    translateX.value = withSpring(BUTTON_WIDTH * index);
+    translateX.value = withSpring(BUTTON_WIDTH * index, {
+      damping: 10,
+      stiffness: 100,
+    });
+
+    console.log("translateX.value", translateX.value);
   };
 
   const animatedStyles = useAnimatedStyle(() => ({
@@ -38,7 +45,12 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
       {buttons.map((button, index) => (
         <TouchableOpacity
           key={index}
-          style={[styles.button]}
+          style={[
+            styles.button,
+            {
+              width: BUTTON_WIDTH,
+            },
+          ]}
           onPress={() => handlePress(index)}
         >
           <Text style={[styles.buttonText]}>{button.label}</Text>
@@ -51,29 +63,14 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginVertical: 10,
     borderWidth: 1,
     borderColor: "#007AFF",
     borderRadius: 10,
     overflow: "hidden",
-    padding: 20,
-    // backgroundColor: "red",
   },
   button: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  firstButton: {
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-  },
-  lastButton: {
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
-  },
-  selectedButton: {
-    // backgroundColor: "#007AFF",
   },
   unselectedButton: {
     backgroundColor: "transparent",
@@ -81,24 +78,11 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: "600",
-  },
-  selectedText: {
-    color: "white",
-  },
-  unselectedText: {
-    color: "#007AFF",
+    color: "black",
   },
   slidingBackground: {
-    // width: 100,
     height: 200,
     backgroundColor: "blue",
     position: "absolute",
-    // left: 200,
-    // backgroundColor: "#007AFF",
-    // borderRadius: 8,
-    // top: 2,
-    // bottom: 2,
-    // left: 2,
-    // right: 2,
   },
 });
