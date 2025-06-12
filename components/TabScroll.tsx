@@ -6,6 +6,8 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
+  Extrapolation,
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -53,9 +55,6 @@ export default function TabScroll({
 }: TabScrollProps) {
   const translateX = useSharedValue(initialIndex * -SCREEN_WIDTH);
   const currentIndex = useSharedValue(initialIndex);
-  const tabTranslateX = useSharedValue(
-    initialIndex * (SCREEN_WIDTH / labels.length)
-  );
 
   const gesture = Gesture.Pan()
     .onUpdate((event) => {
@@ -77,13 +76,6 @@ export default function TabScroll({
           damping: 20,
           stiffness: 150,
         });
-        tabTranslateX.value = withSpring(
-          newIndex * (SCREEN_WIDTH / labels.length),
-          {
-            damping: 20,
-            stiffness: 150,
-          }
-        );
       } else {
         translateX.value = withSpring(currentIndex.value * -SCREEN_WIDTH, {
           damping: 20,
@@ -98,19 +90,9 @@ export default function TabScroll({
     };
   });
 
-  const tabAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: tabTranslateX.value }],
-    };
-  });
-
   const handleTabPress = (index: number) => {
     currentIndex.value = index;
     translateX.value = withSpring(index * -SCREEN_WIDTH, {
-      damping: 20,
-      stiffness: 150,
-    });
-    tabTranslateX.value = withSpring(index * (SCREEN_WIDTH / labels.length), {
       damping: 20,
       stiffness: 150,
     });
@@ -127,7 +109,18 @@ export default function TabScroll({
               height: tabBarHeight,
               backgroundColor: selectedTabBackgroundColor,
             },
-            tabAnimatedStyle,
+            useAnimatedStyle(() => {
+              const progress = -translateX.value / SCREEN_WIDTH;
+              const interpolatedX = interpolate(
+                progress,
+                [0, screens.length - 1],
+                [0, (SCREEN_WIDTH / labels.length) * (screens.length - 1)],
+                Extrapolation.CLAMP
+              );
+              return {
+                transform: [{ translateX: interpolatedX }],
+              };
+            }),
           ]}
         />
         {labels.map((label, index) => (
