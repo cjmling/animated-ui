@@ -13,7 +13,7 @@ const ChildScreen: React.FC<ChildScreenProps> = ({
   backgroundColor,
   style,
 }) => (
-  <View style={{ flex: 1, padding: 20 }}>
+  <View style={{ flex: 1, padding: 20, backgroundColor: "#000" }}>
     <View
       style={[
         {

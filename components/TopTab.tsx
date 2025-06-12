@@ -17,13 +17,24 @@ import Animated, {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface TopTabProps {
+  /** Array of screen components to be displayed in the tab */
   screens: React.ReactNode[];
+  /** Initial index of the screen to show (defaults to 0) */
   initialIndex?: number;
+  /** Background color of the tab container (defaults to "#000") */
+  backgroundColor?: string;
+  /** Bottom position of the pagination dots in pixels (defaults to 50) */
+  paginationBottomPosition?: number;
+  /** Color of the pagination dots (defaults to "#000") */
+  paginationDotColor?: string;
 }
 
 export const TopTab: React.FC<TopTabProps> = ({
   screens,
   initialIndex = 0,
+  backgroundColor = "#000",
+  paginationBottomPosition = 50,
+  paginationDotColor = "#000",
 }) => {
   const translateX = useSharedValue(initialIndex * -SCREEN_WIDTH);
   const currentIndex = useSharedValue(initialIndex);
@@ -63,7 +74,7 @@ export const TopTab: React.FC<TopTabProps> = ({
   });
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor }}>
       <GestureDetector gesture={gesture}>
         <Animated.View
           style={[
@@ -92,6 +103,8 @@ export const TopTab: React.FC<TopTabProps> = ({
         count={screens.length}
         currentIndex={currentIndex}
         translateX={translateX}
+        bottomPosition={paginationBottomPosition}
+        dotColor={paginationDotColor}
       />
     </GestureHandlerRootView>
   );
@@ -101,13 +114,18 @@ interface PaginationDotsProps {
   count: number;
   currentIndex: SharedValue<number>;
   translateX: SharedValue<number>;
+  /** Bottom position of the pagination dots in pixels */
+  bottomPosition: number;
+  /** Color of the pagination dots */
+  dotColor: string;
 }
 
 const PaginationDot: React.FC<{
   index: number;
   currentIndex: SharedValue<number>;
   translateX: SharedValue<number>;
-}> = ({ index, currentIndex, translateX }) => {
+  dotColor: string;
+}> = ({ index, currentIndex, translateX, dotColor }) => {
   const dotStyle = useAnimatedStyle(() => {
     const progress = -translateX.value / SCREEN_WIDTH;
     const opacity = interpolate(
@@ -135,7 +153,7 @@ const PaginationDot: React.FC<{
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: "#000",
+          backgroundColor: dotColor,
         },
         dotStyle,
       ]}
@@ -147,12 +165,14 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
   count,
   currentIndex,
   translateX,
+  bottomPosition,
+  dotColor,
 }) => {
   return (
     <View
       style={{
         position: "absolute",
-        bottom: 50,
+        bottom: bottomPosition,
         left: 0,
         right: 0,
         flexDirection: "row",
@@ -167,6 +187,7 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
           index={index}
           currentIndex={currentIndex}
           translateX={translateX}
+          dotColor={dotColor}
         />
       ))}
     </View>
