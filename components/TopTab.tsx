@@ -88,7 +88,11 @@ export const TopTab: React.FC<TopTabProps> = ({
           ))}
         </Animated.View>
       </GestureDetector>
-      <PaginationDots count={screens.length} currentIndex={currentIndex} />
+      <PaginationDots
+        count={screens.length}
+        currentIndex={currentIndex}
+        translateX={translateX}
+      />
     </GestureHandlerRootView>
   );
 };
@@ -96,21 +100,24 @@ export const TopTab: React.FC<TopTabProps> = ({
 interface PaginationDotsProps {
   count: number;
   currentIndex: SharedValue<number>;
+  translateX: SharedValue<number>;
 }
 
 const PaginationDot: React.FC<{
   index: number;
   currentIndex: SharedValue<number>;
-}> = ({ index, currentIndex }) => {
+  translateX: SharedValue<number>;
+}> = ({ index, currentIndex, translateX }) => {
   const dotStyle = useAnimatedStyle(() => {
+    const progress = -translateX.value / SCREEN_WIDTH;
     const opacity = interpolate(
-      currentIndex.value,
+      progress,
       [index - 1, index, index + 1],
       [0.3, 1, 0.3],
       Extrapolation.CLAMP
     );
     const scale = interpolate(
-      currentIndex.value,
+      progress,
       [index - 1, index, index + 1],
       [0.8, 1.2, 0.8],
       Extrapolation.CLAMP
@@ -139,6 +146,7 @@ const PaginationDot: React.FC<{
 const PaginationDots: React.FC<PaginationDotsProps> = ({
   count,
   currentIndex,
+  translateX,
 }) => {
   return (
     <View
@@ -154,7 +162,12 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
       }}
     >
       {Array.from({ length: count }).map((_, index) => (
-        <PaginationDot key={index} index={index} currentIndex={currentIndex} />
+        <PaginationDot
+          key={index}
+          index={index}
+          currentIndex={currentIndex}
+          translateX={translateX}
+        />
       ))}
     </View>
   );
