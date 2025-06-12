@@ -7,28 +7,51 @@ import Animated, {
 } from "react-native-reanimated";
 
 interface GroupButtonProps {
+  /** Array of labels to display in the button group */
   labels: string[];
+  /** Index of the currently selected button */
   selectedIndex: number;
+  /** Callback function when a button is selected */
   onSelect: (index: number) => void;
+  /** Gap between container and button */
+  containerPadding?: number;
+  /** Border radius of the container and buttons */
+  borderRadius?: number;
+  /** Width of the container border */
+  borderWidth?: number;
+  /** Font size of the button text */
+  buttonFontSize?: number;
+  /** Height of the buttons container */
+  buttonsContainerHeight?: number;
+  /** Width of the buttons container */
+  buttonsContainerWidth?: number;
+  /** Text color for the selected button */
+  selectedButtonTextColor?: string;
+  /** Text color for unselected buttons */
+  unselectedButtonTextColor?: string;
+  /** Background color for the selected button */
+  selectedButtonBackgroundColor?: string;
+  /** Border color of the buttons container */
+  buttonsContainerBorderColor?: string;
 }
 
 export const GroupButton: React.FC<GroupButtonProps> = ({
   labels,
   selectedIndex,
   onSelect,
+  containerPadding = 3,
+  borderRadius = 8,
+  borderWidth = 1,
+  buttonFontSize = 16,
+  buttonsContainerHeight = 40,
+  buttonsContainerWidth = 350,
+  selectedButtonTextColor = "white",
+  unselectedButtonTextColor = "black",
+  selectedButtonBackgroundColor = "black",
+  buttonsContainerBorderColor = "black",
 }) => {
-  const CONTAINER_PADDING = 3; // Gap between container and button
-  const BORDER_RADIUS = 8;
-  const BORDER_WIDTH = 1;
-  const BUTTON_FONT_SIZE = 16;
-  const BUTTONS_CONTAINER_HEIGHT = 40;
-  const BUTTONS_CONTAINER_WIDTH = 350;
-  const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / labels.length;
-  const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT;
-  const SELECTED_BUTTON_TEXT_COLOR = "white";
-  const UNSELECTED_BUTTON_TEXT_COLOR = "black";
-  const SELECTED_BUTTON_BACKGROUND_COLOR = "black";
-  const BUTTONS_CONTAINER_BORDER_COLOR = "black";
+  const BUTTON_WIDTH = buttonsContainerWidth / labels.length;
+  const BUTTON_HEIGHT = buttonsContainerHeight;
 
   const translateX = useSharedValue<number>(0);
 
@@ -44,18 +67,18 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
     transform: [{ translateX: translateX.value }],
     width: BUTTON_WIDTH,
     height: BUTTON_HEIGHT,
-    borderRadius: BORDER_RADIUS,
-    backgroundColor: SELECTED_BUTTON_BACKGROUND_COLOR,
+    borderRadius: borderRadius,
+    backgroundColor: selectedButtonBackgroundColor,
   }));
 
   return (
     <View
       style={{
         alignItems: "center",
-        padding: CONTAINER_PADDING,
-        borderWidth: BORDER_WIDTH,
-        borderColor: BUTTONS_CONTAINER_BORDER_COLOR,
-        borderRadius: BORDER_RADIUS,
+        padding: containerPadding,
+        borderWidth: borderWidth,
+        borderColor: buttonsContainerBorderColor,
+        borderRadius: borderRadius,
         overflow: "hidden",
       }}
     >
@@ -63,8 +86,8 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
         style={[
           styles.container,
           {
-            width: BUTTONS_CONTAINER_WIDTH,
-            height: BUTTONS_CONTAINER_HEIGHT,
+            width: buttonsContainerWidth,
+            height: buttonsContainerHeight,
           },
         ]}
       >
@@ -85,11 +108,11 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
               style={[
                 styles.buttonText,
                 {
-                  fontSize: BUTTON_FONT_SIZE,
+                  fontSize: buttonFontSize,
                   color:
                     index === selectedIndex
-                      ? SELECTED_BUTTON_TEXT_COLOR
-                      : UNSELECTED_BUTTON_TEXT_COLOR,
+                      ? selectedButtonTextColor
+                      : unselectedButtonTextColor,
                 },
               ]}
             >
