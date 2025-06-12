@@ -8,6 +8,7 @@ import {
 import Animated, {
   Extrapolation,
   interpolate,
+  SharedValue,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -22,7 +23,7 @@ interface TopTabProps {
 
 interface PaginationDotsProps {
   count: number;
-  currentIndex: Animated.SharedValue<number>;
+  currentIndex: SharedValue<number>;
 }
 
 const styles = StyleSheet.create({
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
 
 const PaginationDot: React.FC<{
   index: number;
-  currentIndex: Animated.SharedValue<number>;
+  currentIndex: SharedValue<number>;
 }> = ({ index, currentIndex }) => {
   const dotStyle = useAnimatedStyle(() => {
     const opacity = interpolate(
