@@ -93,8 +93,8 @@ export default function TabScroll({
     });
   };
 
-  return (
-    <GestureHandlerRootView style={{ flex: 1, backgroundColor }}>
+  const Tabs = () => {
+    return (
       <View style={[styles.tabBar, { height: tabBarHeight }]}>
         {labels.map((label, index) => (
           <TouchableOpacity
@@ -116,20 +116,16 @@ export default function TabScroll({
             >
               {label}
             </Animated.Text>
-            {currentIndex.value === index && (
-              <View
-                style={[
-                  styles.indicator,
-                  {
-                    backgroundColor: indicatorColor,
-                    height: indicatorHeight,
-                  },
-                ]}
-              />
-            )}
           </TouchableOpacity>
         ))}
       </View>
+    );
+  };
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor }}>
+      <Tabs />
+
       <GestureDetector gesture={gesture}>
         <Animated.View
           style={[
