@@ -27,6 +27,18 @@ interface TopTabProps {
   paginationBottomPosition?: number;
   /** Color of the pagination dots (defaults to "#000") */
   paginationDotColor?: string;
+  /** Size of the pagination dots in pixels (defaults to 8) */
+  paginationDotSize?: number;
+  /** Gap between pagination dots in pixels (defaults to 8) */
+  paginationDotGap?: number;
+  /** Scale of the active pagination dot (defaults to 1.2) */
+  paginationActiveDotScale?: number;
+  /** Scale of the inactive pagination dots (defaults to 0.8) */
+  paginationInactiveDotScale?: number;
+  /** Opacity of the active pagination dot (defaults to 1) */
+  paginationActiveDotOpacity?: number;
+  /** Opacity of the inactive pagination dots (defaults to 0.3) */
+  paginationInactiveDotOpacity?: number;
 }
 
 export const TopTab: React.FC<TopTabProps> = ({
@@ -35,6 +47,12 @@ export const TopTab: React.FC<TopTabProps> = ({
   backgroundColor = "#000",
   paginationBottomPosition = 50,
   paginationDotColor = "#000",
+  paginationDotSize = 8,
+  paginationDotGap = 8,
+  paginationActiveDotScale = 1.2,
+  paginationInactiveDotScale = 0.8,
+  paginationActiveDotOpacity = 1,
+  paginationInactiveDotOpacity = 0.3,
 }) => {
   const translateX = useSharedValue(initialIndex * -SCREEN_WIDTH);
   const currentIndex = useSharedValue(initialIndex);
@@ -105,6 +123,12 @@ export const TopTab: React.FC<TopTabProps> = ({
         translateX={translateX}
         bottomPosition={paginationBottomPosition}
         dotColor={paginationDotColor}
+        dotSize={paginationDotSize}
+        dotGap={paginationDotGap}
+        activeDotScale={paginationActiveDotScale}
+        inactiveDotScale={paginationInactiveDotScale}
+        activeDotOpacity={paginationActiveDotOpacity}
+        inactiveDotOpacity={paginationInactiveDotOpacity}
       />
     </GestureHandlerRootView>
   );
@@ -118,6 +142,18 @@ interface PaginationDotsProps {
   bottomPosition: number;
   /** Color of the pagination dots */
   dotColor: string;
+  /** Size of the pagination dots in pixels */
+  dotSize: number;
+  /** Gap between pagination dots in pixels */
+  dotGap: number;
+  /** Scale of the active pagination dot */
+  activeDotScale: number;
+  /** Scale of the inactive pagination dots */
+  inactiveDotScale: number;
+  /** Opacity of the active pagination dot */
+  activeDotOpacity: number;
+  /** Opacity of the inactive pagination dots */
+  inactiveDotOpacity: number;
 }
 
 const PaginationDot: React.FC<{
@@ -125,19 +161,34 @@ const PaginationDot: React.FC<{
   currentIndex: SharedValue<number>;
   translateX: SharedValue<number>;
   dotColor: string;
-}> = ({ index, currentIndex, translateX, dotColor }) => {
+  dotSize: number;
+  activeDotScale: number;
+  inactiveDotScale: number;
+  activeDotOpacity: number;
+  inactiveDotOpacity: number;
+}> = ({
+  index,
+  currentIndex,
+  translateX,
+  dotColor,
+  dotSize,
+  activeDotScale,
+  inactiveDotScale,
+  activeDotOpacity,
+  inactiveDotOpacity,
+}) => {
   const dotStyle = useAnimatedStyle(() => {
     const progress = -translateX.value / SCREEN_WIDTH;
     const opacity = interpolate(
       progress,
       [index - 1, index, index + 1],
-      [0.3, 1, 0.3],
+      [inactiveDotOpacity, activeDotOpacity, inactiveDotOpacity],
       Extrapolation.CLAMP
     );
     const scale = interpolate(
       progress,
       [index - 1, index, index + 1],
-      [0.8, 1.2, 0.8],
+      [inactiveDotScale, activeDotScale, inactiveDotScale],
       Extrapolation.CLAMP
     );
     return {
@@ -150,9 +201,9 @@ const PaginationDot: React.FC<{
     <Animated.View
       style={[
         {
-          width: 8,
-          height: 8,
-          borderRadius: 4,
+          width: dotSize,
+          height: dotSize,
+          borderRadius: dotSize / 2,
           backgroundColor: dotColor,
         },
         dotStyle,
@@ -167,6 +218,12 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
   translateX,
   bottomPosition,
   dotColor,
+  dotSize,
+  dotGap,
+  activeDotScale,
+  inactiveDotScale,
+  activeDotOpacity,
+  inactiveDotOpacity,
 }) => {
   return (
     <View
@@ -178,7 +235,7 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        gap: 8,
+        gap: dotGap,
       }}
     >
       {Array.from({ length: count }).map((_, index) => (
@@ -188,6 +245,11 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
           currentIndex={currentIndex}
           translateX={translateX}
           dotColor={dotColor}
+          dotSize={dotSize}
+          activeDotScale={activeDotScale}
+          inactiveDotScale={inactiveDotScale}
+          activeDotOpacity={activeDotOpacity}
+          inactiveDotOpacity={inactiveDotOpacity}
         />
       ))}
     </View>
