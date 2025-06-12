@@ -9,6 +9,10 @@ export default function HomeScreen() {
         <MenuItem href="/group-button" label="Group Button Demo" />
         <MenuItem href="/paginated-scroll" label="Paginated Scroll Demo" />
         <MenuItem href="/tabed-scroll" label="Tabed Scroll Demo" />
+        <MenuItem
+          href="/vertical-paginated-scroll"
+          label="Vertical Paginated Scroll Demo"
+        />
       </View>
     </View>
   );
