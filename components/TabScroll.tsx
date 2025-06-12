@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -100,11 +100,21 @@ export default function TabScroll({
 
   const Tabs = () => {
     return (
-      <View style={[styles.tabBar, { height: tabBarHeight }]}>
+      <View
+        style={{
+          flexDirection: "row",
+          backgroundColor: "#fff",
+          borderBottomWidth: 1,
+          borderBottomColor: "#eee",
+          position: "relative",
+          height: tabBarHeight,
+        }}
+      >
         <Animated.View
           style={[
-            styles.slidingBackground,
             {
+              position: "absolute",
+              borderRadius: 4,
               width: SCREEN_WIDTH / labels.length,
               height: tabBarHeight,
               backgroundColor: selectedTabBackgroundColor,
@@ -126,13 +136,18 @@ export default function TabScroll({
         {labels.map((label, index) => (
           <TouchableOpacity
             key={index}
-            style={[styles.tabButton, { width: SCREEN_WIDTH / labels.length }]}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1,
+              width: SCREEN_WIDTH / labels.length,
+            }}
             onPress={() => handleTabPress(index)}
           >
             <Animated.Text
               style={[
-                styles.tabText,
                 {
+                  fontWeight: "500",
                   fontSize: tabFontSize,
                   color:
                     currentIndex.value === index
@@ -180,25 +195,3 @@ export default function TabScroll({
     </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBar: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-    position: "relative",
-  },
-  tabButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1,
-  },
-  tabText: {
-    fontWeight: "500",
-  },
-  slidingBackground: {
-    position: "absolute",
-    borderRadius: 4,
-  },
-});
