@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import React from "react";
+import { Dimensions, View } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -26,25 +26,6 @@ interface PaginationDotsProps {
   currentIndex: SharedValue<number>;
 }
 
-const styles = StyleSheet.create({
-  paginationContainer: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 8,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#000",
-  },
-});
-
 const PaginationDot: React.FC<{
   index: number;
   currentIndex: SharedValue<number>;
@@ -68,7 +49,19 @@ const PaginationDot: React.FC<{
     };
   });
 
-  return <Animated.View style={[styles.dot, dotStyle]} />;
+  return (
+    <Animated.View
+      style={[
+        {
+          width: 8,
+          height: 8,
+          borderRadius: 4,
+          backgroundColor: "#000",
+        },
+        dotStyle,
+      ]}
+    />
+  );
 };
 
 const PaginationDots: React.FC<PaginationDotsProps> = ({
@@ -76,7 +69,18 @@ const PaginationDots: React.FC<PaginationDotsProps> = ({
   currentIndex,
 }) => {
   return (
-    <View style={styles.paginationContainer}>
+    <View
+      style={{
+        position: "absolute",
+        bottom: 20,
+        left: 0,
+        right: 0,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 8,
+      }}
+    >
       {Array.from({ length: count }).map((_, index) => (
         <PaginationDot key={index} index={index} currentIndex={currentIndex} />
       ))}
@@ -125,31 +129,30 @@ export const TopTab: React.FC<TopTabProps> = ({
     };
   });
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: "row",
-      width: SCREEN_WIDTH * screens.length,
-    },
-    screen: {
-      width: SCREEN_WIDTH,
-      height: "100%",
-    },
-  });
-
-  const renderScreens = useCallback(() => {
-    return screens.map((screen, index) => (
-      <View key={index} style={styles.screen}>
-        {screen}
-      </View>
-    ));
-  }, [screens, styles.screen]);
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.container, animatedStyle]}>
-          {renderScreens()}
+        <Animated.View
+          style={[
+            {
+              flex: 1,
+              flexDirection: "row",
+              width: SCREEN_WIDTH * screens.length,
+            },
+            animatedStyle,
+          ]}
+        >
+          {screens.map((screen, index) => (
+            <View
+              key={index}
+              style={{
+                width: SCREEN_WIDTH,
+                height: "100%",
+              }}
+            >
+              {screen}
+            </View>
+          ))}
         </Animated.View>
       </GestureDetector>
       <PaginationDots count={screens.length} currentIndex={currentIndex} />
