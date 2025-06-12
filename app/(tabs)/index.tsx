@@ -1,21 +1,14 @@
-import { Link } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { MenuItem } from "../components/MenuItem";
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to the Demo</Text>
       <View style={styles.menuContainer}>
-        <Link href="/group-button" asChild>
-          <TouchableOpacity style={styles.menuItem}>
-            <Text style={styles.menuText}>Group Button Demo</Text>
-          </TouchableOpacity>
-        </Link>
-        <Link href="/paginated-scroll" asChild>
-          <TouchableOpacity style={styles.menuItem}>
-            <Text style={styles.menuText}>Paginated Scroll Demo</Text>
-          </TouchableOpacity>
-        </Link>
+        <MenuItem href="/group-button" label="Group Button Demo" />
+        <MenuItem href="/paginated-scroll" label="Paginated Scroll Demo" />
+        <MenuItem href="/tabed-scroll" label="Tabed Scroll Demo" />
       </View>
     </View>
   );
@@ -34,14 +27,5 @@ const styles = StyleSheet.create({
   },
   menuContainer: {
     width: "100%",
-  },
-  menuItem: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E5E5",
-  },
-  menuText: {
-    fontSize: 16,
-    color: "#007AFF",
   },
 });
