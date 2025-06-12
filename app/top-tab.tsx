@@ -1,50 +1,45 @@
 import { TopTab } from "@/components/TopTab";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
+
+interface ChildScreenProps {
+  number: number;
+  backgroundColor: string;
+  style?: ViewStyle;
+}
+
+const ChildScreen: React.FC<ChildScreenProps> = ({
+  number,
+  backgroundColor,
+  style,
+}) => (
+  <View style={{ flex: 1, padding: 20 }}>
+    <View
+      style={[
+        {
+          flex: 1,
+          backgroundColor,
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 50,
+        },
+        style,
+      ]}
+    >
+      <Text style={{ color: "#fff", fontSize: 96, fontWeight: "bold" }}>
+        {number}
+      </Text>
+    </View>
+  </View>
+);
 
 export default function TopTabScreen() {
   return (
     <TopTab
       screens={[
-        <View
-          key="1"
-          style={{
-            flex: 1,
-            backgroundColor: "#333",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 96, fontWeight: "bold" }}>
-            1
-          </Text>
-        </View>,
-        <View
-          key="2"
-          style={{
-            flex: 1,
-            backgroundColor: "#444",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 96, fontWeight: "bold" }}>
-            2
-          </Text>
-        </View>,
-        <View
-          key="3"
-          style={{
-            flex: 1,
-            backgroundColor: "#555",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 96, fontWeight: "bold" }}>
-            3
-          </Text>
-        </View>,
+        <ChildScreen key="1" number={1} backgroundColor="#333" />,
+        <ChildScreen key="2" number={2} backgroundColor="#444" />,
+        <ChildScreen key="3" number={3} backgroundColor="#555" />,
       ]}
     />
   );
