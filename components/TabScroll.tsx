@@ -46,12 +46,11 @@ export default function TabScroll({
   initialIndex = 0,
   backgroundColor = "#000",
   activeTabColor = "#000",
-  inactiveTabColor = "#666",
+  inactiveTabColor = "red",
   tabFontSize = 16,
   tabBarHeight = 50,
   indicatorColor = "#000",
-  indicatorHeight = 2,
-  selectedTabBackgroundColor = "#000",
+  indicatorHeight = 50,
 }: TabScrollProps) {
   const translateX = useSharedValue(initialIndex * -SCREEN_WIDTH);
   const currentIndex = useSharedValue(initialIndex);
@@ -76,6 +75,7 @@ export default function TabScroll({
           damping: 20,
           stiffness: 150,
         });
+        console.log("newIndex", newIndex, currentIndex.value);
       } else {
         translateX.value = withSpring(currentIndex.value * -SCREEN_WIDTH, {
           damping: 20,
@@ -104,8 +104,6 @@ export default function TabScroll({
         style={{
           flexDirection: "row",
           backgroundColor: "#fff",
-          borderBottomWidth: 1,
-          borderBottomColor: "#eee",
           position: "relative",
           height: tabBarHeight,
         }}
@@ -114,10 +112,11 @@ export default function TabScroll({
           style={[
             {
               position: "absolute",
-              borderRadius: 4,
+              borderRadius: 0,
+              bottom: 0,
               width: SCREEN_WIDTH / labels.length,
-              height: tabBarHeight,
-              backgroundColor: selectedTabBackgroundColor,
+              height: indicatorHeight,
+              backgroundColor: indicatorColor,
             },
             useAnimatedStyle(() => {
               const progress = -translateX.value / SCREEN_WIDTH;
@@ -156,7 +155,7 @@ export default function TabScroll({
                 },
               ]}
             >
-              {label}
+              {label} : {currentIndex.value}
             </Animated.Text>
           </TouchableOpacity>
         ))}
