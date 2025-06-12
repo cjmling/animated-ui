@@ -22,6 +22,11 @@ export default function HomeScreen() {
             <Text style={styles.linkText}>Go to Group Button Demo</Text>
           </TouchableOpacity>
         </Link>
+        <Link href="/top-tab" asChild>
+          <TouchableOpacity style={styles.linkButton}>
+            <Text style={styles.linkText}>Go to Top Tab Demo</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </ParallaxScrollView>
   );
