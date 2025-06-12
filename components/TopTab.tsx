@@ -6,6 +6,7 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -17,6 +18,69 @@ interface TopTabProps {
   screens: React.ReactNode[];
   initialIndex?: number;
 }
+
+interface PaginationDotsProps {
+  count: number;
+  currentIndex: Animated.SharedValue<number>;
+}
+
+const styles = StyleSheet.create({
+  paginationContainer: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#000",
+  },
+});
+
+const PaginationDot: React.FC<{
+  index: number;
+  currentIndex: Animated.SharedValue<number>;
+}> = ({ index, currentIndex }) => {
+  const dotStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      currentIndex.value,
+      [index - 1, index, index + 1],
+      [0.3, 1, 0.3],
+      "clamp"
+    );
+    const scale = interpolate(
+      currentIndex.value,
+      [index - 1, index, index + 1],
+      [0.8, 1.2, 0.8],
+      "clamp"
+    );
+    return {
+      opacity,
+      transform: [{ scale }],
+    };
+  });
+
+  return <Animated.View style={[styles.dot, dotStyle]} />;
+};
+
+const PaginationDots: React.FC<PaginationDotsProps> = ({
+  count,
+  currentIndex,
+}) => {
+  return (
+    <View style={styles.paginationContainer}>
+      {Array.from({ length: count }).map((_, index) => (
+        <PaginationDot key={index} index={index} currentIndex={currentIndex} />
+      ))}
+    </View>
+  );
+};
 
 export const TopTab: React.FC<TopTabProps> = ({
   screens,
@@ -86,6 +150,7 @@ export const TopTab: React.FC<TopTabProps> = ({
           {renderScreens()}
         </Animated.View>
       </GestureDetector>
+      <PaginationDots count={screens.length} currentIndex={currentIndex} />
     </GestureHandlerRootView>
   );
 };
