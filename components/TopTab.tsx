@@ -21,73 +21,6 @@ interface TopTabProps {
   initialIndex?: number;
 }
 
-interface PaginationDotsProps {
-  count: number;
-  currentIndex: SharedValue<number>;
-}
-
-const PaginationDot: React.FC<{
-  index: number;
-  currentIndex: SharedValue<number>;
-}> = ({ index, currentIndex }) => {
-  const dotStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      currentIndex.value,
-      [index - 1, index, index + 1],
-      [0.3, 1, 0.3],
-      Extrapolation.CLAMP
-    );
-    const scale = interpolate(
-      currentIndex.value,
-      [index - 1, index, index + 1],
-      [0.8, 1.2, 0.8],
-      Extrapolation.CLAMP
-    );
-    return {
-      opacity,
-      transform: [{ scale }],
-    };
-  });
-
-  return (
-    <Animated.View
-      style={[
-        {
-          width: 8,
-          height: 8,
-          borderRadius: 4,
-          backgroundColor: "#000",
-        },
-        dotStyle,
-      ]}
-    />
-  );
-};
-
-const PaginationDots: React.FC<PaginationDotsProps> = ({
-  count,
-  currentIndex,
-}) => {
-  return (
-    <View
-      style={{
-        position: "absolute",
-        bottom: 20,
-        left: 0,
-        right: 0,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 8,
-      }}
-    >
-      {Array.from({ length: count }).map((_, index) => (
-        <PaginationDot key={index} index={index} currentIndex={currentIndex} />
-      ))}
-    </View>
-  );
-};
-
 export const TopTab: React.FC<TopTabProps> = ({
   screens,
   initialIndex = 0,
@@ -157,5 +90,72 @@ export const TopTab: React.FC<TopTabProps> = ({
       </GestureDetector>
       <PaginationDots count={screens.length} currentIndex={currentIndex} />
     </GestureHandlerRootView>
+  );
+};
+
+interface PaginationDotsProps {
+  count: number;
+  currentIndex: SharedValue<number>;
+}
+
+const PaginationDot: React.FC<{
+  index: number;
+  currentIndex: SharedValue<number>;
+}> = ({ index, currentIndex }) => {
+  const dotStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      currentIndex.value,
+      [index - 1, index, index + 1],
+      [0.3, 1, 0.3],
+      Extrapolation.CLAMP
+    );
+    const scale = interpolate(
+      currentIndex.value,
+      [index - 1, index, index + 1],
+      [0.8, 1.2, 0.8],
+      Extrapolation.CLAMP
+    );
+    return {
+      opacity,
+      transform: [{ scale }],
+    };
+  });
+
+  return (
+    <Animated.View
+      style={[
+        {
+          width: 8,
+          height: 8,
+          borderRadius: 4,
+          backgroundColor: "#000",
+        },
+        dotStyle,
+      ]}
+    />
+  );
+};
+
+const PaginationDots: React.FC<PaginationDotsProps> = ({
+  count,
+  currentIndex,
+}) => {
+  return (
+    <View
+      style={{
+        position: "absolute",
+        bottom: 20,
+        left: 0,
+        right: 0,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 8,
+      }}
+    >
+      {Array.from({ length: count }).map((_, index) => (
+        <PaginationDot key={index} index={index} currentIndex={currentIndex} />
+      ))}
+    </View>
   );
 };
