@@ -6,6 +6,7 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
+  Extrapolation,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
@@ -52,13 +53,13 @@ const PaginationDot: React.FC<{
       currentIndex.value,
       [index - 1, index, index + 1],
       [0.3, 1, 0.3],
-      "clamp"
+      Extrapolation.CLAMP
     );
     const scale = interpolate(
       currentIndex.value,
       [index - 1, index, index + 1],
       [0.8, 1.2, 0.8],
-      "clamp"
+      Extrapolation.CLAMP
     );
     return {
       opacity,
