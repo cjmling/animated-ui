@@ -34,6 +34,8 @@ interface TabScrollProps {
   indicatorColor?: string;
   /** Height of the tab indicator line in pixels (defaults to 2) */
   indicatorHeight?: number;
+  /** Background color for the selected tab (defaults to "#000") */
+  selectedTabBackgroundColor?: string;
 }
 
 export default function TabScroll({
@@ -47,9 +49,13 @@ export default function TabScroll({
   tabBarHeight = 50,
   indicatorColor = "#000",
   indicatorHeight = 2,
+  selectedTabBackgroundColor = "#000",
 }: TabScrollProps) {
   const translateX = useSharedValue(initialIndex * -SCREEN_WIDTH);
   const currentIndex = useSharedValue(initialIndex);
+  const tabTranslateX = useSharedValue(
+    initialIndex * (SCREEN_WIDTH / labels.length)
+  );
 
   const gesture = Gesture.Pan()
     .onUpdate((event) => {
@@ -71,6 +77,13 @@ export default function TabScroll({
           damping: 20,
           stiffness: 150,
         });
+        tabTranslateX.value = withSpring(
+          newIndex * (SCREEN_WIDTH / labels.length),
+          {
+            damping: 20,
+            stiffness: 150,
+          }
+        );
       } else {
         translateX.value = withSpring(currentIndex.value * -SCREEN_WIDTH, {
           damping: 20,
@@ -85,9 +98,19 @@ export default function TabScroll({
     };
   });
 
+  const tabAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: tabTranslateX.value }],
+    };
+  });
+
   const handleTabPress = (index: number) => {
     currentIndex.value = index;
     translateX.value = withSpring(index * -SCREEN_WIDTH, {
+      damping: 20,
+      stiffness: 150,
+    });
+    tabTranslateX.value = withSpring(index * (SCREEN_WIDTH / labels.length), {
       damping: 20,
       stiffness: 150,
     });
@@ -96,10 +119,21 @@ export default function TabScroll({
   const Tabs = () => {
     return (
       <View style={[styles.tabBar, { height: tabBarHeight }]}>
+        <Animated.View
+          style={[
+            styles.slidingBackground,
+            {
+              width: SCREEN_WIDTH / labels.length,
+              height: tabBarHeight,
+              backgroundColor: selectedTabBackgroundColor,
+            },
+            tabAnimatedStyle,
+          ]}
+        />
         {labels.map((label, index) => (
           <TouchableOpacity
             key={index}
-            style={styles.tabButton}
+            style={[styles.tabButton, { width: SCREEN_WIDTH / labels.length }]}
             onPress={() => handleTabPress(index)}
           >
             <Animated.Text
@@ -160,19 +194,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
+    position: "relative",
   },
   tabButton: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1,
   },
   tabText: {
     fontWeight: "500",
   },
-  indicator: {
+  slidingBackground: {
     position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+    borderRadius: 4,
   },
 });
