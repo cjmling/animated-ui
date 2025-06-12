@@ -11,9 +11,9 @@ export default function HomeScreen() {
             <Text style={styles.menuText}>Group Button Demo</Text>
           </TouchableOpacity>
         </Link>
-        <Link href="/top-tab" asChild>
+        <Link href="/paginated-scroll" asChild>
           <TouchableOpacity style={styles.menuItem}>
-            <Text style={styles.menuText}>Top Tab Demo</Text>
+            <Text style={styles.menuText}>Paginated Scroll Demo</Text>
           </TouchableOpacity>
         </Link>
       </View>
