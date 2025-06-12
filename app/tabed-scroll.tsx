@@ -42,6 +42,7 @@ export default function TabedScrollScreen() {
         <ChildScreen key="3" number={3} backgroundColor="#555" />,
       ]}
       labels={["Screen 1", "Screen 2", "Screen 3"]}
+      indicatorColor="red"
     />
   );
 }
