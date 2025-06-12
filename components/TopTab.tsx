@@ -6,7 +6,6 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -26,12 +25,6 @@ export const TopTab: React.FC<TopTabProps> = ({
   const translateX = useSharedValue(initialIndex * -SCREEN_WIDTH);
   const currentIndex = useSharedValue(initialIndex);
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      translateX.value = event.contentOffset.x;
-    },
-  });
-
   const gesture = Gesture.Pan()
     .onUpdate((event) => {
       translateX.value =
@@ -48,9 +41,15 @@ export const TopTab: React.FC<TopTabProps> = ({
           Math.min(screens.length - 1, currentIndex.value + direction)
         );
         currentIndex.value = newIndex;
-        translateX.value = withSpring(newIndex * -SCREEN_WIDTH);
+        translateX.value = withSpring(newIndex * -SCREEN_WIDTH, {
+          damping: 20,
+          stiffness: 150,
+        });
       } else {
-        translateX.value = withSpring(currentIndex.value * -SCREEN_WIDTH);
+        translateX.value = withSpring(currentIndex.value * -SCREEN_WIDTH, {
+          damping: 20,
+          stiffness: 150,
+        });
       }
     });
 
