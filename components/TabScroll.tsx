@@ -39,6 +39,23 @@ interface TabScrollProps {
   indicatorHeight?: number;
   /** Background color for the selected tab (defaults to "#000") */
   selectedTabBackgroundColor?: string;
+  /** Background color of the tab buttons container (defaults to "#fff") */
+  tabsButtonContainerBackgroundColor?: string;
+  /** Font weight of the tab text (defaults to "500") */
+  tabsButtonFontWeight?:
+    | "normal"
+    | "bold"
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
+  /** Duration of the color transition animation in milliseconds (defaults to 300) */
+  tabsButtonTransitionDuration?: number;
 }
 
 export default function TabScroll({
@@ -52,6 +69,9 @@ export default function TabScroll({
   tabBarHeight = 50,
   indicatorColor = "#000",
   indicatorHeight = 50,
+  tabsButtonContainerBackgroundColor = "#fff",
+  tabsButtonFontWeight = "500",
+  tabsButtonTransitionDuration = 300,
 }: TabScrollProps) {
   const translateX = useSharedValue(initialIndex * -SCREEN_WIDTH);
   const currentIndex = useSharedValue(initialIndex);
@@ -104,7 +124,7 @@ export default function TabScroll({
       const isActive = currentIndex.value === index;
       return {
         color: withTiming(isActive ? activeTabColor : inactiveTabColor, {
-          duration: 300,
+          duration: tabsButtonTransitionDuration,
         }),
       };
     });
@@ -113,7 +133,7 @@ export default function TabScroll({
       <Animated.Text
         style={[
           {
-            fontWeight: "500",
+            fontWeight: tabsButtonFontWeight,
             fontSize: tabFontSize,
           },
           animatedStyle,
@@ -124,12 +144,12 @@ export default function TabScroll({
     );
   };
 
-  const Tabs = () => {
+  const TabsButtons = () => {
     return (
       <View
         style={{
           flexDirection: "row",
-          backgroundColor: "#fff",
+          backgroundColor: tabsButtonContainerBackgroundColor,
           position: "relative",
           height: tabBarHeight,
         }}
@@ -178,7 +198,7 @@ export default function TabScroll({
 
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor }}>
-      <Tabs />
+      <TabsButtons />
 
       <GestureDetector gesture={gesture}>
         <Animated.View
