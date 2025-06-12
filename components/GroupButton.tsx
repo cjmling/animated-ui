@@ -7,16 +7,13 @@ import Animated, {
 } from "react-native-reanimated";
 
 interface GroupButtonProps {
-  buttons: {
-    label: string;
-    onPress: () => void;
-  }[];
+  labels: string[];
   selectedIndex: number;
   onSelect: (index: number) => void;
 }
 
 export const GroupButton: React.FC<GroupButtonProps> = ({
-  buttons,
+  labels,
   selectedIndex,
   onSelect,
 }) => {
@@ -26,7 +23,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   const BUTTON_FONT_SIZE = 16;
   const BUTTONS_CONTAINER_HEIGHT = 40;
   const BUTTONS_CONTAINER_WIDTH = 350;
-  const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
+  const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / labels.length;
   const BUTTON_HEIGHT = BUTTONS_CONTAINER_HEIGHT;
   const SELECTED_BUTTON_TEXT_COLOR = "white";
   const UNSELECTED_BUTTON_TEXT_COLOR = "black";
@@ -72,7 +69,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
         ]}
       >
         <Animated.View style={[styles.slidingBackground, animatedStyles]} />
-        {buttons.map((button, index) => (
+        {labels.map((label, index) => (
           <TouchableOpacity
             key={index}
             style={[
@@ -96,7 +93,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
                 },
               ]}
             >
-              {button.label}
+              {label}
             </Text>
           </TouchableOpacity>
         ))}

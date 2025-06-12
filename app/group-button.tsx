@@ -8,16 +8,12 @@ export default function GroupButtonScreen() {
     setSelectedIndex(index);
   };
 
-  const buttons = [
-    { label: "Option 1", onPress: () => handlePress(0) },
-    { label: "Option 2", onPress: () => handlePress(1) },
-    { label: "Option 3", onPress: () => handlePress(2) },
-  ];
+  const labels = ["Option 1", "Option 2", "Option 3"];
 
   return (
     <View style={styles.container}>
       <GroupButton
-        buttons={buttons}
+        labels={labels}
         selectedIndex={selectedIndex}
         onSelect={handlePress}
       />
