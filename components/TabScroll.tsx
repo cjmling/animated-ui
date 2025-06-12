@@ -11,6 +11,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -99,9 +100,14 @@ export default function TabScroll({
   };
 
   const TabLabel = ({ label, index }: { label: string; index: number }) => {
-    const animatedStyle = useAnimatedStyle(() => ({
-      color: currentIndex.value === index ? activeTabColor : inactiveTabColor,
-    }));
+    const animatedStyle = useAnimatedStyle(() => {
+      const isActive = currentIndex.value === index;
+      return {
+        color: withTiming(isActive ? activeTabColor : inactiveTabColor, {
+          duration: 300,
+        }),
+      };
+    });
 
     return (
       <Animated.Text
