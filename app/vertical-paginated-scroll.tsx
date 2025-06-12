@@ -27,7 +27,7 @@ export default function VerticalPaginatedScrollScreen() {
         <Screen2 key="screen2" />,
         <Screen3 key="screen3" />,
       ]}
-      backgroundColor="#000"
+      backgroundColor="#FFF"
       paginationRightPosition={20}
       paginationDotColor="#fff"
       paginationDotSize={8}
