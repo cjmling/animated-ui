@@ -23,6 +23,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
   const CONTAINER_PADDING = 3; // Gap between container and button
   const BORDER_RADIUS = 8;
   const BORDER_WIDTH = 1;
+  const BUTTON_FONT_SIZE = 16;
   const BUTTONS_CONTAINER_HEIGHT = 40;
   const BUTTONS_CONTAINER_WIDTH = 350;
   const BUTTON_WIDTH = BUTTONS_CONTAINER_WIDTH / buttons.length;
@@ -87,6 +88,7 @@ export const GroupButton: React.FC<GroupButtonProps> = ({
               style={[
                 styles.buttonText,
                 {
+                  fontSize: BUTTON_FONT_SIZE,
                   color:
                     index === selectedIndex
                       ? SELECTED_BUTTON_TEXT_COLOR
@@ -108,15 +110,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
     justifyContent: "center",
   },
   unselectedButton: {
     backgroundColor: "transparent",
   },
   buttonText: {
-    fontSize: 16,
     fontWeight: "600",
     color: "black",
     textAlign: "center",
