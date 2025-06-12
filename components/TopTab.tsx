@@ -59,14 +59,6 @@ export const TopTab: React.FC<TopTabProps> = ({
     };
   });
 
-  const renderScreens = useCallback(() => {
-    return screens.map((screen, index) => (
-      <View key={index} style={styles.screen}>
-        {screen}
-      </View>
-    ));
-  }, [screens]);
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -78,6 +70,14 @@ export const TopTab: React.FC<TopTabProps> = ({
       height: "100%",
     },
   });
+
+  const renderScreens = useCallback(() => {
+    return screens.map((screen, index) => (
+      <View key={index} style={styles.screen}>
+        {screen}
+      </View>
+    ));
+  }, [screens, styles.screen]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
