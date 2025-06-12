@@ -45,8 +45,8 @@ export default function TabScroll({
   labels,
   initialIndex = 0,
   backgroundColor = "#000",
-  activeTabColor = "#000",
-  inactiveTabColor = "red",
+  activeTabColor = "#FFF",
+  inactiveTabColor = "#000",
   tabFontSize = 16,
   tabBarHeight = 50,
   indicatorColor = "#000",
@@ -98,6 +98,26 @@ export default function TabScroll({
     });
   };
 
+  const TabLabel = ({ label, index }: { label: string; index: number }) => {
+    const animatedStyle = useAnimatedStyle(() => ({
+      color: currentIndex.value === index ? activeTabColor : inactiveTabColor,
+    }));
+
+    return (
+      <Animated.Text
+        style={[
+          {
+            fontWeight: "500",
+            fontSize: tabFontSize,
+          },
+          animatedStyle,
+        ]}
+      >
+        {label}
+      </Animated.Text>
+    );
+  };
+
   const Tabs = () => {
     return (
       <View
@@ -143,20 +163,7 @@ export default function TabScroll({
             }}
             onPress={() => handleTabPress(index)}
           >
-            <Animated.Text
-              style={[
-                {
-                  fontWeight: "500",
-                  fontSize: tabFontSize,
-                  color:
-                    currentIndex.value === index
-                      ? activeTabColor
-                      : inactiveTabColor,
-                },
-              ]}
-            >
-              {label} : {currentIndex.value}
-            </Animated.Text>
+            <TabLabel label={label} index={index} />
           </TouchableOpacity>
         ))}
       </View>
