@@ -13,6 +13,12 @@ import Animated, {
 const ITEM_WIDTH = 50;
 const ITEM_HEIGHT = 50;
 const NUMBERS = Array.from({ length: 10 }, (_, i) => i + 1);
+const CONTAINER_WIDTH = 300;
+
+// Calculate center offsets for first and last numbers
+const FIRST_NUMBER_CENTER_OFFSET = CONTAINER_WIDTH / 2 - ITEM_WIDTH / 2;
+const LAST_NUMBER_CENTER_OFFSET =
+  CONTAINER_WIDTH / 2 - ((NUMBERS.length - 1) * ITEM_WIDTH + ITEM_WIDTH / 2);
 
 interface NumberScrollPickerProps {
   /** Initial selected number (defaults to 1) */
@@ -38,11 +44,7 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   backgroundColor = "#fff",
   centerNumber,
 }) => {
-  const CONTAINER_WIDTH = 300;
-
   // Shared values for tracking the scroll position
-  // offset: current position of the number picker
-  // accumulatedOffset: stores the position when a new gesture begins
   const offset = useSharedValue(0);
   const accumulatedOffset = useSharedValue(0);
 
@@ -51,8 +53,6 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
     if (centerNumber !== undefined) {
       const centerIndex = NUMBERS.indexOf(centerNumber);
       if (centerIndex !== -1) {
-        // Calculate the offset needed to center the number
-        // Center of container - (number position + half of item width)
         const centerOffset =
           CONTAINER_WIDTH / 2 - (centerIndex * ITEM_WIDTH + ITEM_WIDTH / 2);
         offset.value = centerOffset;
@@ -64,16 +64,31 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   // Pan gesture handler for horizontal scrolling
   const gesture = Gesture.Pan()
     .onBegin(() => {
-      // Store the current position when gesture starts
       accumulatedOffset.value = offset.value;
     })
     .onUpdate((event) => {
-      // Update position based on gesture movement
-      // translationX represents the horizontal movement from gesture start
-      offset.value = accumulatedOffset.value + event.translationX;
+      // Calculate the new offset
+      const newOffset = accumulatedOffset.value + event.translationX;
+
+      // Apply bounce-back behavior
+      if (newOffset > FIRST_NUMBER_CENTER_OFFSET) {
+        // If scrolled too far right (past first number), bounce back to first number
+        offset.value = FIRST_NUMBER_CENTER_OFFSET;
+      } else if (newOffset < LAST_NUMBER_CENTER_OFFSET) {
+        // If scrolled too far left (past last number), bounce back to last number
+        offset.value = LAST_NUMBER_CENTER_OFFSET;
+      } else {
+        // Normal scrolling within bounds
+        offset.value = newOffset;
+      }
     })
     .onEnd((event) => {
-      // Save the final position when gesture ends
+      // Ensure the final position is within bounds
+      if (offset.value > FIRST_NUMBER_CENTER_OFFSET) {
+        offset.value = FIRST_NUMBER_CENTER_OFFSET;
+      } else if (offset.value < LAST_NUMBER_CENTER_OFFSET) {
+        offset.value = LAST_NUMBER_CENTER_OFFSET;
+      }
       accumulatedOffset.value = offset.value;
     });
 
