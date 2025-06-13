@@ -13,10 +13,6 @@ export default function HomeScreen() {
           href="/vertical-paginated-scroll"
           label="Vertical Paginated Scroll Demo"
         />
-        <MenuItem
-          href="/number-scroll-picker"
-          label="Number Scroll Picker Demo"
-        />
       </View>
     </View>
   );
