@@ -35,6 +35,8 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   numberFontSize = 24,
   backgroundColor = "#fff",
 }) => {
+  const CONTAINER_WIDTH = 300;
+
   // Shared values for tracking the scroll position
   // offset: current position of the number picker
   // accumulatedOffset: stores the position when a new gesture begins
@@ -75,7 +77,7 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
 
   return (
     <GestureHandlerRootView style={[styles.container, { backgroundColor }]}>
-      <View style={styles.pickerContainer}>
+      <View style={[styles.pickerContainer, { width: CONTAINER_WIDTH }]}>
         <GestureDetector gesture={gesture}>
           <Animated.View
             style={[
@@ -115,7 +117,6 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     height: ITEM_HEIGHT,
-    width: 300,
     backgroundColor: "red",
   },
   numbersContainer: {
