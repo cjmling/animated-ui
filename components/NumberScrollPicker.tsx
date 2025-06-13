@@ -79,7 +79,9 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
         offset.value = LAST_NUMBER_CENTER_OFFSET;
       }
       accumulatedOffset.value = offset.value;
-    });
+    })
+    .minDistance(0) // Start tracking immediately
+    .activeOffsetX([-1, 1]); // Start tracking with minimal horizontal movement
 
   // Animated style that applies the horizontal translation with spring animation
   const numberContainerAnimatedStyle = useAnimatedStyle(() => {
@@ -88,7 +90,11 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
         {
           translateX: withSpring(offset.value, {
             damping: 10,
-            stiffness: 50,
+            stiffness: 100, // Increased stiffness for faster response
+            mass: 0.1, // Reduced mass for quicker movement
+            velocity: 0, // Start from rest
+            restDisplacementThreshold: 0.01, // Smaller threshold for more precise settling
+            restSpeedThreshold: 0.01, // Smaller threshold for more precise settling
           }),
         },
       ],
