@@ -8,7 +8,6 @@ import {
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
 } from "react-native-reanimated";
 
 const ITEM_WIDTH = 60;
@@ -36,40 +35,19 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   numberFontSize = 24,
   backgroundColor = "#fff",
 }) => {
-  const translateX = useSharedValue((initialNumber - 1) * -ITEM_WIDTH);
-  const currentIndex = useSharedValue(initialNumber - 1);
+  const offset = useSharedValue(0);
 
   const gesture = Gesture.Pan()
     .onUpdate((event) => {
-      translateX.value = event.translationX + currentIndex.value * -ITEM_WIDTH;
+      offset.value = event.translationX;
     })
     .onEnd((event) => {
-      const shouldSwipe = Math.abs(event.velocityX) > 500;
-      const shouldSnap = Math.abs(event.translationX) > ITEM_WIDTH * 0.3;
-
-      if (shouldSwipe || shouldSnap) {
-        const direction = event.translationX > 0 ? -1 : 1;
-        const newIndex = Math.max(
-          0,
-          Math.min(NUMBERS.length - 1, currentIndex.value + direction)
-        );
-        currentIndex.value = newIndex;
-        translateX.value = withSpring(newIndex * -ITEM_WIDTH, {
-          damping: 20,
-          stiffness: 150,
-        });
-        onNumberSelect?.(NUMBERS[newIndex]);
-      } else {
-        translateX.value = withSpring(currentIndex.value * -ITEM_WIDTH, {
-          damping: 20,
-          stiffness: 150,
-        });
-      }
+      offset.value = event.translationX;
     });
 
-  const animatedStyle = useAnimatedStyle(() => {
+  const numberContainerAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ translateX: translateX.value }],
+      transform: [{ translateX: offset.value }],
     };
   });
 
@@ -91,7 +69,7 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
               {
                 width: ITEM_WIDTH * NUMBERS.length,
               },
-              animatedStyle,
+              numberContainerAnimatedStyle,
             ]}
           >
             {NUMBERS.map((number, index) => (
