@@ -8,6 +8,7 @@ import {
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withDecay,
   withSpring,
 } from "react-native-reanimated";
 
@@ -71,13 +72,16 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
       // Allow scrolling past boundaries during the gesture
       offset.value = accumulatedOffset.value + event.translationX;
     })
-    .onEnd(() => {
-      // Bounce back to boundaries if scrolled past them
-      if (offset.value > FIRST_NUMBER_CENTER_OFFSET) {
-        offset.value = FIRST_NUMBER_CENTER_OFFSET;
-      } else if (offset.value < LAST_NUMBER_CENTER_OFFSET) {
-        offset.value = LAST_NUMBER_CENTER_OFFSET;
-      }
+    .onEnd((event) => {
+      // Apply momentum scrolling based on velocity
+      const finalOffset = withDecay({
+        velocity: event.velocityX,
+        deceleration: 0.98,
+        clamp: [LAST_NUMBER_CENTER_OFFSET, FIRST_NUMBER_CENTER_OFFSET],
+      });
+
+      // Update the offset with the decayed value
+      offset.value = finalOffset;
       accumulatedOffset.value = offset.value;
     })
     .minDistance(0) // Start tracking immediately
