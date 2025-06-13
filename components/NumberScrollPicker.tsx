@@ -8,6 +8,7 @@ import {
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
 } from "react-native-reanimated";
 
 const ITEM_WIDTH = 50;
@@ -70,19 +71,17 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
       // Calculate the new offset
       const newOffset = accumulatedOffset.value + event.translationX;
 
-      // Apply bounce-back behavior
+      // Apply bounds checking
       if (newOffset > FIRST_NUMBER_CENTER_OFFSET) {
-        // If scrolled too far right (past first number), bounce back to first number
         offset.value = FIRST_NUMBER_CENTER_OFFSET;
       } else if (newOffset < LAST_NUMBER_CENTER_OFFSET) {
-        // If scrolled too far left (past last number), bounce back to last number
         offset.value = LAST_NUMBER_CENTER_OFFSET;
       } else {
         // Normal scrolling within bounds
         offset.value = newOffset;
       }
     })
-    .onEnd((event) => {
+    .onEnd(() => {
       // Ensure the final position is within bounds
       if (offset.value > FIRST_NUMBER_CENTER_OFFSET) {
         offset.value = FIRST_NUMBER_CENTER_OFFSET;
@@ -92,11 +91,17 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
       accumulatedOffset.value = offset.value;
     });
 
-  // Animated style that applies the horizontal translation
-  // This moves the number container based on the offset value
+  // Animated style that applies the horizontal translation with spring animation
   const numberContainerAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ translateX: offset.value }],
+      transform: [
+        {
+          translateX: withSpring(offset.value, {
+            damping: 10,
+            stiffness: 50,
+          }),
+        },
+      ],
     };
   });
 
