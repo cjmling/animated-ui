@@ -35,19 +35,30 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   numberFontSize = 24,
   backgroundColor = "#fff",
 }) => {
+  // Shared values for tracking the scroll position
+  // offset: current position of the number picker
+  // accumulatedOffset: stores the position when a new gesture begins
   const offset = useSharedValue(0);
+  const accumulatedOffset = useSharedValue(0);
 
+  // Pan gesture handler for horizontal scrolling
   const gesture = Gesture.Pan()
     .onBegin(() => {
-      offset.value = offset.value;
+      // Store the current position when gesture starts
+      accumulatedOffset.value = offset.value;
     })
     .onUpdate((event) => {
-      offset.value = event.translationX;
+      // Update position based on gesture movement
+      // translationX represents the horizontal movement from gesture start
+      offset.value = accumulatedOffset.value + event.translationX;
     })
     .onEnd((event) => {
-      offset.value = event.translationX;
+      // Save the final position when gesture ends
+      accumulatedOffset.value = offset.value;
     });
 
+  // Animated style that applies the horizontal translation
+  // This moves the number container based on the offset value
   const numberContainerAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: offset.value }],
