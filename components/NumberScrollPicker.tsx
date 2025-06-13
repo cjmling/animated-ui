@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Gesture,
@@ -10,8 +10,8 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-const ITEM_WIDTH = 60;
-const ITEM_HEIGHT = 60;
+const ITEM_WIDTH = 50;
+const ITEM_HEIGHT = 50;
 const NUMBERS = Array.from({ length: 10 }, (_, i) => i + 1);
 
 interface NumberScrollPickerProps {
@@ -27,6 +27,8 @@ interface NumberScrollPickerProps {
   numberFontSize?: number;
   /** Background color of the container */
   backgroundColor?: string;
+  /** Number to center initially in the UI */
+  centerNumber?: number;
 }
 
 export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
@@ -34,6 +36,7 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   onNumberSelect,
   numberFontSize = 24,
   backgroundColor = "#fff",
+  centerNumber,
 }) => {
   const CONTAINER_WIDTH = 300;
 
@@ -42,6 +45,21 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   // accumulatedOffset: stores the position when a new gesture begins
   const offset = useSharedValue(0);
   const accumulatedOffset = useSharedValue(0);
+
+  // Calculate initial offset to center the specified number
+  useEffect(() => {
+    if (centerNumber !== undefined) {
+      const centerIndex = NUMBERS.indexOf(centerNumber);
+      if (centerIndex !== -1) {
+        // Calculate the offset needed to center the number
+        // Center of container - (number position + half of item width)
+        const centerOffset =
+          CONTAINER_WIDTH / 2 - (centerIndex * ITEM_WIDTH + ITEM_WIDTH / 2);
+        offset.value = centerOffset;
+        accumulatedOffset.value = centerOffset;
+      }
+    }
+  }, [centerNumber]);
 
   // Pan gesture handler for horizontal scrolling
   const gesture = Gesture.Pan()
