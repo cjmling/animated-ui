@@ -68,21 +68,11 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
       accumulatedOffset.value = offset.value;
     })
     .onUpdate((event) => {
-      // Calculate the new offset
-      const newOffset = accumulatedOffset.value + event.translationX;
-
-      // Apply bounds checking
-      if (newOffset > FIRST_NUMBER_CENTER_OFFSET) {
-        offset.value = FIRST_NUMBER_CENTER_OFFSET;
-      } else if (newOffset < LAST_NUMBER_CENTER_OFFSET) {
-        offset.value = LAST_NUMBER_CENTER_OFFSET;
-      } else {
-        // Normal scrolling within bounds
-        offset.value = newOffset;
-      }
+      // Allow scrolling past boundaries during the gesture
+      offset.value = accumulatedOffset.value + event.translationX;
     })
     .onEnd(() => {
-      // Ensure the final position is within bounds
+      // Bounce back to boundaries if scrolled past them
       if (offset.value > FIRST_NUMBER_CENTER_OFFSET) {
         offset.value = FIRST_NUMBER_CENTER_OFFSET;
       } else if (offset.value < LAST_NUMBER_CENTER_OFFSET) {
