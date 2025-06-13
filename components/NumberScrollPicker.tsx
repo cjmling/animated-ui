@@ -38,6 +38,9 @@ export const NumberScrollPicker: React.FC<NumberScrollPickerProps> = ({
   const offset = useSharedValue(0);
 
   const gesture = Gesture.Pan()
+    .onBegin(() => {
+      offset.value = offset.value;
+    })
     .onUpdate((event) => {
       offset.value = event.translationX;
     })
