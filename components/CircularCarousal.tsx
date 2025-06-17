@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import Animated, {
+  FadeIn,
+  FadeOut,
   interpolate,
   interpolateColor,
   runOnJS,
@@ -36,27 +38,34 @@ export const CircularCarousal = () => {
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x / CIRCULAR_TOTAL_WIDTH;
       const newActiveIndex = Math.round(scrollX.value);
-      // Sometime newActiveIndex is beyond the items array length
-      if (newActiveIndex >= 0 && newActiveIndex < items.length) {
+      // Sometime newActiveIndex is beyond the items array length and only set the active index if it is different from the current active index
+      if (
+        newActiveIndex >= 0 &&
+        newActiveIndex < items.length &&
+        newActiveIndex !== activeIndex
+      ) {
         runOnJS(setActiveIndex)(newActiveIndex);
       }
     },
   });
 
   return (
-    <View style={{ flex: 1 }}>
-      <View
+    <View style={{ flex: 1, backgroundColor: "#222" }}>
+      <Animated.View
+        entering={FadeIn.duration(500)}
+        exiting={FadeOut.duration(500)}
         style={{
           backgroundColor: "#222",
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
         }}
+        key={`activeIndex-${activeIndex}`}
       >
-        <Text style={{ color: "#fff", fontSize: 100 }}>
+        <Animated.Text style={{ color: "#fff", fontSize: 100 }}>
           {items[activeIndex].title.toLocaleUpperCase()}
-        </Text>
-      </View>
+        </Animated.Text>
+      </Animated.View>
       <View style={{ position: "absolute", bottom: 0, left: 0 }}>
         <Animated.FlatList
           style={{
