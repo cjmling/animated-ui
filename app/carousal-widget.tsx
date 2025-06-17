@@ -19,16 +19,16 @@ export default function CarousalWidgetScreen() {
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <View style={{ backgroundColor: "red" }}>
-        <CarousalWidget
-          items={[
-            <CarousalItem key="1" />,
-            <CarousalItem key="2" />,
-            <CarousalItem key="3" />,
-          ]}
-        />
-      </View>
+    <View
+      style={{ padding: 20, justifyContent: "center", alignItems: "center" }}
+    >
+      <CarousalWidget
+        items={[
+          <CarousalItem key="1" />,
+          <CarousalItem key="2" />,
+          <CarousalItem key="3" />,
+        ]}
+      />
     </View>
   );
 }

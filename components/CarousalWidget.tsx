@@ -1,13 +1,5 @@
 import React from "react";
 import { Dimensions, FlatList, View } from "react-native";
-import Animated, {
-  Extrapolation,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface CarousalWidgetProps {
   /** Array of items to be displayed in the carousel */
@@ -36,99 +28,35 @@ interface CarousalWidgetProps {
   paginationInactiveDotOpacity?: number;
 }
 
-export const CarousalWidget: React.FC<CarousalWidgetProps> = ({
-  items,
-  initialIndex = 0,
-  height = 200,
-  backgroundColor = "transparent",
-  paginationBottomPosition = 10,
-  paginationDotColor = "#000",
-  paginationDotSize = 6,
-  paginationDotGap = 6,
-  paginationActiveDotScale = 1.2,
-  paginationInactiveDotScale = 0.8,
-  paginationActiveDotOpacity = 1,
-  paginationInactiveDotOpacity = 0.3,
-}) => {
-  const scrollX = useSharedValue(0);
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const CAROUSEL_CONTAINER_WIDTH = SCREEN_WIDTH * 0.9;
+const CAROUSEL_WIDTH = SCREEN_WIDTH * 0.7;
+const CAROUSEL_SPACING = 10;
+const CAROUSEL_TOTAL_WIDTH = CAROUSEL_WIDTH + CAROUSEL_SPACING;
 
-  const PaginationDot: React.FC<{ index: number }> = ({ index }) => {
-    const dotStyle = useAnimatedStyle(() => {
-      const progress = scrollX.value / SCREEN_WIDTH;
-      const opacity = interpolate(
-        progress,
-        [index - 1, index, index + 1],
-        [
-          paginationInactiveDotOpacity,
-          paginationActiveDotOpacity,
-          paginationInactiveDotOpacity,
-        ],
-        Extrapolation.CLAMP
-      );
-      const scale = interpolate(
-        progress,
-        [index - 1, index, index + 1],
-        [
-          paginationInactiveDotScale,
-          paginationActiveDotScale,
-          paginationInactiveDotScale,
-        ],
-        Extrapolation.CLAMP
-      );
-      return {
-        opacity,
-        transform: [{ scale }],
-      };
-    });
-
-    return (
-      <Animated.View
-        style={[
-          {
-            width: paginationDotSize,
-            height: paginationDotSize,
-            borderRadius: paginationDotSize / 2,
-            backgroundColor: paginationDotColor,
-          },
-          dotStyle,
-        ]}
-      />
-    );
-  };
-
+export const CarousalWidget: React.FC<CarousalWidgetProps> = ({ items }) => {
   return (
-    <View style={{ height, backgroundColor, gap: 10 }}>
-      <FlatList
-        style={{ backgroundColor: "blue" }}
-        contentContainerStyle={{
-          flex: 1,
-        }}
-        data={items}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={(event) => {
-          scrollX.value = event.nativeEvent.contentOffset.x;
-        }}
-        scrollEventThrottle={16}
-        initialScrollIndex={initialIndex}
-        renderItem={({ item }) => (
-          <View style={{ width: "100%", backgroundColor: "green" }}>
-            {item}
-          </View>
-        )}
-      />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: paginationDotGap,
-        }}
-      >
-        {items.map((_, index) => (
-          <PaginationDot key={index} index={index} />
-        ))}
+    <View style={{ height: 200 }}>
+      <View style={{ flex: 1, width: CAROUSEL_CONTAINER_WIDTH }}>
+        <FlatList
+          data={items}
+          contentContainerStyle={{
+            paddingHorizontal: (CAROUSEL_CONTAINER_WIDTH - CAROUSEL_WIDTH) / 2,
+            backgroundColor: "red",
+            gap: CAROUSEL_SPACING,
+          }}
+          renderItem={({ item }) => (
+            <View style={{ width: CAROUSEL_WIDTH, backgroundColor: "green" }}>
+              {item}
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={16}
+          snapToInterval={CAROUSEL_TOTAL_WIDTH}
+          decelerationRate="fast"
+        />
       </View>
     </View>
   );
