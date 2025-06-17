@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
+  runOnJS,
   SharedValue,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -28,10 +30,16 @@ const CIRCULAR_SPACING = 10;
 const CIRCULAR_TOTAL_WIDTH = CIRCULAR_PREVIEW_WIDTH + CIRCULAR_SPACING;
 
 export const CircularCarousal = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const scrollX = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x / CIRCULAR_TOTAL_WIDTH;
+      const newActiveIndex = Math.round(scrollX.value);
+      // Sometime newActiveIndex is beyond the items array length
+      if (newActiveIndex >= 0 && newActiveIndex < items.length) {
+        runOnJS(setActiveIndex)(newActiveIndex);
+      }
     },
   });
 
@@ -39,11 +47,15 @@ export const CircularCarousal = () => {
     <View style={{ flex: 1 }}>
       <View
         style={{
-          backgroundColor: "red",
+          backgroundColor: "#222",
           flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Text>Hello</Text>
+        <Text style={{ color: "#fff", fontSize: 100 }}>
+          {items[activeIndex].title.toLocaleUpperCase()}
+        </Text>
       </View>
       <View style={{ position: "absolute", bottom: 0, left: 0 }}>
         <Animated.FlatList
