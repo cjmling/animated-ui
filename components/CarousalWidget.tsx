@@ -99,6 +99,10 @@ export const CarousalWidget: React.FC<CarousalWidgetProps> = ({
   return (
     <View style={{ height, backgroundColor, gap: 10 }}>
       <FlatList
+        style={{ backgroundColor: "blue" }}
+        contentContainerStyle={{
+          flex: 1,
+        }}
         data={items}
         horizontal
         pagingEnabled
@@ -108,13 +112,10 @@ export const CarousalWidget: React.FC<CarousalWidgetProps> = ({
         }}
         scrollEventThrottle={16}
         initialScrollIndex={initialIndex}
-        getItemLayout={(_, index) => ({
-          length: SCREEN_WIDTH,
-          offset: SCREEN_WIDTH * index,
-          index,
-        })}
         renderItem={({ item }) => (
-          <View style={{ width: SCREEN_WIDTH, height: "100%" }}>{item}</View>
+          <View style={{ width: "100%", backgroundColor: "green" }}>
+            {item}
+          </View>
         )}
       />
       <View
