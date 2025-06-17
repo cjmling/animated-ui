@@ -36,30 +36,38 @@ export const CircularCarousal = () => {
   });
 
   return (
-    <View
-      style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "#222" }}
-    >
-      <Animated.FlatList
+    <View style={{ flex: 1 }}>
+      <View
         style={{
-          flexGrow: 0, // To stop carousal from taking up the full height of the screen
-          paddingBottom: CIRCULAR_PREVIEW_WIDTH / 2,
+          backgroundColor: "red",
+          flex: 1,
         }}
-        data={items}
-        renderItem={({ item, index }) => (
-          <CarousalItem item={item} scrollX={scrollX} index={index} />
-        )}
-        keyExtractor={(item) => item.key}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        contentContainerStyle={{
-          paddingHorizontal: (SCREEN_WIDTH - CIRCULAR_PREVIEW_WIDTH) / 2, // This is to center the carousal starting and ending point
-          gap: CIRCULAR_SPACING,
-        }}
-        snapToInterval={CIRCULAR_TOTAL_WIDTH}
-        decelerationRate="fast"
-      />
+      >
+        <Text>Hello</Text>
+      </View>
+      <View style={{ position: "absolute", bottom: 0, left: 0 }}>
+        <Animated.FlatList
+          style={{
+            flexGrow: 0, // To stop carousal from taking up the full height of the screen
+            paddingBottom: CIRCULAR_PREVIEW_WIDTH / 2,
+          }}
+          data={items}
+          renderItem={({ item, index }) => (
+            <CarousalItem item={item} scrollX={scrollX} index={index} />
+          )}
+          keyExtractor={(item) => item.key}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          contentContainerStyle={{
+            paddingHorizontal: (SCREEN_WIDTH - CIRCULAR_PREVIEW_WIDTH) / 2, // This is to center the carousal starting and ending point
+            gap: CIRCULAR_SPACING,
+          }}
+          snapToInterval={CIRCULAR_TOTAL_WIDTH}
+          decelerationRate="fast"
+        />
+      </View>
     </View>
   );
 };
