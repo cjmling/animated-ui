@@ -30,34 +30,35 @@ interface CarousalWidgetProps {
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const CAROUSEL_CONTAINER_WIDTH = SCREEN_WIDTH * 0.9;
+const CAROUSEL_CONTAINER_HEIGHT = 200;
 const CAROUSEL_WIDTH = SCREEN_WIDTH * 0.7;
 const CAROUSEL_SPACING = 10;
 const CAROUSEL_TOTAL_WIDTH = CAROUSEL_WIDTH + CAROUSEL_SPACING;
 
 export const CarousalWidget: React.FC<CarousalWidgetProps> = ({ items }) => {
   return (
-    <View style={{ height: 200 }}>
-      <View style={{ flex: 1, width: CAROUSEL_CONTAINER_WIDTH }}>
-        <FlatList
-          data={items}
-          contentContainerStyle={{
-            paddingHorizontal: (CAROUSEL_CONTAINER_WIDTH - CAROUSEL_WIDTH) / 2,
-            backgroundColor: "red",
-            gap: CAROUSEL_SPACING,
-          }}
-          renderItem={({ item }) => (
-            <View style={{ width: CAROUSEL_WIDTH, backgroundColor: "green" }}>
-              {item}
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
-          snapToInterval={CAROUSEL_TOTAL_WIDTH}
-          decelerationRate="fast"
-        />
-      </View>
+    <View
+      style={{
+        width: CAROUSEL_CONTAINER_WIDTH,
+        height: CAROUSEL_CONTAINER_HEIGHT,
+      }}
+    >
+      <FlatList
+        data={items}
+        contentContainerStyle={{
+          paddingHorizontal: (CAROUSEL_CONTAINER_WIDTH - CAROUSEL_WIDTH) / 2,
+          gap: CAROUSEL_SPACING,
+        }}
+        renderItem={({ item }) => (
+          <View style={{ width: CAROUSEL_WIDTH }}>{item}</View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        scrollEventThrottle={16}
+        snapToInterval={CAROUSEL_TOTAL_WIDTH}
+        decelerationRate="fast"
+      />
     </View>
   );
 };
