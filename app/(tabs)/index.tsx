@@ -14,6 +14,7 @@ export default function HomeScreen() {
           label="Vertical Paginated Scroll Demo"
         />
         <MenuItem href="/circular-carousal" label="Circular Carousal Demo" />
+        <MenuItem href="/carousal-widget" label="Carousal Widget Demo" />
       </View>
     </View>
   );
