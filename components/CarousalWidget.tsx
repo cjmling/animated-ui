@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions, FlatList, View } from "react-native";
 
 interface CarousalWidgetProps {
@@ -35,12 +35,48 @@ const CAROUSEL_WIDTH = SCREEN_WIDTH * 0.7;
 const CAROUSEL_SPACING = 10;
 const CAROUSEL_TOTAL_WIDTH = CAROUSEL_WIDTH + CAROUSEL_SPACING;
 
-export const CarousalWidget: React.FC<CarousalWidgetProps> = ({ items }) => {
+export const CarousalWidget: React.FC<CarousalWidgetProps> = ({
+  items,
+  paginationDotColor = "#000",
+  paginationDotSize = 6,
+  paginationDotGap = 6,
+  paginationActiveDotScale = 1.2,
+  paginationInactiveDotScale = 0.8,
+  paginationActiveDotOpacity = 1,
+  paginationInactiveDotOpacity = 0.3,
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const PaginationDot: React.FC<{ index: number }> = ({ index }) => {
+    const isActive = index === currentIndex;
+    return (
+      <View
+        style={{
+          width: paginationDotSize,
+          height: paginationDotSize,
+          borderRadius: paginationDotSize / 2,
+          backgroundColor: paginationDotColor,
+          opacity: isActive
+            ? paginationActiveDotOpacity
+            : paginationInactiveDotOpacity,
+          transform: [
+            {
+              scale: isActive
+                ? paginationActiveDotScale
+                : paginationInactiveDotScale,
+            },
+          ],
+        }}
+      />
+    );
+  };
+
   return (
     <View
       style={{
         width: CAROUSEL_CONTAINER_WIDTH,
         height: CAROUSEL_CONTAINER_HEIGHT,
+        gap: 10,
       }}
     >
       <FlatList
@@ -58,7 +94,25 @@ export const CarousalWidget: React.FC<CarousalWidgetProps> = ({ items }) => {
         scrollEventThrottle={16}
         snapToInterval={CAROUSEL_TOTAL_WIDTH}
         decelerationRate="fast"
+        onMomentumScrollEnd={(event) => {
+          const newIndex = Math.round(
+            event.nativeEvent.contentOffset.x / CAROUSEL_TOTAL_WIDTH
+          );
+          setCurrentIndex(newIndex);
+        }}
       />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: paginationDotGap,
+        }}
+      >
+        {items.map((_, index) => (
+          <PaginationDot key={index} index={index} />
+        ))}
+      </View>
     </View>
   );
 };
