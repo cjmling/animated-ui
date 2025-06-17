@@ -36,7 +36,7 @@ export const CircularCarousal = () => {
   const scrollX = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
-      scrollX.value = event.contentOffset.x / CIRCULAR_TOTAL_WIDTH;
+      scrollX.value = event.contentOffset.x / CIRCULAR_TOTAL_WIDTH; // You may choose to use clamp to ensure the scrollX value is always between 0 and items.length 18:47
       const newActiveIndex = Math.round(scrollX.value);
       // Sometime newActiveIndex is beyond the items array length and only set the active index if it is different from the current active index
       if (
