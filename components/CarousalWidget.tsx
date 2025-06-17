@@ -26,14 +26,17 @@ interface CarousalWidgetProps {
   paginationActiveDotOpacity?: number;
   /** Opacity of the inactive pagination dots (defaults to 0.3) */
   paginationInactiveDotOpacity?: number;
+  /** Width of the carousel container in pixels */
+  containerWidth?: number;
+  /** Height of the carousel container in pixels (defaults to 200) */
+  containerHeight?: number;
+  /** Width of each carousel item as a percentage of screen width (defaults to 0.7) */
+  itemWidthPercentage?: number;
+  /** Spacing between carousel items in pixels (defaults to 10) */
+  itemSpacing?: number;
 }
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
-const CAROUSEL_CONTAINER_WIDTH = SCREEN_WIDTH * 0.9;
-const CAROUSEL_CONTAINER_HEIGHT = 200;
-const CAROUSEL_WIDTH = SCREEN_WIDTH * 0.7;
-const CAROUSEL_SPACING = 10;
-const CAROUSEL_TOTAL_WIDTH = CAROUSEL_WIDTH + CAROUSEL_SPACING;
 
 export const CarousalWidget: React.FC<CarousalWidgetProps> = ({
   items,
@@ -44,8 +47,18 @@ export const CarousalWidget: React.FC<CarousalWidgetProps> = ({
   paginationInactiveDotScale = 0.8,
   paginationActiveDotOpacity = 1,
   paginationInactiveDotOpacity = 0.3,
+  containerWidth = SCREEN_WIDTH * 0.9,
+  containerHeight = 200,
+  itemWidthPercentage = 0.7,
+  itemSpacing = 10,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const CAROUSEL_CONTAINER_WIDTH = containerWidth;
+  const CAROUSEL_CONTAINER_HEIGHT = containerHeight;
+  const CAROUSEL_WIDTH = SCREEN_WIDTH * itemWidthPercentage;
+  const CAROUSEL_SPACING = itemSpacing;
+  const CAROUSEL_TOTAL_WIDTH = CAROUSEL_WIDTH + CAROUSEL_SPACING;
 
   const PaginationDot: React.FC<{ index: number }> = ({ index }) => {
     const isActive = index === currentIndex;
