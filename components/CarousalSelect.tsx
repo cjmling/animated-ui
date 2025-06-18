@@ -9,8 +9,10 @@ import Animated, {
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH * 0.65;
-const CARD_HEIGHT = 200;
-const CARD_SPACING = 16;
+const CARD_HEIGHT = 300;
+const CARD_SPACING = 30;
+const CARD_TOP_PADDING = 100;
+const CARD_TOTAL_WIDTH = CARD_WIDTH + CARD_SPACING;
 
 const cards = [
   { key: "1", title: "airtel", offer: "50% cashback on mobile" },
@@ -44,21 +46,23 @@ export default function CarousalSelect() {
           width: "100%",
           height: CARD_HEIGHT * 2,
           backgroundColor: "yellow",
-          justifyContent: "center",
+          //   justifyContent: "center",
         }}
       >
         {/* Center highlight border */}
         <View
           pointerEvents="none"
-          style={[
-            styles.centerHighlight,
-            {
-              left: (SCREEN_WIDTH - CARD_WIDTH) / 2,
-              width: CARD_WIDTH,
-              height: CARD_HEIGHT,
-              backgroundColor: "green",
-            },
-          ]}
+          style={{
+            position: "absolute",
+            borderWidth: 3,
+            borderColor: "#FFD700",
+            borderRadius: 18,
+            zIndex: 1,
+            left: (SCREEN_WIDTH - CARD_WIDTH) / 2,
+            width: CARD_WIDTH,
+            height: CARD_HEIGHT,
+            top: CARD_TOP_PADDING,
+          }}
         />
         <Animated.FlatList
           style={{
@@ -69,11 +73,13 @@ export default function CarousalSelect() {
           keyExtractor={(item) => item.key}
           horizontal
           showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH + CARD_SPACING}
+          snapToInterval={CARD_TOTAL_WIDTH}
           decelerationRate="fast"
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
-            backgroundColor: "red",
+            justifyContent: "center",
+            paddingTop: CARD_TOP_PADDING,
+            gap: CARD_SPACING,
           }}
           onScroll={onScroll}
           scrollEventThrottle={16}
@@ -122,25 +128,13 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginTop: 24,
   },
-  centerHighlight: {
-    position: "absolute",
-    borderWidth: 3,
-    borderColor: "#FFD700",
-    borderRadius: 18,
-    zIndex: 1,
-  },
   card: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    marginHorizontal: CARD_SPACING / 2,
     backgroundColor: "#222",
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
   },
   cardTitle: {
     color: "#fff",
