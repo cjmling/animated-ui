@@ -76,11 +76,12 @@ function AnimatedCard({ item, index, scrollX }: any) {
   ];
 
   const animatedStyle = useAnimatedStyle(() => {
-    const rotate = interpolate(scrollX.value, inputRange, [10, 0, -10]);
+    const rotate = interpolate(scrollX.value, inputRange, [-10, 0, 10]);
     const scale = interpolate(scrollX.value, inputRange, [0.92, 1, 0.92]);
     const opacity = interpolate(scrollX.value, inputRange, [0.7, 1, 0.7]);
+    const translateY = interpolate(scrollX.value, inputRange, [-50, 0, -50]);
     return {
-      transform: [{ rotate: `${rotate}deg` }, { scale }],
+      transform: [{ rotate: `${rotate}deg` }, { scale }, { translateY }],
       opacity,
     };
   });
