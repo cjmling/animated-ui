@@ -30,9 +30,23 @@ export default function CarousalSelect() {
   });
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "blue",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Text style={styles.title}>Choose your{"\n"}welcome gift</Text>
-      <View style={styles.carousalWrapper}>
+      <View
+        style={{
+          width: "100%",
+          height: CARD_HEIGHT * 2,
+          backgroundColor: "yellow",
+          justifyContent: "center",
+        }}
+      >
         {/* Center highlight border */}
         <View
           pointerEvents="none"
@@ -42,10 +56,14 @@ export default function CarousalSelect() {
               left: (SCREEN_WIDTH - CARD_WIDTH) / 2,
               width: CARD_WIDTH,
               height: CARD_HEIGHT,
+              backgroundColor: "green",
             },
           ]}
         />
         <Animated.FlatList
+          style={{
+            backgroundColor: "purple",
+          }}
           ref={flatListRef}
           data={cards}
           keyExtractor={(item) => item.key}
@@ -55,6 +73,7 @@ export default function CarousalSelect() {
           decelerationRate="fast"
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
+            backgroundColor: "red",
           }}
           onScroll={onScroll}
           scrollEventThrottle={16}
@@ -95,12 +114,6 @@ function AnimatedCard({ item, index, scrollX }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#181818",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   title: {
     color: "#fff",
     fontSize: 24,
@@ -108,11 +121,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
     marginTop: 24,
-  },
-  carousalWrapper: {
-    width: "100%",
-    height: CARD_HEIGHT + 32,
-    justifyContent: "center",
   },
   centerHighlight: {
     position: "absolute",
