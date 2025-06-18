@@ -13,6 +13,7 @@ const CARD_HEIGHT = 300;
 const CARD_SPACING = 30;
 const CARD_TOP_PADDING = 100;
 const CARD_TOTAL_WIDTH = CARD_WIDTH + CARD_SPACING;
+const CARD_CENTER_SPACING = 20;
 
 const cards = [
   { key: "1", title: "airtel", offer: "50% cashback on mobile" },
@@ -56,12 +57,12 @@ export default function CarousalSelect() {
             position: "absolute",
             borderWidth: 3,
             borderColor: "#FFD700",
-            borderRadius: 18,
+            borderRadius: 18 + CARD_CENTER_SPACING / 2,
             zIndex: 1,
-            left: (SCREEN_WIDTH - CARD_WIDTH) / 2,
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT,
-            top: CARD_TOP_PADDING,
+            left: (SCREEN_WIDTH - CARD_WIDTH - CARD_CENTER_SPACING) / 2,
+            width: CARD_WIDTH + CARD_CENTER_SPACING,
+            height: CARD_HEIGHT + CARD_CENTER_SPACING,
+            top: CARD_TOP_PADDING - CARD_CENTER_SPACING / 2,
           }}
         />
         <Animated.FlatList
