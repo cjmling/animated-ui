@@ -7,6 +7,8 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+// Design https://pin.it/Z0QM0g8Fi
+
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH * 0.65;
 const CARD_HEIGHT = 300;
