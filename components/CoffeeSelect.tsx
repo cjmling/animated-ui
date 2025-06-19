@@ -80,7 +80,7 @@ export default function CoffeeSelect() {
         </Text>
       </View>
       {/* Carousel */}
-      <View style={{ backgroundColor: "blue" }}>
+      <View style={{ zIndex: 2 }}>
         <Animated.FlatList
           data={coffeeData}
           renderItem={({ item, index }) => (
@@ -94,10 +94,10 @@ export default function CoffeeSelect() {
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - CAROUSEL_ITEM_SIZE) / 2,
             gap: CAROUSEL_SPACING,
-            backgroundColor: "red",
           }}
           snapToInterval={CAROUSEL_TOTAL_WIDTH}
           decelerationRate="fast"
+          style={{ flexGrow: 1 }}
         />
       </View>
       {/* Details Card */}
