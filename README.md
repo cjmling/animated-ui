@@ -1,6 +1,6 @@
 # Animated UI Components 🎨
 
-A collection of animated React Native components built with Expo for creating engaging user interfaces.
+A collection of animated React Native components built with Expo using react-native-reanimated library for creating engaging user interfaces. Creator of this collection is still learning how to animate stuff , so please don't expect quality code.
 
 ## Components
 
