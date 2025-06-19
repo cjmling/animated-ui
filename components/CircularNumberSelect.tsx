@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import Animated, {
+  interpolate,
   interpolateColor,
   runOnJS,
   SharedValue,
@@ -11,22 +12,22 @@ import Animated, {
 
 const TICK_COUNT = 61; // 0-60
 const TICK_WIDTH = 2;
-const TICK_HEIGHT = 44;
+const TICK_HEIGHT = 60;
 const TICK_SPACING = 10;
 const TICK_TOTAL_WIDTH = TICK_WIDTH + TICK_SPACING;
 const SCREEN_WIDTH = Dimensions.get("window").width;
-const ITEM_SIZE = 24; // space per tick
+const ITEM_SIZE = 12; // space per tick
 
 const ticks = Array.from({ length: TICK_COUNT }, (_, i) => i);
 
 function Tick({
   item,
   index,
-  scrollX,
+  scrollXSelected,
 }: {
   item: number;
   index: number;
-  scrollX: SharedValue<number>;
+  scrollXSelected: SharedValue<number>;
 }) {
   // Animated highlight for center tick
   const animatedStyle = useAnimatedStyle(() => {
@@ -34,10 +35,19 @@ function Tick({
       height: TICK_HEIGHT,
       width: TICK_WIDTH,
       backgroundColor: interpolateColor(
-        scrollX.value,
+        scrollXSelected.value,
         [index - 1, index, index + 1],
         ["#888", "#FFF", "#888"]
       ),
+      transform: [
+        {
+          rotate: `${interpolate(
+            scrollXSelected.value,
+            [index - 1, index, index + 1],
+            [3, 0, -3]
+          )}deg`,
+        },
+      ],
     };
   });
 
@@ -46,12 +56,13 @@ function Tick({
 
 export default function CircularNumberSelect() {
   const [selected, setSelected] = useState(Math.floor(TICK_COUNT / 2));
-  const scrollX = useSharedValue(selected * ITEM_SIZE);
+  const scrollXSelected = useSharedValue(selected * ITEM_SIZE);
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
-      scrollX.value = event.contentOffset.x / TICK_TOTAL_WIDTH;
-      const newActiveIndex = Math.round(scrollX.value);
+      scrollXSelected.value = event.contentOffset.x / TICK_TOTAL_WIDTH;
+      console.log(scrollXSelected.value);
+      const newActiveIndex = Math.round(scrollXSelected.value);
       if (
         newActiveIndex >= 0 &&
         newActiveIndex < TICK_COUNT &&
@@ -98,7 +109,7 @@ export default function CircularNumberSelect() {
         <Animated.FlatList
           data={ticks}
           renderItem={({ item, index }) => (
-            <Tick item={item} index={index} scrollX={scrollX} />
+            <Tick item={item} index={index} scrollXSelected={scrollXSelected} />
           )}
           keyExtractor={(item) => item.toString()}
           horizontal
