@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import Animated, {
+  interpolateColor,
   runOnJS,
   SharedValue,
   useAnimatedScrollHandler,
@@ -10,7 +11,7 @@ import Animated, {
 
 const TICK_COUNT = 61; // 0-60
 const TICK_WIDTH = 2;
-const TICK_HEIGHT = 24;
+const TICK_HEIGHT = 44;
 const TICK_SPACING = 10;
 const TICK_TOTAL_WIDTH = TICK_WIDTH + TICK_SPACING;
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -29,12 +30,14 @@ function Tick({
 }) {
   // Animated highlight for center tick
   const animatedStyle = useAnimatedStyle(() => {
-    const center = scrollX.value / ITEM_SIZE;
-    const isActive = Math.abs(center - index) < 0.5;
     return {
-      backgroundColor: isActive ? "#fff" : "#888",
-      height: isActive ? TICK_HEIGHT * 1.4 : TICK_HEIGHT,
+      height: TICK_HEIGHT,
       width: TICK_WIDTH,
+      backgroundColor: interpolateColor(
+        scrollX.value,
+        [index - 1, index, index + 1],
+        ["#888", "#FFF", "#888"]
+      ),
     };
   });
 
@@ -66,6 +69,7 @@ export default function CircularNumberSelect() {
         backgroundColor: "#222",
         borderRadius: 32,
         overflow: "hidden",
+        gap: 20,
       }}
     >
       <View style={{ alignItems: "center", marginTop: 16 }}>
@@ -76,7 +80,6 @@ export default function CircularNumberSelect() {
       <View
         style={{
           flex: 1,
-          backgroundColor: "#444",
         }}
       >
         <Animated.FlatList
@@ -88,7 +91,6 @@ export default function CircularNumberSelect() {
           horizontal
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          //   bounces={false}
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - TICK_WIDTH) / 2, // This is to center the carousal starting and ending point
             gap: TICK_SPACING,
