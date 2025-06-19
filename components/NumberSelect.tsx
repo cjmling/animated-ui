@@ -44,7 +44,7 @@ function Tick({
   return <Animated.View style={animatedStyle} key={index} />;
 }
 
-export default function CircularNumberSelect() {
+export default function NumberSelect() {
   const [selected, setSelected] = useState(Math.floor(TICK_COUNT / 2));
   const scrollXSelected = useSharedValue(selected * ITEM_SIZE);
 
