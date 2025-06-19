@@ -82,6 +82,19 @@ export default function CircularNumberSelect() {
           flex: 1,
         }}
       >
+        <View
+          pointerEvents="none"
+          style={{
+            position: "absolute",
+            backgroundColor: "#FFF",
+            borderRadius: 18 + TICK_SPACING / 2,
+            zIndex: 1,
+            left: (SCREEN_WIDTH - TICK_WIDTH - TICK_SPACING / 2) / 2,
+            width: TICK_WIDTH + TICK_SPACING / 2,
+            height: TICK_HEIGHT * 4,
+            top: -10,
+          }}
+        />
         <Animated.FlatList
           data={ticks}
           renderItem={({ item, index }) => (
