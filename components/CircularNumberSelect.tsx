@@ -8,8 +8,6 @@ import Animated, {
 } from "react-native-reanimated";
 
 const TICK_COUNT = 61; // 0-60
-const TICK_ANGLE = 120; // degrees of arc
-const TICK_SIZE = 40; // radius of arc
 const TICK_WIDTH = 2;
 const TICK_HEIGHT = 24;
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -20,21 +18,10 @@ const ticks = Array.from({ length: TICK_COUNT }, (_, i) => i);
 function Tick({
   index,
   scrollX,
-  SCREEN_WIDTH,
 }: {
   index: number;
   scrollX: Animated.SharedValue<number>;
-  SCREEN_WIDTH: number;
 }) {
-  // Arc layout: center the arc horizontally
-  const arcRadius = TICK_SIZE;
-  const arcStart = (180 - TICK_ANGLE) / 2;
-  // Calculate angle for this tick
-  const angle = arcStart + (index / (TICK_COUNT - 1)) * TICK_ANGLE;
-  const rad = (angle * Math.PI) / 180;
-  const x = arcRadius * Math.cos(rad);
-  const y = arcRadius * Math.sin(rad);
-
   // Animated highlight for center tick
   const animatedStyle = useAnimatedStyle(() => {
     const center = scrollX.value / ITEM_SIZE;
@@ -44,9 +31,7 @@ function Tick({
       height: isActive ? TICK_HEIGHT * 1.4 : TICK_HEIGHT,
       width: TICK_WIDTH,
       borderRadius: TICK_WIDTH / 2,
-      position: "absolute",
-      left: SCREEN_WIDTH / 2 + x - TICK_WIDTH / 2,
-      top: 60 + y, // 60px from top for number display
+      marginHorizontal: 5,
     };
   });
 
@@ -68,13 +53,13 @@ export default function CircularNumberSelect() {
   });
 
   const renderItem = ({ item, index }: { item: number; index: number }) => (
-    <Tick index={index} scrollX={scrollX} SCREEN_WIDTH={SCREEN_WIDTH} />
+    <Tick index={index} scrollX={scrollX} />
   );
 
   return (
     <View
       style={{
-        height: 140,
+        height: 200,
         backgroundColor: "#222",
         borderRadius: 32,
         overflow: "hidden",
@@ -93,7 +78,12 @@ export default function CircularNumberSelect() {
           keyExtractor={(item) => item.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ height: 120, gap: 10 }}
+          contentContainerStyle={{
+            height: 160,
+            gap: 10,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
           snapToInterval={ITEM_SIZE}
           decelerationRate="fast"
           onScroll={onScroll}
