@@ -1,15 +1,22 @@
-import React, { useState } from "react";
-import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated, {
-  FadeIn,
-  FadeOut,
   interpolate,
   runOnJS,
   SharedValue,
+  useAnimatedRef,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
+
+// Inspired by https://pin.it/mwirJSauL
 
 const coffeeData = [
   {
@@ -45,10 +52,14 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 const CAROUSEL_ITEM_SIZE = 260;
 const CAROUSEL_SPACING = 5;
 const CAROUSEL_TOTAL_WIDTH = CAROUSEL_ITEM_SIZE + CAROUSEL_SPACING;
+const DETAILS_CARD_HEIGHT = 300;
+const DETAILS_CARD_SPACING = 50;
+const DETAILS_CARD_TOTAL_HEIGHT = DETAILS_CARD_HEIGHT + DETAILS_CARD_SPACING;
 
 export default function CoffeeSelect() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollIndex = useSharedValue(0);
+  const detailsListRef = useAnimatedRef<FlatList<(typeof coffeeData)[0]>>();
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollIndex.value = event.contentOffset.x / CAROUSEL_TOTAL_WIDTH;
@@ -59,9 +70,22 @@ export default function CoffeeSelect() {
         newActiveIndex !== activeIndex
       ) {
         runOnJS(setActiveIndex)(newActiveIndex);
+        console.log("a", detailsListRef.current);
+        detailsListRef.current?.scrollToIndex({
+          index: newActiveIndex,
+          animated: true,
+        });
       }
     },
   });
+
+  useEffect(() => {
+    console.log("active index changed", activeIndex);
+    detailsListRef.current?.scrollToIndex({
+      index: activeIndex,
+      animated: true,
+    });
+  }, [activeIndex]);
 
   return (
     <View
@@ -76,11 +100,15 @@ export default function CoffeeSelect() {
       {/* Starbucks logo */}
       <View style={{ alignItems: "center", marginBottom: 10 }}>
         <Text style={{ fontSize: 44, fontWeight: "bold", color: "#fff" }}>
-          Starbucks
+          COFFEE
         </Text>
       </View>
       {/* Carousel */}
-      <View style={{ zIndex: 2 }}>
+      <View
+        style={{
+          zIndex: 2,
+        }}
+      >
         <Animated.FlatList
           data={coffeeData}
           renderItem={({ item, index }) => (
@@ -97,71 +125,33 @@ export default function CoffeeSelect() {
           }}
           snapToInterval={CAROUSEL_TOTAL_WIDTH}
           decelerationRate="fast"
-          style={{ flexGrow: 1 }}
+          style={{ flexGrow: 0 }}
         />
       </View>
-      {/* Details Card */}
-      <Animated.View
-        entering={FadeIn.duration(500)}
-        exiting={FadeOut.duration(500)}
-        style={{
-          backgroundColor: "#fff",
-          borderRadius: 32,
-          padding: 24,
-          paddingTop: 60,
-          justifyContent: "flex-end",
-          shadowColor: "#000",
-          shadowOpacity: 0.1,
-          shadowRadius: 16,
-          shadowOffset: { width: 0, height: 8 },
-          width: SCREEN_WIDTH - 48,
-          minHeight: 350,
-          position: "absolute",
-          bottom: 40,
-          left: 24,
-          gap: 10,
-          zIndex: 1,
+      <Animated.FlatList
+        ref={detailsListRef}
+        data={coffeeData}
+        renderItem={({ item, index }) => (
+          <DetailsCard activeIndex={activeIndex} index={index} item={item} />
+        )}
+        keyExtractor={(item) => item.key}
+        scrollEventThrottle={16}
+        contentContainerStyle={{
+          gap: DETAILS_CARD_SPACING,
         }}
-        key={`activeIndex-${activeIndex}`}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={{ fontSize: 28, fontWeight: "bold", color: "#1db954" }}>
-            ${coffeeData[activeIndex].price}
-          </Text>
-          <Text style={{ fontSize: 16, color: "#888", marginLeft: 8 }}>
-            {coffeeData[activeIndex].volume}
-          </Text>
-        </View>
-        <Text
-          style={{
-            fontSize: 22,
-            fontWeight: "bold",
-            marginTop: 8,
-            marginBottom: 8,
-            color: "#222",
-          }}
-        >
-          {coffeeData[activeIndex].name}
-        </Text>
-        <Text style={{ fontSize: 15, color: "#444", marginBottom: 18 }}>
-          {coffeeData[activeIndex].description}
-        </Text>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#222",
-            borderRadius: 16,
-            paddingVertical: 12,
-            paddingHorizontal: 32,
-            alignSelf: "stretch",
-            alignItems: "center",
-            marginTop: 8,
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
-            Get it
-          </Text>
-        </TouchableOpacity>
-      </Animated.View>
+        snapToInterval={DETAILS_CARD_TOTAL_HEIGHT}
+        decelerationRate="fast"
+        style={{
+          backgroundColor: "#FFF",
+          maxHeight: 350,
+          padding: 20,
+          paddingTop: 50,
+          marginHorizontal: 20,
+          borderRadius: 30,
+          position: "absolute",
+          bottom: 50,
+        }}
+      />
     </View>
   );
 }
@@ -194,7 +184,9 @@ function CarouselItem({
         },
       ],
       width: CAROUSEL_ITEM_SIZE,
-      height: CAROUSEL_ITEM_SIZE,
+      height: CAROUSEL_ITEM_SIZE * 1.6,
+      overflow: "visible",
+      overflowY: "visible",
     };
   });
 
@@ -218,5 +210,64 @@ function CarouselItem({
         style={[imageAnimatedStyle]}
       />
     </Animated.View>
+  );
+}
+
+function DetailsCard({
+  activeIndex,
+  index,
+  item,
+}: {
+  activeIndex: number;
+  index: number;
+  item: (typeof coffeeData)[0];
+}) {
+  return (
+    <View
+      key={`activeIndex-${index}`}
+      style={{
+        height: DETAILS_CARD_HEIGHT,
+        justifyContent: "space-between",
+        paddingBottom: 20,
+      }}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Text style={{ fontSize: 28, fontWeight: "bold", color: "#1db954" }}>
+          ${item.price}
+        </Text>
+        <Text style={{ fontSize: 16, color: "#888", marginLeft: 8 }}>
+          {item.volume}
+        </Text>
+      </View>
+      <Text
+        style={{
+          fontSize: 22,
+          fontWeight: "bold",
+          marginTop: 8,
+          marginBottom: 8,
+          color: "#222",
+        }}
+      >
+        {item.name}
+      </Text>
+      <Text style={{ fontSize: 15, color: "#444", marginBottom: 18 }}>
+        {item.description}
+      </Text>
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#222",
+          borderRadius: 16,
+          paddingVertical: 12,
+          paddingHorizontal: 32,
+          alignSelf: "stretch",
+          alignItems: "center",
+          marginTop: 8,
+        }}
+      >
+        <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
+          Get it
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
