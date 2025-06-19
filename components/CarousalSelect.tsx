@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Animated, {
   interpolate,
+  runOnJS,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -26,11 +27,23 @@ const cards = [
 
 export default function CarousalSelect() {
   const scrollX = useSharedValue(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   // const flatListRef = useRef<FlatList>(null);
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
+
+      const newActiveIndex = Math.round(scrollX.value / CARD_TOTAL_WIDTH);
+      // Sometime newActiveIndex is beyond the items array length and only set the active index if it is different from the current active index
+      if (
+        newActiveIndex >= 0 &&
+        newActiveIndex < cards.length &&
+        newActiveIndex !== activeIndex
+      ) {
+        console.log("newActiveIndex", newActiveIndex);
+        runOnJS(setActiveIndex)(newActiveIndex);
+      }
     },
   });
 
