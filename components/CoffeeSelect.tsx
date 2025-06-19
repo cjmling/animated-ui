@@ -91,7 +91,7 @@ export default function CoffeeSelect() {
     <View
       style={{
         flex: 1,
-        backgroundColor: "green",
+        backgroundColor: "#3DB384",
         alignItems: "center",
         justifyContent: "flex-start",
         paddingTop: 20,
