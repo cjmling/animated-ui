@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -43,7 +43,7 @@ const coffeeData = [
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const CAROUSEL_ITEM_SIZE = 220;
-const CAROUSEL_SPACING = 16;
+const CAROUSEL_SPACING = 5;
 const CAROUSEL_TOTAL_WIDTH = CAROUSEL_ITEM_SIZE + CAROUSEL_SPACING;
 
 export default function CoffeeSelect() {
@@ -171,7 +171,7 @@ function CarouselItem({
   scrollX: SharedValue<number>;
   index: number;
 }) {
-  const animatedStyle = useAnimatedStyle(() => {
+  const viewAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
@@ -194,12 +194,24 @@ function CarouselItem({
     };
   });
 
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      width: 240,
+      height: 240,
+      blurRadius: interpolate(
+        scrollX.value,
+        [index - 1, index, index + 1],
+        [10, 0, 10]
+      ),
+    };
+  });
+
   return (
-    <Animated.View style={animatedStyle}>
-      <Image
+    <Animated.View style={viewAnimatedStyle}>
+      <Animated.Image
         source={item.image}
-        style={{ width: 240, height: 240 }}
         resizeMode="contain"
+        style={[imageAnimatedStyle]}
       />
     </Animated.View>
   );
