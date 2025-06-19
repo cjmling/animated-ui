@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import Animated, {
-  Extrapolate,
   interpolate,
   interpolateColor,
   runOnJS,
@@ -12,9 +11,9 @@ import Animated, {
 } from "react-native-reanimated";
 
 const MIN_AGE = 27;
-const MAX_AGE = 35;
+const MAX_AGE = 65;
 const TICK_HEIGHT = 40;
-const TICK_SPACING = 8;
+const TICK_SPACING = 4;
 const TICK_TOTAL_HEIGHT = TICK_HEIGHT + TICK_SPACING;
 
 const ticks = Array.from(
@@ -37,20 +36,18 @@ function Tick({
     const opacity = interpolate(
       scrollYSelected.value,
       inputRange,
-      [0.2, 0.5, 1, 0.5, 0.2],
-      Extrapolate.CLAMP
+      [0.2, 0.5, 1, 0.5, 0.2]
     );
     const fontSize = interpolate(
       scrollYSelected.value,
       inputRange,
-      [18, 22, 36, 22, 18],
-      Extrapolate.CLAMP
+      [18, 22, 36, 22, 18]
     );
     const fontWeight = scrollYSelected.value === index ? "700" : "400";
     const color = interpolateColor(
       scrollYSelected.value,
       [index - 1, index, index + 1],
-      ["#bbb", "#111", "#bbb"]
+      ["#999", "#111", "#999"]
     );
     return {
       opacity,
@@ -111,27 +108,6 @@ export const NumberSelector = () => {
           position: "relative",
         }}
       >
-        {/* Center highlight */}
-        <View
-          pointerEvents="none"
-          style={{
-            position: "absolute",
-            backgroundColor: "#fff",
-            borderRadius: 12,
-            zIndex: 1,
-            left: 0,
-            right: 0,
-            top: TICK_TOTAL_HEIGHT * 2,
-            height: TICK_TOTAL_HEIGHT,
-            borderWidth: 0,
-            borderColor: "#eee",
-            justifyContent: "center",
-            alignItems: "center",
-            shadowColor: "#000",
-            shadowOpacity: 0.04,
-            shadowRadius: 8,
-          }}
-        />
         <Animated.FlatList
           data={ticks}
           renderItem={({ item, index }) => (
@@ -150,34 +126,6 @@ export const NumberSelector = () => {
           scrollEventThrottle={16}
           style={{ flexGrow: 0 }}
         />
-      </View>
-      <View style={{ marginTop: 32, alignItems: "center" }}>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#111",
-            borderRadius: 12,
-            paddingVertical: 16,
-            paddingHorizontal: 48,
-            marginBottom: 8,
-            width: 280,
-          }}
-        >
-          <Text
-            style={{
-              color: "#fff",
-              fontSize: 18,
-              fontWeight: "600",
-              textAlign: "center",
-            }}
-          >
-            Next step
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={{ color: "#888", fontSize: 16, textAlign: "center" }}>
-            Previous step
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
