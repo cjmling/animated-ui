@@ -102,10 +102,7 @@ export const NumberSelector = () => {
       </Text>
       <View
         style={{
-          height: TICK_TOTAL_HEIGHT * 5,
-          alignSelf: "center",
-          width: 120,
-          position: "relative",
+          height: TICK_TOTAL_HEIGHT * 15,
         }}
       >
         <Animated.FlatList
@@ -115,7 +112,6 @@ export const NumberSelector = () => {
           )}
           keyExtractor={(item) => item.toString()}
           showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
             paddingVertical: TICK_TOTAL_HEIGHT * 2,
             gap: TICK_SPACING,
@@ -124,7 +120,7 @@ export const NumberSelector = () => {
           decelerationRate="fast"
           onScroll={onScroll}
           scrollEventThrottle={16}
-          style={{ flexGrow: 0 }}
+          style={{ flexGrow: 0, backgroundColor: "red" }}
         />
       </View>
     </View>
