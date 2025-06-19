@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
@@ -89,40 +89,23 @@ export const NumberSelector = () => {
     <View
       style={{ flex: 1, backgroundColor: "#fff", justifyContent: "center" }}
     >
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 20,
-          fontWeight: "600",
-          marginTop: 32,
-          marginBottom: 16,
+      <Animated.FlatList
+        data={ticks}
+        renderItem={({ item, index }) => (
+          <Tick item={item} index={index} scrollYSelected={scrollYSelected} />
+        )}
+        keyExtractor={(item) => item.toString()}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingVertical: TICK_TOTAL_HEIGHT * 2,
+          gap: TICK_SPACING,
         }}
-      >
-        How old are you?
-      </Text>
-      <View
-        style={{
-          height: TICK_TOTAL_HEIGHT * 15,
-        }}
-      >
-        <Animated.FlatList
-          data={ticks}
-          renderItem={({ item, index }) => (
-            <Tick item={item} index={index} scrollYSelected={scrollYSelected} />
-          )}
-          keyExtractor={(item) => item.toString()}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingVertical: TICK_TOTAL_HEIGHT * 2,
-            gap: TICK_SPACING,
-          }}
-          snapToInterval={TICK_TOTAL_HEIGHT}
-          decelerationRate="fast"
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-          style={{ flexGrow: 0, backgroundColor: "red" }}
-        />
-      </View>
+        snapToInterval={TICK_TOTAL_HEIGHT}
+        decelerationRate="fast"
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        style={{ flexGrow: 0, backgroundColor: "red" }}
+      />
     </View>
   );
 };
