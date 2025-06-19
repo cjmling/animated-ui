@@ -43,7 +43,7 @@ function Tick({
       inputRange,
       [18, 22, 36, 22, 18]
     );
-    const fontWeight = scrollYSelected.value === index ? "700" : "400";
+
     const color = interpolateColor(
       scrollYSelected.value,
       [index - 1, index, index + 1],
@@ -53,7 +53,6 @@ function Tick({
       opacity,
       fontSize,
       color,
-      fontWeight,
       textAlign: "center",
       height: TICK_HEIGHT,
       lineHeight: TICK_HEIGHT,
@@ -104,7 +103,13 @@ export const NumberSelector = () => {
         decelerationRate="fast"
         onScroll={onScroll}
         scrollEventThrottle={16}
-        style={{ flexGrow: 0, backgroundColor: "red" }}
+        initialScrollIndex={selected}
+        getItemLayout={(_, index) => ({
+          length: TICK_TOTAL_HEIGHT,
+          offset: TICK_TOTAL_HEIGHT * index,
+          index,
+        })}
+        style={{ flexGrow: 0 }}
       />
     </View>
   );
