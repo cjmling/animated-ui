@@ -10,6 +10,8 @@ import Animated, {
 const TICK_COUNT = 61; // 0-60
 const TICK_WIDTH = 2;
 const TICK_HEIGHT = 24;
+const TICK_SPACING = 10;
+const TICK_TOTAL_WIDTH = TICK_WIDTH + TICK_SPACING;
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const ITEM_SIZE = 24; // space per tick
 
@@ -30,8 +32,6 @@ function Tick({
       backgroundColor: isActive ? "#fff" : "#888",
       height: isActive ? TICK_HEIGHT * 1.4 : TICK_HEIGHT,
       width: TICK_WIDTH,
-      borderRadius: TICK_WIDTH / 2,
-      marginHorizontal: 5,
     };
   });
 
@@ -63,7 +63,6 @@ export default function CircularNumberSelect() {
         backgroundColor: "#222",
         borderRadius: 32,
         overflow: "hidden",
-        margin: 16,
       }}
     >
       <View style={{ alignItems: "center", marginTop: 16 }}>
@@ -71,24 +70,27 @@ export default function CircularNumberSelect() {
           {ticks[selected]}
         </Text>
       </View>
-      <View style={{ flex: 1, justifyContent: "flex-end" }}>
+      <View
+        style={{
+          height: TICK_HEIGHT * 2,
+        }}
+      >
         <Animated.FlatList
           data={ticks}
           renderItem={renderItem}
           keyExtractor={(item) => item.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
           contentContainerStyle={{
-            height: 160,
-            gap: 10,
-            alignItems: "center",
-            justifyContent: "center",
+            paddingHorizontal: (SCREEN_WIDTH - TICK_WIDTH) / 2, // This is to center the carousal starting and ending point
+            gap: TICK_SPACING,
           }}
-          snapToInterval={ITEM_SIZE}
+          snapToInterval={TICK_TOTAL_WIDTH}
           decelerationRate="fast"
           onScroll={onScroll}
           scrollEventThrottle={16}
-          style={{ width: SCREEN_WIDTH, height: 120 }}
         />
       </View>
     </View>
