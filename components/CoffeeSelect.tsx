@@ -196,8 +196,8 @@ function CarouselItem({
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     return {
-      width: 240,
-      height: 240,
+      width: CAROUSEL_ITEM_SIZE,
+      height: CAROUSEL_ITEM_SIZE,
       blurRadius: interpolate(
         scrollX.value,
         [index - 1, index, index + 1],
