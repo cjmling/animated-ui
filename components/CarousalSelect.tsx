@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedScrollHandler,
@@ -10,9 +10,9 @@ import Animated, {
 // Design https://pin.it/Z0QM0g8Fi
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const CARD_WIDTH = SCREEN_WIDTH * 0.65;
+const CARD_WIDTH = SCREEN_WIDTH * 0.45;
 const CARD_HEIGHT = 300;
-const CARD_SPACING = 30;
+const CARD_SPACING = 50;
 const CARD_TOP_PADDING = 100;
 const CARD_TOTAL_WIDTH = CARD_WIDTH + CARD_SPACING;
 const CARD_CENTER_SPACING = 20;
@@ -26,7 +26,7 @@ const cards = [
 
 export default function CarousalSelect() {
   const scrollX = useSharedValue(0);
-  const flatListRef = useRef<FlatList>(null);
+  // const flatListRef = useRef<FlatList>(null);
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -71,7 +71,6 @@ export default function CarousalSelect() {
           style={{
             backgroundColor: "purple",
           }}
-          ref={flatListRef}
           data={cards}
           keyExtractor={(item) => item.key}
           horizontal
