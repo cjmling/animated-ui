@@ -15,6 +15,8 @@ const MAX_AGE = 65;
 const TICK_HEIGHT = 40;
 const TICK_SPACING = 4;
 const TICK_TOTAL_HEIGHT = TICK_HEIGHT + TICK_SPACING;
+const VISIBLE_TICKS = 15;
+const CONTAINER_HEIGHT = TICK_TOTAL_HEIGHT * VISIBLE_TICKS;
 
 const ticks = Array.from(
   { length: MAX_AGE - MIN_AGE + 1 },
@@ -32,16 +34,28 @@ function Tick({
 }) {
   // Animated highlight for center tick
   const animatedStyle = useAnimatedStyle(() => {
-    const inputRange = [index - 2, index - 1, index, index + 1, index + 2];
+    const inputRange = [
+      index - 4,
+      index - 3,
+      index - 2,
+      index - 1,
+      index,
+      index + 1,
+      index + 2,
+      index + 3,
+      index + 4,
+    ];
     const opacity = interpolate(
       scrollYSelected.value,
       inputRange,
-      [0.2, 0.5, 1, 0.5, 0.2]
+      [0.2, 0.5, 0.7, 0.8, 1, 0.8, 0.7, 0.5, 0.2],
+      "extend"
     );
     const fontSize = interpolate(
       scrollYSelected.value,
       inputRange,
-      [18, 22, 36, 22, 18]
+      [18, 22, 26, 30, 36, 30, 26, 22, 18],
+      "extend"
     );
 
     const color = interpolateColor(
@@ -74,11 +88,13 @@ export const NumberSelector = () => {
     onScroll: (event) => {
       scrollYSelected.value = event.contentOffset.y / TICK_TOTAL_HEIGHT;
       const newActiveIndex = Math.round(scrollYSelected.value);
+
       if (
         newActiveIndex >= 0 &&
         newActiveIndex < ticks.length &&
         newActiveIndex !== selected
       ) {
+        console.log(ticks[newActiveIndex]);
         runOnJS(setSelected)(newActiveIndex);
       }
     },
@@ -86,7 +102,11 @@ export const NumberSelector = () => {
 
   return (
     <View
-      style={{ flex: 1, backgroundColor: "#fff", justifyContent: "center" }}
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        height: CONTAINER_HEIGHT,
+      }}
     >
       <Animated.FlatList
         data={ticks}
@@ -96,7 +116,7 @@ export const NumberSelector = () => {
         keyExtractor={(item) => item.toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingVertical: TICK_TOTAL_HEIGHT * 2,
+          paddingVertical: (CONTAINER_HEIGHT - TICK_TOTAL_HEIGHT) / 2,
           gap: TICK_SPACING,
         }}
         snapToInterval={TICK_TOTAL_HEIGHT}
