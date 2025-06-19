@@ -39,6 +39,11 @@ function Tick({
         [index - 1, index, index + 1],
         ["#888", "#FFF", "#888"]
       ),
+      top: interpolate(
+        scrollXSelected.value,
+        [index - 1, index, index + 1],
+        [2, 0, 2]
+      ),
       transform: [
         {
           rotate: `${interpolate(
