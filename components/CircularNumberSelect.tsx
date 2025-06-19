@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import Animated, {
-  interpolate,
   interpolateColor,
   runOnJS,
   SharedValue,
@@ -39,20 +38,6 @@ function Tick({
         [index - 1, index, index + 1],
         ["#888", "#FFF", "#888"]
       ),
-      top: interpolate(
-        scrollXSelected.value,
-        [index - 1, index, index + 1],
-        [2, 0, 2]
-      ),
-      transform: [
-        {
-          rotate: `${interpolate(
-            scrollXSelected.value,
-            [index - 1, index, index + 1],
-            [3, 0, -3]
-          )}deg`,
-        },
-      ],
     };
   });
 
@@ -66,7 +51,6 @@ export default function CircularNumberSelect() {
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollXSelected.value = event.contentOffset.x / TICK_TOTAL_WIDTH;
-      console.log(scrollXSelected.value);
       const newActiveIndex = Math.round(scrollXSelected.value);
       if (
         newActiveIndex >= 0 &&
