@@ -80,7 +80,7 @@ export default function CoffeeSelect() {
         </Text>
       </View>
       {/* Carousel */}
-      <View style={{ backgroundColor: "blue", flex: 1 }}>
+      <View style={{ backgroundColor: "blue" }}>
         <Animated.FlatList
           data={coffeeData}
           renderItem={({ item, index }) => (
@@ -108,15 +108,19 @@ export default function CoffeeSelect() {
           backgroundColor: "#fff",
           borderRadius: 32,
           padding: 24,
-          alignItems: "flex-start",
+          paddingTop: 60,
+          justifyContent: "flex-end",
           shadowColor: "#000",
           shadowOpacity: 0.1,
           shadowRadius: 16,
           shadowOffset: { width: 0, height: 8 },
           width: SCREEN_WIDTH - 48,
+          minHeight: 350,
           position: "absolute",
           bottom: 40,
           left: 24,
+          gap: 10,
+          zIndex: 1,
         }}
         key={`activeIndex-${activeIndex}`}
       >
