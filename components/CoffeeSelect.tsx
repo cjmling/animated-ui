@@ -4,7 +4,6 @@ import Animated, {
   FadeIn,
   FadeOut,
   interpolate,
-  interpolateColor,
   runOnJS,
   SharedValue,
   useAnimatedScrollHandler,
@@ -71,24 +70,17 @@ export default function CoffeeSelect() {
         backgroundColor: "green",
         alignItems: "center",
         justifyContent: "flex-start",
-        paddingTop: 60,
+        paddingTop: 20,
       }}
     >
       {/* Starbucks logo */}
       <View style={{ alignItems: "center", marginBottom: 10 }}>
-        <Image
-          source={require("../assets/images/coffee/coffee1.png")}
-          style={{
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: "#fff",
-          }}
-          resizeMode="contain"
-        />
+        <Text style={{ fontSize: 44, fontWeight: "bold", color: "#fff" }}>
+          Starbucks
+        </Text>
       </View>
       {/* Carousel */}
-      <View style={{ height: 240, marginBottom: 24 }}>
+      <View style={{ marginBottom: 24, backgroundColor: "blue", flex: 1 }}>
         <Animated.FlatList
           data={coffeeData}
           renderItem={({ item, index }) => (
@@ -102,6 +94,7 @@ export default function CoffeeSelect() {
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - CAROUSEL_ITEM_SIZE) / 2,
             gap: CAROUSEL_SPACING,
+            backgroundColor: "red",
           }}
           snapToInterval={CAROUSEL_TOTAL_WIDTH}
           decelerationRate="fast"
@@ -116,7 +109,6 @@ export default function CoffeeSelect() {
           backgroundColor: "#fff",
           borderRadius: 32,
           padding: 24,
-          marginHorizontal: 24,
           alignItems: "flex-start",
           shadowColor: "#000",
           shadowOpacity: 0.1,
@@ -182,12 +174,6 @@ function CarouselItem({
 }) {
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      borderWidth: 4,
-      borderColor: interpolateColor(
-        scrollX.value,
-        [index - 1, index, index + 1],
-        ["transparent", "#FFF", "transparent"]
-      ),
       transform: [
         {
           translateY: interpolate(
@@ -204,14 +190,8 @@ function CarouselItem({
           ),
         },
       ],
-      backgroundColor: "#fff",
-      shadowColor: "#000",
-      shadowOpacity: 0.2,
-      shadowRadius: 10,
-      shadowOffset: { width: 0, height: 4 },
       width: CAROUSEL_ITEM_SIZE,
       height: CAROUSEL_ITEM_SIZE,
-      borderRadius: CAROUSEL_ITEM_SIZE / 2,
       justifyContent: "center",
       alignItems: "center",
       marginBottom: 0,
@@ -222,7 +202,7 @@ function CarouselItem({
     <Animated.View style={animatedStyle}>
       <Image
         source={item.image}
-        style={{ width: 140, height: 180 }}
+        style={{ width: 240, height: 240 }}
         resizeMode="contain"
       />
     </Animated.View>
