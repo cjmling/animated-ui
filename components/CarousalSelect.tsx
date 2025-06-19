@@ -6,6 +6,8 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
+  FadeIn,
+  FadeOut,
   interpolate,
   runOnJS,
   useAnimatedScrollHandler,
@@ -68,7 +70,7 @@ export default function CarousalSelect() {
       <View
         style={{
           flex: 1,
-          backgroundColor: "blue",
+          backgroundColor: "#333",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -78,8 +80,6 @@ export default function CarousalSelect() {
           style={{
             width: "100%",
             height: CARD_HEIGHT * 2,
-            backgroundColor: "yellow",
-            //   justifyContent: "center",
           }}
         >
           {/* Center highlight border */}
@@ -98,9 +98,6 @@ export default function CarousalSelect() {
             }}
           />
           <Animated.FlatList
-            style={{
-              backgroundColor: "purple",
-            }}
             data={cards}
             keyExtractor={(item) => item.key}
             horizontal
@@ -214,7 +211,13 @@ function AnimatedCard({
       <Text style={styles.cardTitle}>{item.title}</Text>
       <Text style={styles.cardOffer}>{item.offer}</Text>
       {isActive && (
-        <Text style={styles.swipeIndicator}>↓ Swipe down to activate</Text>
+        <Animated.Text
+          style={styles.swipeIndicator}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          ↓ Swipe down to activate
+        </Animated.Text>
       )}
     </Animated.View>
   );
