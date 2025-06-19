@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import Animated, {
   runOnJS,
+  SharedValue,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -18,11 +19,13 @@ const ITEM_SIZE = 24; // space per tick
 const ticks = Array.from({ length: TICK_COUNT }, (_, i) => i);
 
 function Tick({
+  item,
   index,
   scrollX,
 }: {
+  item: number;
   index: number;
-  scrollX: Animated.SharedValue<number>;
+  scrollX: SharedValue<number>;
 }) {
   // Animated highlight for center tick
   const animatedStyle = useAnimatedStyle(() => {
@@ -44,17 +47,17 @@ export default function CircularNumberSelect() {
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
-      scrollX.value = event.contentOffset.x;
-      const idx = Math.round(event.contentOffset.x / ITEM_SIZE);
-      if (idx !== selected && idx >= 0 && idx < TICK_COUNT) {
-        runOnJS(setSelected)(idx);
+      scrollX.value = event.contentOffset.x / TICK_TOTAL_WIDTH;
+      const newActiveIndex = Math.round(scrollX.value);
+      if (
+        newActiveIndex >= 0 &&
+        newActiveIndex < TICK_COUNT &&
+        newActiveIndex !== selected
+      ) {
+        runOnJS(setSelected)(newActiveIndex);
       }
     },
   });
-
-  const renderItem = ({ item, index }: { item: number; index: number }) => (
-    <Tick index={index} scrollX={scrollX} />
-  );
 
   return (
     <View
@@ -72,17 +75,20 @@ export default function CircularNumberSelect() {
       </View>
       <View
         style={{
-          height: TICK_HEIGHT * 2,
+          flex: 1,
+          backgroundColor: "#444",
         }}
       >
         <Animated.FlatList
           data={ticks}
-          renderItem={renderItem}
+          renderItem={({ item, index }) => (
+            <Tick item={item} index={index} scrollX={scrollX} />
+          )}
           keyExtractor={(item) => item.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          bounces={false}
+          //   bounces={false}
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - TICK_WIDTH) / 2, // This is to center the carousal starting and ending point
             gap: TICK_SPACING,
