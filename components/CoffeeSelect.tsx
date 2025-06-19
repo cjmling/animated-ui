@@ -42,17 +42,17 @@ const coffeeData = [
 ];
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
-const CAROUSEL_ITEM_SIZE = 220;
+const CAROUSEL_ITEM_SIZE = 260;
 const CAROUSEL_SPACING = 5;
 const CAROUSEL_TOTAL_WIDTH = CAROUSEL_ITEM_SIZE + CAROUSEL_SPACING;
 
 export default function CoffeeSelect() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const scrollX = useSharedValue(0);
+  const scrollIndex = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
-      scrollX.value = event.contentOffset.x / CAROUSEL_TOTAL_WIDTH;
-      const newActiveIndex = Math.round(scrollX.value);
+      scrollIndex.value = event.contentOffset.x / CAROUSEL_TOTAL_WIDTH;
+      const newActiveIndex = Math.round(scrollIndex.value);
       if (
         newActiveIndex >= 0 &&
         newActiveIndex < coffeeData.length &&
@@ -80,11 +80,11 @@ export default function CoffeeSelect() {
         </Text>
       </View>
       {/* Carousel */}
-      <View style={{ marginBottom: 24, backgroundColor: "blue", flex: 1 }}>
+      <View style={{ backgroundColor: "blue", flex: 1 }}>
         <Animated.FlatList
           data={coffeeData}
           renderItem={({ item, index }) => (
-            <CarouselItem item={item} scrollX={scrollX} index={index} />
+            <CarouselItem item={item} scrollIndex={scrollIndex} index={index} />
           )}
           keyExtractor={(item) => item.key}
           horizontal
@@ -164,11 +164,11 @@ export default function CoffeeSelect() {
 
 function CarouselItem({
   item,
-  scrollX,
+  scrollIndex,
   index,
 }: {
   item: (typeof coffeeData)[0];
-  scrollX: SharedValue<number>;
+  scrollIndex: SharedValue<number>;
   index: number;
 }) {
   const viewAnimatedStyle = useAnimatedStyle(() => {
@@ -176,14 +176,14 @@ function CarouselItem({
       transform: [
         {
           translateY: interpolate(
-            scrollX.value,
+            scrollIndex.value,
             [index - 1, index, index + 1],
             [0, 40, 0]
           ),
         },
         {
           scale: interpolate(
-            scrollX.value,
+            scrollIndex.value,
             [index - 1, index, index + 1],
             [0.85, 1.2, 0.85]
           ),
@@ -199,7 +199,7 @@ function CarouselItem({
       width: CAROUSEL_ITEM_SIZE,
       height: CAROUSEL_ITEM_SIZE,
       blurRadius: interpolate(
-        scrollX.value,
+        scrollIndex.value,
         [index - 1, index, index + 1],
         [10, 0, 10]
       ),
