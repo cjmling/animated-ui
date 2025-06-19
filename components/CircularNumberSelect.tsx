@@ -75,7 +75,7 @@ export default function CircularNumberSelect() {
     <View
       style={{
         height: 140,
-        backgroundColor: "#000",
+        backgroundColor: "#222",
         borderRadius: 32,
         overflow: "hidden",
         margin: 16,
@@ -93,12 +93,12 @@ export default function CircularNumberSelect() {
           keyExtractor={(item) => item.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ height: 120 }}
+          contentContainerStyle={{ height: 120, gap: 10 }}
           snapToInterval={ITEM_SIZE}
           decelerationRate="fast"
           onScroll={onScroll}
           scrollEventThrottle={16}
-          style={{ position: "absolute", width: SCREEN_WIDTH, height: 120 }}
+          style={{ width: SCREEN_WIDTH, height: 120 }}
         />
       </View>
     </View>
