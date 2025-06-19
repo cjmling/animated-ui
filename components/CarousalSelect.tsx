@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 import Animated, {
   interpolate,
   runOnJS,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
 // Design https://pin.it/Z0QM0g8Fi
@@ -28,6 +35,8 @@ const cards = [
 export default function CarousalSelect() {
   const scrollX = useSharedValue(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const cardVerticalOffset = useSharedValue(0);
+  const isCardSwiped = useSharedValue(false);
   // const flatListRef = useRef<FlatList>(null);
 
   const onScroll = useAnimatedScrollHandler({
@@ -41,97 +50,183 @@ export default function CarousalSelect() {
         newActiveIndex < cards.length &&
         newActiveIndex !== activeIndex
       ) {
-        console.log("newActiveIndex", newActiveIndex);
         runOnJS(setActiveIndex)(newActiveIndex);
+        // Reset card position when switching to a new active card
+        cardVerticalOffset.value = withSpring(0);
+        isCardSwiped.value = false;
       }
     },
   });
 
+  const resetCardPosition = () => {
+    cardVerticalOffset.value = withSpring(0);
+    isCardSwiped.value = false;
+  };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "blue",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Text style={styles.title}>Choose your{"\n"}welcome gift</Text>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <View
         style={{
-          width: "100%",
-          height: CARD_HEIGHT * 2,
-          backgroundColor: "yellow",
-          //   justifyContent: "center",
+          flex: 1,
+          backgroundColor: "blue",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {/* Center highlight border */}
+        <Text style={styles.title}>Choose your{"\n"}welcome gift</Text>
         <View
-          pointerEvents="none"
           style={{
-            position: "absolute",
-            borderWidth: 3,
-            borderColor: "#FFD700",
-            borderRadius: 18 + CARD_CENTER_SPACING / 2,
-            zIndex: 1,
-            left: (SCREEN_WIDTH - CARD_WIDTH - CARD_CENTER_SPACING) / 2,
-            width: CARD_WIDTH + CARD_CENTER_SPACING,
-            height: CARD_HEIGHT + CARD_CENTER_SPACING,
-            top: CARD_TOP_PADDING - CARD_CENTER_SPACING / 2,
+            width: "100%",
+            height: CARD_HEIGHT * 2,
+            backgroundColor: "yellow",
+            //   justifyContent: "center",
           }}
-        />
-        <Animated.FlatList
-          style={{
-            backgroundColor: "purple",
-          }}
-          data={cards}
-          keyExtractor={(item) => item.key}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_TOTAL_WIDTH}
-          decelerationRate="fast"
-          contentContainerStyle={{
-            paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
-            justifyContent: "center",
-            paddingTop: CARD_TOP_PADDING,
-            gap: CARD_SPACING,
-          }}
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-          renderItem={({ item, index }) => {
-            return <AnimatedCard item={item} index={index} scrollX={scrollX} />;
-          }}
-        />
+        >
+          {/* Center highlight border */}
+          <View
+            pointerEvents="none"
+            style={{
+              position: "absolute",
+              borderWidth: 3,
+              borderColor: "#FFD700",
+              borderRadius: 18 + CARD_CENTER_SPACING / 2,
+              zIndex: 1,
+              left: (SCREEN_WIDTH - CARD_WIDTH - CARD_CENTER_SPACING) / 2,
+              width: CARD_WIDTH + CARD_CENTER_SPACING,
+              height: CARD_HEIGHT + CARD_CENTER_SPACING,
+              top: CARD_TOP_PADDING - CARD_CENTER_SPACING / 2,
+            }}
+          />
+          <Animated.FlatList
+            style={{
+              backgroundColor: "purple",
+            }}
+            data={cards}
+            keyExtractor={(item) => item.key}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={CARD_TOTAL_WIDTH}
+            decelerationRate="fast"
+            contentContainerStyle={{
+              paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
+              justifyContent: "center",
+              paddingTop: CARD_TOP_PADDING,
+              gap: CARD_SPACING,
+            }}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+            renderItem={({ item, index }) => {
+              return (
+                <AnimatedCard
+                  item={item}
+                  index={index}
+                  scrollX={scrollX}
+                  isActive={index === activeIndex}
+                  cardVerticalOffset={cardVerticalOffset}
+                  isCardSwiped={isCardSwiped}
+                  onResetPosition={resetCardPosition}
+                />
+              );
+            }}
+          />
+        </View>
+        <Text style={styles.swipeHint}>Drag down to activate offer</Text>
       </View>
-      <Text style={styles.swipeHint}>Drag down to activate offer</Text>
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
-function AnimatedCard({ item, index, scrollX }: any) {
+interface AnimatedCardProps {
+  item: {
+    key: string;
+    title: string;
+    offer: string;
+  };
+  index: number;
+  scrollX: Animated.SharedValue<number>;
+  isActive: boolean;
+  cardVerticalOffset: Animated.SharedValue<number>;
+  isCardSwiped: Animated.SharedValue<boolean>;
+  onResetPosition: () => void;
+}
+
+function AnimatedCard({
+  item,
+  index,
+  scrollX,
+  isActive,
+  cardVerticalOffset,
+  isCardSwiped,
+  onResetPosition,
+}: AnimatedCardProps) {
   const inputRange = [
     (index - 1) * (CARD_WIDTH + CARD_SPACING),
     index * (CARD_WIDTH + CARD_SPACING),
     (index + 1) * (CARD_WIDTH + CARD_SPACING),
   ];
 
+  // Gesture for vertical swipe (only for active card)
+  const panGesture = Gesture.Pan()
+    .onUpdate((event) => {
+      if (isActive) {
+        // Only allow downward swipe
+        if (event.translationY > 0) {
+          cardVerticalOffset.value = event.translationY;
+        }
+      }
+    })
+    .onEnd((event) => {
+      if (isActive) {
+        // If swiped down more than 100px, activate the card
+        if (event.translationY > 100) {
+          cardVerticalOffset.value = withTiming(300, { duration: 500 });
+          isCardSwiped.value = true;
+          // You can add your activation logic here
+          console.log(`Activated card: ${item.title}`);
+        } else {
+          // Reset to original position
+          cardVerticalOffset.value = withSpring(0);
+        }
+      }
+    });
+
   const animatedStyle = useAnimatedStyle(() => {
     const rotate = interpolate(scrollX.value, inputRange, [-10, 0, 10]);
     const scale = interpolate(scrollX.value, inputRange, [0.92, 1, 0.92]);
     const opacity = interpolate(scrollX.value, inputRange, [0.7, 1, 0.7]);
     const translateY = interpolate(scrollX.value, inputRange, [-50, 0, -50]);
+
+    // Add vertical offset for active card
+    const activeTranslateY = isActive ? cardVerticalOffset.value : 0;
+
     return {
-      transform: [{ rotate: `${rotate}deg` }, { scale }, { translateY }],
-      opacity,
+      transform: [
+        { rotate: `${rotate}deg` },
+        { scale },
+        { translateY: translateY + activeTranslateY },
+      ],
+      opacity: isCardSwiped.value && isActive ? 0.3 : opacity,
     };
   });
 
-  return (
+  const cardContent = (
     <Animated.View style={[styles.card, animatedStyle]}>
       <Text style={styles.cardTitle}>{item.title}</Text>
       <Text style={styles.cardOffer}>{item.offer}</Text>
+      {isActive && (
+        <Text style={styles.swipeIndicator}>↓ Swipe down to activate</Text>
+      )}
     </Animated.View>
   );
+
+  // Only wrap with gesture detector if it's the active card
+  if (isActive) {
+    return (
+      <GestureDetector gesture={panGesture}>{cardContent}</GestureDetector>
+    );
+  }
+
+  return cardContent;
 }
 
 const styles = StyleSheet.create({
@@ -167,5 +262,11 @@ const styles = StyleSheet.create({
     color: "#aaa",
     fontSize: 16,
     marginTop: 32,
+  },
+  swipeIndicator: {
+    color: "#FFD700",
+    fontSize: 12,
+    marginTop: 8,
+    textAlign: "center",
   },
 });
