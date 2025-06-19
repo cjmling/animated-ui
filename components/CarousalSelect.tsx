@@ -210,7 +210,7 @@ function AnimatedCard({
     <Animated.View style={[styles.card, animatedStyle]}>
       <Text style={styles.cardTitle}>{item.title}</Text>
       <Text style={styles.cardOffer}>{item.offer}</Text>
-      {isActive && (
+      {isActive ? (
         <Animated.Text
           style={styles.swipeIndicator}
           entering={FadeIn}
@@ -218,6 +218,8 @@ function AnimatedCard({
         >
           ↓ Swipe down to activate
         </Animated.Text>
+      ) : (
+        <Text style={styles.swipeIndicator}></Text> //Placeholder so it doesn't jump
       )}
     </Animated.View>
   );
