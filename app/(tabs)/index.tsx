@@ -17,6 +17,7 @@ export default function HomeScreen() {
         <MenuItem href="/carousal-widget" label="Carousal Widget Demo" />
         <MenuItem href="/caraousal-select" label="Carousal Select Demo" />
         <MenuItem href="/number-select" label="Number Select Demo" />
+        <MenuItem href="/coffee-select" label="Coffee Select Demo" />
       </View>
     </View>
   );
