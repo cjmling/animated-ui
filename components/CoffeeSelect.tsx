@@ -98,7 +98,6 @@ export default function CoffeeSelect() {
           }}
           snapToInterval={CAROUSEL_TOTAL_WIDTH}
           decelerationRate="fast"
-          style={{ flexGrow: 0 }}
         />
       </View>
       {/* Details Card */}
@@ -179,22 +178,19 @@ function CarouselItem({
           translateY: interpolate(
             scrollX.value,
             [index - 1, index, index + 1],
-            [40, 0, 40]
+            [0, 40, 0]
           ),
         },
         {
           scale: interpolate(
             scrollX.value,
             [index - 1, index, index + 1],
-            [0.85, 1, 0.85]
+            [0.85, 1.2, 0.85]
           ),
         },
       ],
       width: CAROUSEL_ITEM_SIZE,
       height: CAROUSEL_ITEM_SIZE,
-      justifyContent: "center",
-      alignItems: "center",
-      marginBottom: 0,
     };
   });
 
