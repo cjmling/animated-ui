@@ -15,8 +15,7 @@ const MAX_AGE = 65;
 const TICK_HEIGHT = 40;
 const TICK_SPACING = 4;
 const TICK_TOTAL_HEIGHT = TICK_HEIGHT + TICK_SPACING;
-const VISIBLE_TICKS = 15;
-const CONTAINER_HEIGHT = TICK_TOTAL_HEIGHT * VISIBLE_TICKS;
+const CONTAINER_HEIGHT = 800; // If user can't scroll to certain tick, we can increase this height
 
 const ticks = Array.from(
   { length: MAX_AGE - MIN_AGE + 1 },
