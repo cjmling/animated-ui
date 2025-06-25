@@ -89,19 +89,6 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
     });
   };
 
-  // Function to scroll to previous item
-  const scrollToPrevious = () => {
-    if (items.length <= 1) return;
-
-    const prevIndex = currentIndex === 0 ? items.length - 1 : currentIndex - 1;
-    setCurrentIndex(prevIndex);
-
-    flatListRef.current?.scrollToIndex({
-      index: prevIndex,
-      animated: true,
-    });
-  };
-
   // Auto-slide effect
   useEffect(() => {
     if (!autoSlideEnabled || items.length <= 1) return;
