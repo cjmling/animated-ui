@@ -153,7 +153,6 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
         width: CAROUSEL_CONTAINER_WIDTH,
         height: CAROUSEL_CONTAINER_HEIGHT,
         gap: 10,
-        marginTop: 20,
       }}
     >
       <AnimatedFlatList
