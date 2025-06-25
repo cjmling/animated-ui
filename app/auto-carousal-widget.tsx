@@ -18,12 +18,14 @@ export default function AutoCarousalScreen() {
     );
   };
   return (
-    <AutoCarousalWidget
-      items={[
-        <CarousalItem key="1" />,
-        <CarousalItem key="2" />,
-        <CarousalItem key="3" />,
-      ]}
-    />
+    <View style={{ flex: 1, backgroundColor: "#333" }}>
+      <AutoCarousalWidget
+        items={[
+          <CarousalItem key="1" />,
+          <CarousalItem key="2" />,
+          <CarousalItem key="3" />,
+        ]}
+      />
+    </View>
   );
 }

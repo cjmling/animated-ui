@@ -58,7 +58,7 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
   paginationInactiveDotScale = 0.8,
   paginationActiveDotOpacity = 1,
   paginationInactiveDotOpacity = 0.3,
-  containerWidth = SCREEN_WIDTH * 0.9,
+  containerWidth = SCREEN_WIDTH * 1,
   containerHeight = 200,
   itemWidthPercentage = 0.7,
   itemSpacing = 10,
@@ -76,21 +76,21 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
   const CAROUSEL_SPACING = itemSpacing;
   const CAROUSEL_TOTAL_WIDTH = CAROUSEL_WIDTH + CAROUSEL_SPACING;
 
-  // Function to scroll to next item
-  const scrollToNext = () => {
-    if (items.length <= 1) return;
-
-    const nextIndex = (currentIndex + 1) % items.length;
-    setCurrentIndex(nextIndex);
-
-    flatListRef.current?.scrollToIndex({
-      index: nextIndex,
-      animated: true,
-    });
-  };
-
   // Auto-slide effect
   useEffect(() => {
+    // Function to scroll to next item
+    const scrollToNext = () => {
+      if (items.length <= 1) return;
+
+      const nextIndex = (currentIndex + 1) % items.length;
+      setCurrentIndex(nextIndex);
+
+      flatListRef.current?.scrollToIndex({
+        index: nextIndex,
+        animated: true,
+      });
+    };
+
     if (!autoSlideEnabled || items.length <= 1) return;
 
     const startAutoSlide = () => {
@@ -153,6 +153,7 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
         width: CAROUSEL_CONTAINER_WIDTH,
         height: CAROUSEL_CONTAINER_HEIGHT,
         gap: 10,
+        marginTop: 20,
       }}
     >
       <AnimatedFlatList
