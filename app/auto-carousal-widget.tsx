@@ -18,7 +18,7 @@ export default function AutoCarousalScreen() {
     );
   };
   return (
-    <View style={{ flex: 1, backgroundColor: "#333", marginTop: 20 }}>
+    <View style={{ flex: 1, backgroundColor: "#333", paddingTop: 20 }}>
       <AutoCarousalWidget
         items={[
           <CarousalItem key="1" />,

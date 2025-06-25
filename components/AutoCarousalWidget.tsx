@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, FlatList, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
+  useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
 interface AutoCarousalWidgetProps {
@@ -69,12 +71,22 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
   const flatListRef = useRef<FlatList>(null);
   const scrollX = useSharedValue(0);
   const autoSlideTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const progressValue = useSharedValue(0);
 
   const CAROUSEL_CONTAINER_WIDTH = containerWidth;
   const CAROUSEL_CONTAINER_HEIGHT = containerHeight;
   const CAROUSEL_WIDTH = SCREEN_WIDTH * itemWidthPercentage;
   const CAROUSEL_SPACING = itemSpacing;
   const CAROUSEL_TOTAL_WIDTH = CAROUSEL_WIDTH + CAROUSEL_SPACING;
+  const LOADING_COLOR = "#888";
+
+  // Progress animation for active dot
+  useEffect(() => {
+    if (autoSlideEnabled && items.length > 1) {
+      progressValue.value = 0;
+      progressValue.value = withTiming(1, { duration: autoSlideInterval });
+    }
+  }, [currentIndex, autoSlideEnabled, autoSlideInterval, items.length]);
 
   // Auto-slide effect
   useEffect(() => {
@@ -125,10 +137,25 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
 
   const PaginationDot: React.FC<{ index: number }> = ({ index }) => {
     const isActive = index === currentIndex;
+
+    const progressStyle = useAnimatedStyle(() => {
+      if (!isActive) return { width: 0 };
+
+      return {
+        width: progressValue.value * 15, // 15px width for active dot
+        height: paginationDotSize,
+        backgroundColor: LOADING_COLOR,
+        borderRadius: paginationDotSize / 2,
+        position: "absolute",
+        left: 0,
+        top: 0,
+      };
+    });
+
     return (
       <View
         style={{
-          width: paginationDotSize,
+          width: isActive ? 15 : paginationDotSize, // 15px for active, normal size for inactive
           height: paginationDotSize,
           borderRadius: paginationDotSize / 2,
           backgroundColor: paginationDotColor,
@@ -142,8 +169,12 @@ export const AutoCarousalWidget: React.FC<AutoCarousalWidgetProps> = ({
                 : paginationInactiveDotScale,
             },
           ],
+          position: "relative",
+          overflow: "hidden",
         }}
-      />
+      >
+        {isActive && <Animated.View style={progressStyle} />}
+      </View>
     );
   };
 
