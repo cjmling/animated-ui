@@ -1,5 +1,6 @@
 import { StackCards } from "@/components/StackCards";
 import { Text, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function StackCardsScreen() {
   const CardItem = ({ index }: { index: number }) => {
@@ -17,14 +18,16 @@ export default function StackCardsScreen() {
     );
   };
   return (
-    <View style={{ flex: 1, backgroundColor: "#333", paddingTop: 100 }}>
-      <StackCards
-        cards={[
-          <CardItem key="1" index={1} />,
-          <CardItem key="2" index={2} />,
-          <CardItem key="3" index={3} />,
-        ]}
-      />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "#333", paddingTop: 100 }}>
+        <StackCards
+          cards={[
+            <CardItem key="1" index={1} />,
+            <CardItem key="2" index={2} />,
+            <CardItem key="3" index={3} />,
+          ]}
+        />
+      </View>
+    </GestureHandlerRootView>
   );
 }
