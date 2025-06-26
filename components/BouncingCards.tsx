@@ -50,7 +50,7 @@ const CardStack = () => {
         {cards.map((card, index) => {
           const animatedStyle = useAnimatedStyle(() => ({
             transform: [{ translateY: anims[index].value }],
-            zIndex: cards.length - index,
+            zIndex: cards.length + index,
           }));
 
           return (
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     justifyContent: "space-between",
+    flexDirection: "row",
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
