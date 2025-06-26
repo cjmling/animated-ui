@@ -31,12 +31,13 @@ const CardStack = () => {
       anim.value = withSequence(
         withTiming(
           expanded ? BOUNCE_UP * -i : BOUNCE_UP * -i,
-          { duration: 150 },
+          { duration: delay },
           () => {}
         ),
+
         withTiming(
           expanded ? BOUNCE_DOWN * -i : BOUNCE_SETTLE * -i,
-          { duration: 150 },
+          { duration: delay },
           () => {}
         )
       );
