@@ -16,14 +16,13 @@ export const StackCards = ({
   stackOffset = 8,
   maxRotation = 10,
 }: StackCardsProps) => {
-  // Generate random rotations for each card
+  // Generate alternating rotations for each card
   const rotations = useMemo(() => {
-    return cards.map(() => {
-      const isPositive = Math.random() > 0.5;
-      const rotation = Math.random() * maxRotation;
-      return isPositive ? rotation : -rotation;
+    return cards.map((_, index) => {
+      // Alternate between positive and negative 15 degrees
+      return index % 2 === 0 ? 5 : -5;
     });
-  }, [cards, maxRotation]);
+  }, [cards]);
 
   return (
     <View style={styles.container}>
