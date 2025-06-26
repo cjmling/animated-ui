@@ -24,6 +24,7 @@ export default function HomeScreen() {
           label="Auto Carousal Widget Demo"
         />
         <MenuItem href="/stack-cards" label="Stack Cards Demo" />
+        <MenuItem href="/bouncing-cards" label="Bouncing Cards Demo" />
       </View>
     </View>
   );

@@ -1,0 +1,129 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+// CardStack.tsx
+import React, { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
+
+const CARD_HEIGHT = 80;
+const BOUNCE_UP = -30;
+const BOUNCE_SETTLE = -20;
+const BOUNCE_DOWN = 0;
+
+const cards = [
+  { label: "stripe", color: "#B2B2FF", amount: "$32,495" },
+  { label: "wise", color: "#A6ECA8", amount: "$45,654" },
+  { label: "paypal", color: "#F3F3F3", amount: "$345,865" },
+];
+
+const CardStack = () => {
+  const [expanded, setExpanded] = useState(false);
+  const anims = cards.map(() => useSharedValue(0));
+
+  const onPress = () => {
+    setExpanded((prev) => !prev);
+    anims.forEach((anim, i) => {
+      const delay = i * 100;
+      anim.value = withSequence(
+        withTiming(
+          expanded ? BOUNCE_UP * -i : BOUNCE_UP * -i,
+          { duration: 150 },
+          () => {}
+        ),
+        withTiming(
+          expanded ? BOUNCE_DOWN * -i : BOUNCE_SETTLE * -i,
+          { duration: 150 },
+          () => {}
+        )
+      );
+    });
+  };
+
+  return (
+    <Pressable onPress={onPress}>
+      <View style={styles.wrapper}>
+        {cards.map((card, index) => {
+          const animatedStyle = useAnimatedStyle(() => ({
+            transform: [{ translateY: anims[index].value }],
+            zIndex: cards.length - index,
+          }));
+
+          return (
+            <Animated.View
+              key={card.label}
+              style={[
+                styles.card,
+                animatedStyle,
+                {
+                  backgroundColor: card.color,
+                  top: index * 30,
+                },
+              ]}
+            >
+              <Text style={styles.label}>{card.label}</Text>
+              <Text style={styles.amount}>{card.amount}</Text>
+            </Animated.View>
+          );
+        })}
+        <View style={styles.totalBox}>
+          <Text style={styles.total}>424,014</Text>
+          <Text style={styles.totalLabel}>Total Balance</Text>
+        </View>
+      </View>
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  wrapper: {
+    alignItems: "center",
+    marginTop: 100,
+  },
+  card: {
+    position: "absolute",
+    width: 280,
+    height: CARD_HEIGHT,
+    borderRadius: 12,
+    padding: 16,
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  label: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#333",
+    textTransform: "capitalize",
+  },
+  amount: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#111",
+  },
+  totalBox: {
+    alignItems: "center",
+    backgroundColor: "#1B1F14",
+    borderRadius: 20,
+    paddingVertical: 30,
+    paddingHorizontal: 40,
+    marginTop: cards.length * 30 + 20,
+  },
+  total: {
+    color: "#fff",
+    fontSize: 28,
+    fontWeight: "bold",
+  },
+  totalLabel: {
+    color: "#ccc",
+    fontSize: 14,
+    marginTop: 4,
+  },
+});
+
+export default CardStack;
