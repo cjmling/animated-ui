@@ -84,11 +84,13 @@ const Card = ({
       }
     });
 
-  const tapGesture = Gesture.Tap().onStart(() => {
-    if (!isTop) return;
+  const tapGesture = Gesture.Tap()
+    .maxDistance(5)
+    .onStart(() => {
+      if (!isTop) return;
 
-    runOnJS(setIsFlipped)(!isFlipped);
-  });
+      runOnJS(setIsFlipped)(!isFlipped);
+    });
 
   const gesture = Gesture.Simultaneous(panGesture, tapGesture);
 
@@ -120,6 +122,7 @@ const Card = ({
             exiting={FlipOutYRight}
           >
             <Text style={styles.text}>{card.title}</Text>
+            <Text style={styles.tapHint}>Tap to flip back</Text>
           </Animated.View>
         )}
 
