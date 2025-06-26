@@ -122,7 +122,7 @@ const Card = ({
             exiting={FlipOutYRight}
           >
             <Text style={styles.text}>{card.title}</Text>
-            <Text style={styles.tapHint}>Tap to flip back</Text>
+            <Text style={{ color: "#000" }}>Tap to flip back</Text>
           </Animated.View>
         )}
 
