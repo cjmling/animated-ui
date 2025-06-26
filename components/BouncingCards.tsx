@@ -80,7 +80,9 @@ const CardStack = () => {
               ]}
             >
               <Text style={styles.label}>{card.label}</Text>
-              <Text style={styles.amount}>{card.amount}</Text>
+              <Text style={styles.amount}>
+                {expanded ? card.amount : "******"}
+              </Text>
             </Animated.View>
           );
         })}
@@ -96,7 +98,7 @@ const CardStack = () => {
 const styles = StyleSheet.create({
   wrapper: {
     alignItems: "center",
-    marginTop: 100,
+    marginTop: 200,
   },
   card: {
     position: "absolute",
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#111",
+    color: "#555",
   },
   totalBox: {
     alignItems: "center",
