@@ -1,9 +1,10 @@
-import React, { useCallback, useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -18,12 +19,15 @@ interface StackCardsProps {
 }
 
 export const StackCards = ({
-  cards,
+  cards: initialCards,
   cardWidth = 250,
   cardHeight = 350,
   stackOffset = 8,
   onCardSwiped,
 }: StackCardsProps) => {
+  // Manage cards state internally
+  const [cards, setCards] = useState(initialCards);
+
   // Generate alternating rotations for each card
   const rotations = useMemo(() => {
     return cards.map((_, index) => {
@@ -42,6 +46,20 @@ export const StackCards = ({
   const SWIPE_THRESHOLD = cardWidth * 0.3;
 
   const moveCardToBack = useCallback(() => {
+    setCards((currentCards) => {
+      if (currentCards.length <= 1) return currentCards;
+
+      // Move the first card to the end of the array
+      const newCards = [...currentCards];
+      const firstCard = newCards.shift();
+      if (firstCard) {
+        newCards.push(firstCard);
+      }
+
+      return newCards;
+    });
+
+    // Call the callback if provided
     if (onCardSwiped) {
       onCardSwiped(0, translateX.value > 0 ? "right" : "left");
     }
@@ -73,12 +91,9 @@ export const StackCards = ({
         translateY.value = withSpring(0);
         scale.value = withSpring(0.8);
 
-        // Call the callback after animation
-        // setTimeout(() => {
-        //   //   if (onCardSwiped) {
-        //   // runOnJS(moveCardToBack)();
-        //   //   }
-        // }, 300);
+        if (onCardSwiped) {
+          runOnJS(moveCardToBack)();
+        }
       } else {
         // Reset card position
         translateX.value = withSpring(0);
@@ -118,7 +133,9 @@ export const StackCards = ({
               index === 0 && animatedStyle, // Only apply swipe animation to top card
             ]}
           >
-            {card}
+            <Text>
+              {card} : {index}
+            </Text>
           </Animated.View>
         </GestureDetector>
       ))}
