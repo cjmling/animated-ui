@@ -1,106 +1,63 @@
-import React, { useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-  Extrapolate,
-  interpolate,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
-interface StackCardsProps {
-  cards: React.ReactNode[];
-  cardWidth?: number;
-  cardHeight?: number;
-  stackOffset?: number;
-  onCardSwiped?: (index: number, direction: "left" | "right") => void;
-}
+const { width, height } = Dimensions.get("window");
+const CARD_WIDTH = width * 0.7;
+const CARD_HEIGHT = height * 0.5;
+const SWIPE_THRESHOLD = 120;
 
-export const StackCards = ({
-  cards: initialCards,
-  cardWidth = 250,
-  cardHeight = 350,
-  stackOffset = 8,
-  onCardSwiped,
-}: StackCardsProps) => {
-  // Manage cards state internally
-  const [cards, setCards] = useState(initialCards);
+const cardsData = [
+  { id: "1", color: "#FF6B6B" },
+  { id: "2", color: "#FFD93D" },
+  { id: "3", color: "#6BCB77" },
+  { id: "4", color: "#4D96FF" },
+];
 
-  // Generate alternating rotations for each card
-  const rotations = useMemo(() => {
-    return cards.map((_, index) => {
-      // Alternate between positive and negative 15 degrees
-      return index % 2 === 0 ? 5 : -5;
-    });
-  }, [cards]);
-
-  // Animation values for each card
+const Card = ({
+  card,
+  index,
+  onSwipe,
+  isTop,
+}: {
+  card: any;
+  index: number;
+  onSwipe: (card: any) => void;
+  isTop: boolean;
+}) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
-  const scale = useSharedValue(1);
-  const rotation = useSharedValue(0);
+  const rotateZ = useSharedValue(0);
 
-  // Threshold for swipe detection
-  const SWIPE_THRESHOLD = cardWidth * 0.3;
-
-  const moveCardToBack = () => {
-    setCards((currentCards) => {
-      if (currentCards.length <= 1) return currentCards;
-
-      // Move the first card to the end of the array
-      const newCards = [...currentCards];
-      const firstCard = newCards.shift();
-      if (firstCard) {
-        newCards.push(firstCard);
-      }
-
-      return newCards;
-    });
-
-    // Call the callback if provided
-    if (onCardSwiped) {
-      onCardSwiped(0, translateX.value > 0 ? "right" : "left");
-    }
-  };
-
-  const panGesture = Gesture.Pan()
+  const gesture = Gesture.Pan()
     .onUpdate((event) => {
+      if (!isTop) return;
       translateX.value = event.translationX;
       translateY.value = event.translationY;
-
-      // Scale and rotate based on swipe distance
-      const progress = Math.abs(event.translationX) / SWIPE_THRESHOLD;
-      scale.value = interpolate(progress, [0, 1], [1, 0.8], Extrapolate.CLAMP);
-      rotation.value = interpolate(
-        event.translationX,
-        [-cardWidth, cardWidth],
-        [-15, 15],
-        Extrapolate.CLAMP
-      );
+      rotateZ.value = event.translationX / 20;
     })
-    .onEnd((event) => {
-      const shouldSwipe = Math.abs(event.translationX) > SWIPE_THRESHOLD;
+    .onEnd(() => {
+      if (!isTop) return;
 
-      if (shouldSwipe) {
-        // Animate card off screen
-        translateX.value = withSpring(
-          event.translationX > 0 ? cardWidth * 2 : -cardWidth * 2
-        );
-        translateY.value = withSpring(0);
-        scale.value = withSpring(0.8);
-
-        if (onCardSwiped) {
-          runOnJS(moveCardToBack)();
-        }
-        // topCard.value = withSpring(topCard.value + 1);
+      if (Math.abs(translateX.value) > SWIPE_THRESHOLD) {
+        const toX = translateX.value > 0 ? width * 1.5 : -width * 1.5;
+        translateX.value = withTiming(toX, { duration: 200 }, () => {
+          runOnJS(onSwipe)(card);
+          translateX.value = 0;
+          translateY.value = 0;
+          rotateZ.value = 0;
+        });
       } else {
-        // Reset card position
         translateX.value = withSpring(0);
         translateY.value = withSpring(0);
-        scale.value = withSpring(1);
-        rotation.value = withSpring(0);
+        rotateZ.value = withSpring(0);
       }
     });
 
@@ -109,62 +66,78 @@ export const StackCards = ({
       transform: [
         { translateX: translateX.value },
         { translateY: translateY.value },
-        { scale: scale.value },
-        { rotate: `${rotation.value}deg` },
+        { rotateZ: `${rotateZ.value}deg` },
+        { scale: withSpring(isTop ? 1 : 0.95 - index * 0.02) },
       ],
     };
   });
 
   return (
-    <View style={styles.container}>
-      {cards.map((card, index) => (
-        <GestureDetector key={index} gesture={panGesture}>
-          <Animated.View
-            style={[
-              styles.card,
-              {
-                width: cardWidth,
-                height: cardHeight,
-                transform: [
-                  { rotate: `${rotations[index]}deg` },
-                  { translateY: index * stackOffset },
-                ],
-                zIndex: cards.length - index,
-              },
-              index === 0 && animatedStyle, // Only apply swipe animation to top card
-            ]}
-          >
-            <Text>
-              {card} : {index}
-            </Text>
-          </Animated.View>
-        </GestureDetector>
-      ))}
-    </View>
+    <GestureDetector gesture={gesture}>
+      <Animated.View
+        style={[
+          styles.card,
+          { backgroundColor: card.color, zIndex: cardsData.length - index },
+          animatedStyle,
+        ]}
+      >
+        <Text style={styles.text}>Card {card.id}</Text>
+      </Animated.View>
+    </GestureDetector>
   );
 };
 
+export function StackCards() {
+  const [cards, setCards] = useState(cardsData);
+
+  const handleSwipe = (swipedCard: any) => {
+    setCards((prev) => {
+      const remaining = prev.filter((c) => c.id !== swipedCard.id);
+      return [...remaining, swipedCard]; // move swiped card to end
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      {cards
+        .map((card, index) => {
+          const isTop = index === 0;
+          return (
+            <Card
+              key={card.id}
+              card={card}
+              index={index}
+              isTop={isTop}
+              onSwipe={handleSwipe}
+            />
+          );
+        })
+        .reverse()}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
-    backgroundColor: "blue",
-    marginTop: 100,
   },
   card: {
     position: "absolute",
-    backgroundColor: "white",
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    alignItems: "center",
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
+    borderRadius: 20,
     justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+  },
+  text: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#fff",
   },
 });
