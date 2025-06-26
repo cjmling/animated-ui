@@ -23,6 +23,7 @@ export default function HomeScreen() {
           href="/auto-carousal-widget"
           label="Auto Carousal Widget Demo"
         />
+        <MenuItem href="/stack-cards" label="Stack Cards Demo" />
       </View>
     </View>
   );
