@@ -9,7 +9,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const CARD_HEIGHT = 80;
+const CARD_WIDTH = 280;
+const CARD_HEIGHT = 180;
 const BOUNCE_UP = -30;
 const BOUNCE_SETTLE = -20;
 const BOUNCE_DOWN = 0;
@@ -74,7 +75,7 @@ const CardStack = () => {
                 animatedStyle,
                 {
                   backgroundColor: card.color,
-                  top: index * 30,
+                  top: index * 40,
                 },
               ]}
             >
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   },
   card: {
     position: "absolute",
-    width: 280,
+    width: CARD_WIDTH,
     height: CARD_HEIGHT,
     borderRadius: 12,
     padding: 16,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 30,
     paddingHorizontal: 40,
-    marginTop: cards.length * 30 + 20,
+    marginTop: cards.length * 100 + 20,
   },
   total: {
     color: "#fff",
