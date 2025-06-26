@@ -86,6 +86,7 @@ const CardStack = () => {
             </Animated.View>
           );
         })}
+        <View style={styles.totalContainer}></View>
         <View style={styles.totalBox}>
           <Text style={styles.total}>424,014</Text>
           <Text style={styles.totalLabel}>Total Balance</Text>
@@ -130,7 +131,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 30,
     paddingHorizontal: 40,
-    marginTop: cards.length * 100 + 20,
+    marginTop: -150,
+    zIndex: 100,
+    width: CARD_WIDTH * 0.8,
+  },
+  totalContainer: {
+    backgroundColor: "#1B1F14",
+    marginTop: 100,
+    width: CARD_WIDTH * 1.2,
+    height: CARD_HEIGHT * 1.5,
+    borderRadius: 20,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
   },
   total: {
     color: "#fff",
