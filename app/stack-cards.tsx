@@ -1,5 +1,4 @@
 import { StackCards } from "@/components/StackCards";
-import { useState } from "react";
 import { Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -19,11 +18,11 @@ export default function StackCardsScreen() {
     );
   };
 
-  const [cards, setCards] = useState([
+  const cards = [
     <CardItem key="1" text={"1"} />,
     <CardItem key="2" text={"2"} />,
     <CardItem key="3" text={"3"} />,
-  ]);
+  ];
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

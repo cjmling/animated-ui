@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -45,7 +45,7 @@ export const StackCards = ({
   // Threshold for swipe detection
   const SWIPE_THRESHOLD = cardWidth * 0.3;
 
-  const moveCardToBack = useCallback(() => {
+  const moveCardToBack = () => {
     setCards((currentCards) => {
       if (currentCards.length <= 1) return currentCards;
 
@@ -63,7 +63,7 @@ export const StackCards = ({
     if (onCardSwiped) {
       onCardSwiped(0, translateX.value > 0 ? "right" : "left");
     }
-  }, [onCardSwiped, translateX]);
+  };
 
   const panGesture = Gesture.Pan()
     .onUpdate((event) => {
@@ -94,6 +94,7 @@ export const StackCards = ({
         if (onCardSwiped) {
           runOnJS(moveCardToBack)();
         }
+        // topCard.value = withSpring(topCard.value + 1);
       } else {
         // Reset card position
         translateX.value = withSpring(0);
