@@ -48,11 +48,11 @@ const Card = ({
 
       if (Math.abs(translateX.value) > SWIPE_THRESHOLD) {
         const toX = translateX.value > 0 ? width * 1.5 : -width * 1.5;
-        translateX.value = withTiming(toX, { duration: 200 }, () => {
+        translateX.value = withTiming(toX, { duration: 500 }, () => {
           runOnJS(onSwipe)(card);
-          translateX.value = 0;
-          translateY.value = 0;
-          rotateZ.value = 0;
+          translateX.value = withTiming(0, { duration: 200 });
+          translateY.value = withTiming(0, { duration: 200 });
+          rotateZ.value = withTiming(0, { duration: 200 });
         });
       } else {
         translateX.value = withSpring(0);
