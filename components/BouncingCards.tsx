@@ -27,16 +27,29 @@ const CardStack = () => {
   const onPress = () => {
     setExpanded((prev) => !prev);
     anims.forEach((anim, i) => {
-      const delay = i * 100;
+      let bounceFactor = 1;
+      if (i === 0) {
+        bounceFactor = 3;
+      }
+
+      if (i === 1) {
+        bounceFactor = 2;
+      }
+
+      if (i === 2) {
+        bounceFactor = 1;
+      }
+
+      const delay = bounceFactor * 150;
       anim.value = withSequence(
         withTiming(
-          expanded ? BOUNCE_UP * -i : BOUNCE_UP * -i,
+          expanded ? BOUNCE_UP * bounceFactor : BOUNCE_UP * bounceFactor,
           { duration: delay },
           () => {}
         ),
 
         withTiming(
-          expanded ? BOUNCE_DOWN * -i : BOUNCE_SETTLE * -i,
+          expanded ? BOUNCE_DOWN * bounceFactor : BOUNCE_SETTLE * bounceFactor,
           { duration: delay },
           () => {}
         )
