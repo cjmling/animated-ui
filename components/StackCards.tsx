@@ -11,8 +11,8 @@ interface StackCardsProps {
 
 export const StackCards = ({
   cards,
-  cardWidth = 150,
-  cardHeight = 200,
+  cardWidth = 250,
+  cardHeight = 300,
   stackOffset = 8,
   maxRotation = 10,
 }: StackCardsProps) => {
@@ -54,6 +54,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
+    backgroundColor: "blue",
+    marginTop: 100,
   },
   card: {
     position: "absolute",
