@@ -126,6 +126,11 @@ export const SpotifyVerticalScroll = () => {
           onScroll={onScroll}
           scrollEventThrottle={16}
         />
+        {/* Vertical Strip Indicator */}
+        <VerticalStripIndicator
+          itemCount={ARTISTS.length}
+          activeIndex={activeIndex}
+        />
       </View>
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={() => {}}>
@@ -193,6 +198,55 @@ const ArtistCard = ({
     </Animated.View>
   );
 };
+
+// Vertical strip indicator component
+const VerticalStripIndicator = ({
+  itemCount,
+  activeIndex,
+}: {
+  itemCount: number;
+  activeIndex: number;
+}) => {
+  return (
+    <View style={stripStyles.container} pointerEvents="none">
+      {Array.from({ length: itemCount }).map((_, idx) => (
+        <View
+          key={idx}
+          style={[
+            stripStyles.line,
+            idx === activeIndex && stripStyles.activeLine,
+          ]}
+        />
+      ))}
+    </View>
+  );
+};
+
+const stripStyles = StyleSheet.create({
+  container: {
+    position: "absolute",
+    right: 12,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 24,
+    zIndex: 1000,
+  },
+  line: {
+    width: 14,
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: "#444",
+    marginVertical: 6,
+    opacity: 0.5,
+  },
+  activeLine: {
+    width: 22,
+    backgroundColor: "#fff",
+    opacity: 1,
+  },
+});
 
 const styles = StyleSheet.create({
   card: {
