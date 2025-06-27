@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
 
   purseContainer: {
     backgroundColor: "#1B1F14",
-    marginTop: 100,
+    marginTop: 80,
     width: CARD_WIDTH * 1.2,
     height: CARD_HEIGHT * 1.5,
     borderRadius: 20,
