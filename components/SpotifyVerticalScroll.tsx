@@ -105,33 +105,29 @@ export const SpotifyVerticalScroll = () => {
   });
 
   return (
-    <View
-      style={{ flex: 1, backgroundColor: "#181A20", justifyContent: "center" }}
-    >
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Animated.FlatList
-          data={ARTISTS}
-          keyExtractor={(item) => item.key}
-          renderItem={({ item, index }) => (
-            <ArtistCard item={item} index={index} scrollY={scrollY} />
-          )}
-          showsVerticalScrollIndicator={false}
-          style={{ flexGrow: 0 }}
-          contentContainerStyle={{
-            paddingVertical: (SCREEN_HEIGHT - CARD_HEIGHT) / 2,
-            gap: CARD_SPACING,
-          }}
-          snapToInterval={CARD_TOTAL_HEIGHT}
-          decelerationRate="fast"
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-        />
-        {/* Vertical Strip Indicator */}
-        <VerticalStripIndicator
-          itemCount={ARTISTS.length}
-          activeIndex={activeIndex}
-        />
-      </View>
+    <View style={{ flex: 1, backgroundColor: "#181A20" }}>
+      <Animated.FlatList
+        data={ARTISTS}
+        keyExtractor={(item) => item.key}
+        renderItem={({ item, index }) => (
+          <ArtistCard item={item} index={index} scrollY={scrollY} />
+        )}
+        showsVerticalScrollIndicator={false}
+        style={{ flexGrow: 0, top: -100 }}
+        contentContainerStyle={{
+          paddingVertical: (SCREEN_HEIGHT - CARD_HEIGHT) / 2,
+          gap: CARD_SPACING,
+        }}
+        snapToInterval={CARD_TOTAL_HEIGHT}
+        decelerationRate="fast"
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+      />
+      {/* Vertical Strip Indicator */}
+      <VerticalStripIndicator
+        itemCount={ARTISTS.length}
+        activeIndex={activeIndex}
+      />
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={() => {}}>
           <Text style={styles.buttonText}>Connect Spotify</Text>
@@ -155,7 +151,7 @@ const ArtistCard = ({
     const translateX = interpolate(
       scrollY.value,
       [index - 1, index, index + 1],
-      [-CARD_SPACING / 1.2, 0, -CARD_SPACING / 1.2]
+      [-CARD_SPACING / 1.8, 0, -CARD_SPACING / 1.8]
     );
     const rotate = interpolate(
       scrollY.value,
@@ -221,7 +217,7 @@ const stripStyles = StyleSheet.create({
   container: {
     position: "absolute",
     right: 12,
-    top: 0,
+    top: -100,
     bottom: 0,
     justifyContent: "center",
     alignItems: "center",
