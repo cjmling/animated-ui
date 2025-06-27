@@ -147,7 +147,7 @@ const ArtistCard = ({
     const translateX = interpolate(
       scrollY.value,
       [index - 1, index, index + 1],
-      [-CARD_SPACING, 0, -CARD_SPACING]
+      [-CARD_SPACING / 1.2, 0, -CARD_SPACING / 1.2]
     );
     const rotate = interpolate(
       scrollY.value,
