@@ -45,11 +45,7 @@ const CardStack = () => {
 
       const delay = bounceFactor * 150;
       anim.value = withSequence(
-        withTiming(
-          expanded ? BOUNCE_UP * bounceFactor : BOUNCE_UP * bounceFactor,
-          { duration: delay },
-          () => {}
-        ),
+        withTiming(BOUNCE_UP * bounceFactor, { duration: delay }, () => {}),
 
         withTiming(
           expanded ? BOUNCE_DOWN * bounceFactor : BOUNCE_SETTLE * bounceFactor,
