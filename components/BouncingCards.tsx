@@ -44,15 +44,29 @@ const CardStack = () => {
       }
 
       const delay = bounceFactor * 150;
-      anim.value = withSequence(
-        withTiming(BOUNCE_UP * bounceFactor, { duration: delay }, () => {}),
 
-        withTiming(
-          expanded ? BOUNCE_DOWN * bounceFactor : BOUNCE_SETTLE * bounceFactor,
-          { duration: delay },
-          () => {}
-        )
-      );
+      if (!expanded) {
+        // When expanding: squeeze down first, then bounce up sequence
+        anim.value = withSequence(
+          withTiming(
+            CARD_HEIGHT * 0.2 * bounceFactor,
+            { duration: 500 },
+            () => {}
+          ),
+          withTiming(BOUNCE_UP * bounceFactor, { duration: delay }, () => {}),
+          withTiming(
+            BOUNCE_SETTLE * bounceFactor,
+            { duration: delay },
+            () => {}
+          )
+        );
+      } else {
+        // When collapsing: just bounce down sequence
+        anim.value = withSequence(
+          withTiming(BOUNCE_UP * bounceFactor, { duration: delay }, () => {}),
+          withTiming(BOUNCE_DOWN * bounceFactor, { duration: delay }, () => {})
+        );
+      }
     });
   };
 
@@ -143,9 +157,10 @@ const styles = StyleSheet.create({
   purseContainer2: {
     backgroundColor: "#1B1F14",
     width: CARD_WIDTH * 1,
-    height: CARD_HEIGHT * 0.8,
+    height: CARD_HEIGHT * 1.1,
     zIndex: 100,
     alignItems: "center",
+    marginTop: 25,
   },
   totalBox: {
     alignItems: "center",
