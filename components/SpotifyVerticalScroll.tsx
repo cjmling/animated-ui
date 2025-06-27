@@ -118,7 +118,7 @@ export const SpotifyVerticalScroll = () => {
           showsVerticalScrollIndicator={false}
           style={{ flexGrow: 0 }}
           contentContainerStyle={{
-            paddingVertical: (SCREEN_HEIGHT - CARD_HEIGHT) / 2.5,
+            paddingVertical: (SCREEN_HEIGHT - CARD_HEIGHT) / 2,
             gap: CARD_SPACING,
           }}
           snapToInterval={CARD_TOTAL_HEIGHT}
@@ -162,11 +162,6 @@ const ArtistCard = ({
       [index - 1, index, index + 1],
       [15, 0, -15]
     );
-    const scale = interpolate(
-      scrollY.value,
-      [index - 1, index, index + 1],
-      [0.92, 1, 0.92]
-    );
     const opacity = interpolate(
       scrollY.value,
       [index - 1, index, index + 1],
@@ -178,7 +173,7 @@ const ArtistCard = ({
       ["#222", "#fff", "#222"]
     );
     return {
-      transform: [{ translateX }, { rotate: `${rotate}deg` }, { scale }],
+      transform: [{ translateX }, { rotate: `${rotate}deg` }],
       borderColor,
       opacity,
       zIndex: 100 - index,
