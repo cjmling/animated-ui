@@ -28,7 +28,6 @@ const CardStack = () => {
   const anims = cards.map(() => useSharedValue(0));
 
   const onPress = () => {
-    setExpanded((prev) => !prev);
     anims.forEach((anim, i) => {
       let bounceFactor = 1;
       if (i === 0) {
@@ -68,6 +67,14 @@ const CardStack = () => {
         );
       }
     });
+
+    if (!expanded) {
+      setTimeout(() => {
+        setExpanded((prev) => !prev);
+      }, 500);
+    } else {
+      setExpanded((prev) => !prev);
+    }
   };
 
   return (
