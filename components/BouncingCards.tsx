@@ -28,19 +28,9 @@ const CardStack = () => {
   const anims = cards.map(() => useSharedValue(0));
 
   const onPress = () => {
+    const totalCards = anims.length;
     anims.forEach((anim, i) => {
-      let bounceFactor = 1;
-      if (i === 0) {
-        bounceFactor = 3;
-      }
-
-      if (i === 1) {
-        bounceFactor = 2;
-      }
-
-      if (i === 2) {
-        bounceFactor = 1;
-      }
+      const bounceFactor = totalCards - i;
 
       const delay = bounceFactor * 150;
 
