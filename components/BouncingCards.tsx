@@ -9,6 +9,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+// Design Inspiration: https://www.pinterest.com/pin/611574824483515995/
+
 const CARD_WIDTH = 280;
 const CARD_HEIGHT = 180;
 const BOUNCE_UP = -30;
@@ -86,10 +88,15 @@ const CardStack = () => {
             </Animated.View>
           );
         })}
-        <View style={styles.totalContainer}></View>
-        <View style={styles.totalBox}>
-          <Text style={styles.total}>424,014</Text>
-          <Text style={styles.totalLabel}>Total Balance</Text>
+        <View style={styles.purseContainer}>
+          <View style={styles.purseContainer2}>
+            <View style={styles.totalBox}>
+              <Text style={styles.total}>
+                {expanded ? "424,014" : "******"}
+              </Text>
+              <Text style={styles.totalLabel}>Total Balance</Text>
+            </View>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -125,17 +132,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#555",
   },
-  totalBox: {
-    alignItems: "center",
-    backgroundColor: "#1B1F14",
-    borderRadius: 20,
-    paddingVertical: 30,
-    paddingHorizontal: 40,
-    marginTop: -150,
-    zIndex: 100,
-    width: CARD_WIDTH * 0.8,
-  },
-  totalContainer: {
+
+  purseContainer: {
     backgroundColor: "#1B1F14",
     marginTop: 100,
     width: CARD_WIDTH * 1.2,
@@ -143,6 +141,25 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  purseContainer2: {
+    backgroundColor: "#1B1F14",
+    width: CARD_WIDTH * 1,
+    height: CARD_HEIGHT * 0.8,
+    zIndex: 100,
+    alignItems: "center",
+  },
+  totalBox: {
+    alignItems: "center",
+    backgroundColor: "#1B1F14",
+    borderRadius: 20,
+    paddingVertical: 30,
+    paddingHorizontal: 40,
+    top: -10,
+    zIndex: 100,
+    width: CARD_WIDTH * 0.9,
   },
   total: {
     color: "#fff",
