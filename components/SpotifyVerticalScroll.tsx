@@ -10,6 +10,7 @@ import {
 import Animated, {
   interpolate,
   interpolateColor,
+  runOnJS,
   SharedValue,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -96,7 +97,9 @@ export const SpotifyVerticalScroll = () => {
         newActiveIndex < ARTISTS.length &&
         newActiveIndex !== activeIndex
       ) {
+        console.log("newActiveIndex", newActiveIndex);
         // setActiveIndex(newActiveIndex);
+        runOnJS(setActiveIndex)(newActiveIndex);
       }
     },
   });
@@ -159,6 +162,11 @@ const ArtistCard = ({
       [index - 1, index, index + 1],
       [0.92, 1, 0.92]
     );
+    const opacity = interpolate(
+      scrollY.value,
+      [index - 1, index, index + 1],
+      [0.6, 1, 0.6]
+    );
     const borderColor = interpolateColor(
       scrollY.value,
       [index - 1, index, index + 1],
@@ -167,6 +175,7 @@ const ArtistCard = ({
     return {
       transform: [{ translateX }, { rotate: `${rotate}deg` }, { scale }],
       borderColor,
+      opacity,
       zIndex: 100 - index,
     };
   });
