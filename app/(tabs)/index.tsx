@@ -25,6 +25,10 @@ export default function HomeScreen() {
         />
         <MenuItem href="/stack-cards" label="Stack Cards Demo" />
         <MenuItem href="/bouncing-cards" label="Bouncing Cards Demo" />
+        <MenuItem
+          href="/spotify-vertical-scroll"
+          label="Spotify Vertical Scroll Demo"
+        />
       </View>
     </View>
   );
