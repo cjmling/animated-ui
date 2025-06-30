@@ -33,6 +33,8 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
   borderRadius = 20,
 }) => {
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
+  const MARGIN_DURATION = 500;
+  const BORDER_RADIUS_DURATION = 1000;
 
   const onLocalSelect = (index: number) => {
     setLocalSelectedIndex(index);
@@ -49,34 +51,46 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
 
         const animatedStyle = useAnimatedStyle(() => ({
           marginLeft: withTiming(idx === localSelectedIndex ? marginSize : 0, {
-            duration: 500,
+            duration: MARGIN_DURATION,
           }),
           marginRight: withTiming(idx === localSelectedIndex ? marginSize : 0, {
-            duration: 500,
+            duration: MARGIN_DURATION,
           }),
           borderTopLeftRadius: withTiming(
             isAdjacentRight || localSelectedIndex === idx || idx === 0
               ? borderRadius
-              : 0
+              : 0,
+            {
+              duration: BORDER_RADIUS_DURATION,
+            }
           ),
           borderTopRightRadius: withTiming(
             isAdjacentLeft ||
               localSelectedIndex === idx ||
               idx === labels.length - 1
               ? borderRadius
-              : 0
+              : 0,
+            {
+              duration: BORDER_RADIUS_DURATION,
+            }
           ),
           borderBottomLeftRadius: withTiming(
             isAdjacentRight || localSelectedIndex === idx || idx === 0
               ? borderRadius
-              : 0
+              : 0,
+            {
+              duration: BORDER_RADIUS_DURATION,
+            }
           ),
           borderBottomRightRadius: withTiming(
             isAdjacentLeft ||
               localSelectedIndex === idx ||
               idx === labels.length - 1
               ? borderRadius
-              : 0
+              : 0,
+            {
+              duration: BORDER_RADIUS_DURATION,
+            }
           ),
           backgroundColor: isSelected ? selectedColor : unselectedColor,
         }));
