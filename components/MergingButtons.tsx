@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
-  useSharedValue,
-  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
 interface MergingButtonsProps {
@@ -24,14 +23,14 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
   labels,
   selectedIndex,
   onSelect,
-  buttonWidth = 80,
+  buttonWidth = 90,
   buttonHeight = 44,
   selectedColor = "#2563eb",
   unselectedColor = "#111",
   selectedTextColor = "#fff",
   unselectedTextColor = "#fff",
-  marginSize = 8,
-  borderRadius = 10,
+  marginSize = 20,
+  borderRadius = 20,
 }) => {
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
 
@@ -45,40 +44,40 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
       {labels.map((label, idx) => {
         // Determine if this button is selected or adjacent
         const isSelected = idx === localSelectedIndex;
-        const isAdjacent =
-          idx === localSelectedIndex - 1 || idx === localSelectedIndex + 1;
         const isAdjacentLeft = idx === localSelectedIndex - 1;
-        const isAdjacentRight = idx === selectedIndex + 1;
-
-        // Shared values for margin and border radius
-        // const margin = useSharedValue(
-        //   isSelected || isAdjacent ? marginSize : 0
-        // );
-
-        const margin = useSharedValue(0);
-
-        const radius = useSharedValue(
-          isSelected || isAdjacent ? borderRadius : 0
-        );
-
-        React.useEffect(() => {
-          margin.value = withSpring(isSelected || isAdjacent ? marginSize : 0, {
-            damping: 18,
-            stiffness: 180,
-          });
-          radius.value = withSpring(
-            isSelected || isAdjacent ? borderRadius : 0,
-            {
-              damping: 18,
-              stiffness: 180,
-            }
-          );
-        }, [localSelectedIndex]);
+        const isAdjacentRight = idx === localSelectedIndex + 1;
 
         const animatedStyle = useAnimatedStyle(() => ({
-          marginLeft: idx === localSelectedIndex ? 10 : 0,
-          marginRight: idx === localSelectedIndex ? 10 : 0,
-          borderRadius: radius.value,
+          marginLeft: withTiming(idx === localSelectedIndex ? marginSize : 0, {
+            duration: 500,
+          }),
+          marginRight: withTiming(idx === localSelectedIndex ? marginSize : 0, {
+            duration: 500,
+          }),
+          borderTopLeftRadius: withTiming(
+            isAdjacentRight || localSelectedIndex === idx || idx === 0
+              ? borderRadius
+              : 0
+          ),
+          borderTopRightRadius: withTiming(
+            isAdjacentLeft ||
+              localSelectedIndex === idx ||
+              idx === labels.length - 1
+              ? borderRadius
+              : 0
+          ),
+          borderBottomLeftRadius: withTiming(
+            isAdjacentRight || localSelectedIndex === idx || idx === 0
+              ? borderRadius
+              : 0
+          ),
+          borderBottomRightRadius: withTiming(
+            isAdjacentLeft ||
+              localSelectedIndex === idx ||
+              idx === labels.length - 1
+              ? borderRadius
+              : 0
+          ),
           backgroundColor: isSelected ? selectedColor : unselectedColor,
         }));
 
@@ -87,7 +86,7 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
             key={label}
             activeOpacity={0.8}
             onPress={() => onLocalSelect(idx)}
-            style={{ borderRadius, overflow: "hidden" }}
+            style={{ overflow: "hidden" }}
           >
             <Animated.View
               style={[
@@ -107,7 +106,7 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
                   fontSize: 16,
                 }}
               >
-                {label} : {localSelectedIndex}
+                {label}
               </Text>
             </Animated.View>
           </TouchableOpacity>
