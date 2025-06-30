@@ -106,7 +106,7 @@ export const SpotifyVerticalScroll = () => {
           <ArtistCard item={item} index={index} scrollY={scrollY} />
         )}
         showsVerticalScrollIndicator={false}
-        style={{ flexGrow: 0, top: -100 }}
+        style={{ flexGrow: 0 }}
         contentContainerStyle={{
           paddingVertical: (SCREEN_HEIGHT - CARD_HEIGHT) / 2,
           gap: CARD_SPACING,
@@ -211,8 +211,7 @@ const stripStyles = StyleSheet.create({
   container: {
     position: "absolute",
     right: 12,
-    top: -100,
-    bottom: 0,
+    top: 400,
     justifyContent: "center",
     alignItems: "center",
     width: 24,
