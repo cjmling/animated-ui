@@ -34,7 +34,8 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
 }) => {
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
   const MARGIN_DURATION = 500;
-  const BORDER_RADIUS_DURATION = 200;
+  const BORDER_RADIUS_DURATION = 500;
+  const BORDER_RADIUS_JOIN_DURATION = 1000;
 
   const onLocalSelect = (index: number) => {
     setLocalSelectedIndex(index);
@@ -48,50 +49,61 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
         const isSelected = idx === localSelectedIndex;
         const isAdjacentLeft = idx === localSelectedIndex - 1;
         const isAdjacentRight = idx === localSelectedIndex + 1;
+        const isFirst = idx === 0;
+        const isLast = idx === labels.length - 1;
+
+        const borderTopLeftRadius =
+          isAdjacentRight || isSelected || isFirst ? borderRadius : 0;
+
+        // If its going to be 0 then take longer else shorter
+        const borderTopLeftRadiusDuration =
+          borderTopLeftRadius === 0
+            ? BORDER_RADIUS_JOIN_DURATION
+            : BORDER_RADIUS_DURATION;
+
+        const borderTopRightRadius =
+          isAdjacentLeft || isSelected || isLast ? borderRadius : 0;
+
+        const borderTopRightRadiusDuration =
+          borderTopRightRadius === 0
+            ? BORDER_RADIUS_JOIN_DURATION
+            : BORDER_RADIUS_DURATION;
+
+        const borderBottomLeftRadius =
+          isAdjacentRight || isSelected || isFirst ? borderRadius : 0;
+
+        const borderBottomLeftRadiusDuration =
+          borderBottomLeftRadius === 0
+            ? BORDER_RADIUS_JOIN_DURATION
+            : BORDER_RADIUS_DURATION;
+
+        const borderBottomRightRadius =
+          isAdjacentLeft || isSelected || isLast ? borderRadius : 0;
+
+        const borderBottomRightRadiusDuration =
+          borderBottomRightRadius === 0
+            ? BORDER_RADIUS_JOIN_DURATION
+            : BORDER_RADIUS_DURATION;
 
         const animatedStyle = useAnimatedStyle(() => ({
-          marginLeft: withTiming(idx === localSelectedIndex ? marginSize : 0, {
+          marginLeft: withTiming(isSelected ? marginSize : 0, {
             duration: MARGIN_DURATION,
           }),
-          marginRight: withTiming(idx === localSelectedIndex ? marginSize : 0, {
+          marginRight: withTiming(isSelected ? marginSize : 0, {
             duration: MARGIN_DURATION,
           }),
-          borderTopLeftRadius: withTiming(
-            isAdjacentRight || localSelectedIndex === idx || idx === 0
-              ? borderRadius
-              : 0,
-            {
-              duration: BORDER_RADIUS_DURATION,
-            }
-          ),
-          borderTopRightRadius: withTiming(
-            isAdjacentLeft ||
-              localSelectedIndex === idx ||
-              idx === labels.length - 1
-              ? borderRadius
-              : 0,
-            {
-              duration: BORDER_RADIUS_DURATION,
-            }
-          ),
-          borderBottomLeftRadius: withTiming(
-            isAdjacentRight || localSelectedIndex === idx || idx === 0
-              ? borderRadius
-              : 0,
-            {
-              duration: BORDER_RADIUS_DURATION,
-            }
-          ),
-          borderBottomRightRadius: withTiming(
-            isAdjacentLeft ||
-              localSelectedIndex === idx ||
-              idx === labels.length - 1
-              ? borderRadius
-              : 0,
-            {
-              duration: BORDER_RADIUS_DURATION,
-            }
-          ),
+          borderTopLeftRadius: withTiming(borderTopLeftRadius, {
+            duration: borderTopLeftRadiusDuration,
+          }),
+          borderTopRightRadius: withTiming(borderTopRightRadius, {
+            duration: borderTopRightRadiusDuration,
+          }),
+          borderBottomLeftRadius: withTiming(borderBottomLeftRadius, {
+            duration: borderBottomLeftRadiusDuration,
+          }),
+          borderBottomRightRadius: withTiming(borderBottomRightRadius, {
+            duration: borderBottomRightRadiusDuration,
+          }),
           backgroundColor: isSelected ? selectedColor : unselectedColor,
         }));
 
