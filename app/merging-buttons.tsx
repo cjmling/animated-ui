@@ -6,7 +6,7 @@ export default function MergingButtonsScreen() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <MergingButtons
         labels={["One", "Two", "Three", "Four"]}
-        selectedIndex={1}
+        selectedIndex={0}
         onSelect={() => {}}
       />
     </View>

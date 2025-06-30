@@ -34,7 +34,7 @@ export const MergingButtons: React.FC<MergingButtonsProps> = ({
 }) => {
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
   const MARGIN_DURATION = 500;
-  const BORDER_RADIUS_DURATION = 1000;
+  const BORDER_RADIUS_DURATION = 200;
 
   const onLocalSelect = (index: number) => {
     setLocalSelectedIndex(index);
