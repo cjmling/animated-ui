@@ -30,6 +30,7 @@ export default function HomeScreen() {
           label="Spotify Vertical Scroll Demo"
         />
         <MenuItem href="/merging-buttons" label="Merging Buttons Demo" />
+        <MenuItem href="/slot-number" label="Slot Number Demo" />
       </View>
     </View>
   );
