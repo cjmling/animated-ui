@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
@@ -128,11 +121,6 @@ export const SpotifyVerticalScroll = () => {
         itemCount={ARTISTS.length}
         activeIndex={activeIndex}
       />
-      <View style={styles.buttonContainer}>
-        <Pressable style={styles.button} onPress={() => {}}>
-          <Text style={styles.buttonText}>Connect Spotify</Text>
-        </Pressable>
-      </View>
     </View>
   );
 };
@@ -150,8 +138,14 @@ const ArtistCard = ({
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(
       scrollY.value,
-      [index - 1, index, index + 1],
-      [-CARD_SPACING / 1.8, 0, -CARD_SPACING / 1.8]
+      [index - 2, index - 1, index, index + 1, index + 2],
+      [
+        -CARD_SPACING / 0.5,
+        -CARD_SPACING / 1.8,
+        0,
+        -CARD_SPACING / 1.8,
+        -CARD_SPACING / 0.5,
+      ]
     );
     const rotate = interpolate(
       scrollY.value,
