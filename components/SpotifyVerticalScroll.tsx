@@ -140,11 +140,11 @@ const ArtistCard = ({
       scrollY.value,
       [index - 2, index - 1, index, index + 1, index + 2],
       [
-        -CARD_SPACING / 0.5,
+        -CARD_SPACING / 0.6,
         -CARD_SPACING / 1.8,
         0,
         -CARD_SPACING / 1.8,
-        -CARD_SPACING / 0.5,
+        -CARD_SPACING / 0.6,
       ]
     );
     const rotate = interpolate(
