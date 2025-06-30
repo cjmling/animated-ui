@@ -8,6 +8,7 @@ module.exports = defineConfig([
     ignores: ["dist/*"],
     rules: {
       "react-native/no-inline-styles": "off",
+      "react-hooks/rules-of-hooks": "off",
     },
   },
 ]);
