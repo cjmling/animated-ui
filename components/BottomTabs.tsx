@@ -45,19 +45,30 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
   const BUTTON_WIDTH = buttonsContainerWidth / labels.length;
   const BUTTON_HEIGHT = BUTTON_WIDTH;
   const LABELS_BACKGROUND_COUNT = (labels.length - 1) * 2 + labels.length;
+  console.log(LABELS_BACKGROUND_COUNT);
 
   const translateX = useSharedValue<number>(0);
 
   const handlePress = (index: number) => {
-    translateX.value = withTiming(BUTTON_WIDTH * index, {
+    const translateXValue =
+      -(BUTTON_WIDTH * (labels.length - 1)) + index * BUTTON_WIDTH;
+    translateX.value = withTiming(translateXValue, {
       duration: 200,
     });
-    console.log(BUTTON_WIDTH, index, BUTTON_WIDTH * index);
+    console.log(BUTTON_WIDTH, index, translateXValue);
 
     setLocalSelectedIndex(index);
     onSelect(index);
     console.log(index);
   };
+
+  //   useEffect(() => {
+  //     const translateXValue =
+  //       -(BUTTON_WIDTH * (labels.length - 1)) + selectedIndex * BUTTON_WIDTH;
+  //     translateX.value = withTiming(translateXValue, {
+  //       duration: 200,
+  //     });
+  //   }, [selectedIndex]);
 
   const movingBackgroundAniamtedStyles = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
@@ -98,7 +109,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
                 style={{
                   width: BUTTON_WIDTH,
                   height: BUTTON_HEIGHT,
-                  backgroundColor: isSelected ? "red" : "green",
+                  backgroundColor: "red",
                   justifyContent: "center",
                   alignItems: "center",
                   borderTopRightRadius: isAdjacentLeft ? 25 : 0,
