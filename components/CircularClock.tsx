@@ -59,7 +59,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
   // Dashes
   const dashes = Array.from({ length: 60 }).map((_, i) => {
     const angle = (i * 6 - 90) * (Math.PI / 180);
-    const dashLength = i % 5 === 0 ? 16 : 8;
+    const dashLength = i % 5 === 0 ? 12 : 8;
     const x1 = center + (radius - dashLength) * Math.cos(angle);
     const y1 = center + (radius - dashLength) * Math.sin(angle);
     const x2 = center + radius * Math.cos(angle);
@@ -71,8 +71,9 @@ export const CircularClock: React.FC<CircularClockProps> = ({
         y1={y1}
         x2={x2}
         y2={y2}
-        stroke={i % 5 === 0 ? "#333" : "#bbb"}
+        stroke={i % 5 === 0 ? "#222" : "#222"}
         strokeWidth={i % 5 === 0 ? 3 : 1.5}
+        strokeLinecap="round"
       />
     );
   });
@@ -110,7 +111,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
           x1={center}
           y1={center}
           animatedProps={minuteAnimatedProps}
-          stroke="#4D96FF"
+          stroke="#222"
           strokeWidth={4}
           strokeLinecap="round"
         />
