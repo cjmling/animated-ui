@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { MenuItem } from "../components/MenuItem";
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>Welcome to the Demo</Text>
       <View style={styles.menuContainer}>
         <MenuItem href="/group-button" label="Group Button Demo" />
@@ -31,8 +31,9 @@ export default function HomeScreen() {
         />
         <MenuItem href="/merging-buttons" label="Merging Buttons Demo" />
         <MenuItem href="/slot-number" label="Slot Number Demo" />
+        <MenuItem href="/bottom-tabs" label="Bottom Tabs Demo" />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
