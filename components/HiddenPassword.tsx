@@ -6,7 +6,6 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Colors } from "../constants/Colors";
 
 const BOX_HEIGHT = 64;
 const BOX_RADIUS = 20;
@@ -17,7 +16,7 @@ const RIGHT_START_POSITION = 25;
 
 export const HiddenPassword = () => {
   const [expanded, setExpanded] = useState(false);
-  const [password, setPassword] = useState("u8F2x34ij");
+  const password = "u8F2x34ij";
   const expandedProgress = useSharedValue(0);
 
   const handleToggle = () => {
@@ -62,7 +61,11 @@ export const HiddenPassword = () => {
     >
       <Animated.View style={[animatedBgStyle]} />
       <View style={{ zIndex: 2, marginRight: 16 }}>
-        <Ionicons name="lock-closed" size={28} color="#fff" />
+        <Ionicons
+          name={expanded ? "lock-open" : "lock-closed"}
+          size={28}
+          color={expanded ? "#000" : "#fff"}
+        />
       </View>
       <View
         style={{
@@ -97,16 +100,12 @@ export const HiddenPassword = () => {
             backgroundColor: "#fff",
             justifyContent: "center",
             alignItems: "center",
-            shadowColor: "#000",
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 2,
           }}
         >
           <Ionicons
             name={expanded ? "eye" : "eye-off"}
             size={28}
-            color={expanded ? Colors.light.text : Colors.light.icon}
+            color={expanded ? "#000" : "#000"}
           />
         </View>
       </TouchableOpacity>
