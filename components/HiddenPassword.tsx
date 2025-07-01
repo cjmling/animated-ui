@@ -11,6 +11,8 @@ import { Colors } from "../constants/Colors";
 const BOX_HEIGHT = 64;
 const BOX_RADIUS = 20;
 const ANIMATION_DURATION = 200;
+const MIN_SIZE = 20;
+const MAX_SIZE = 320;
 
 export const HiddenPassword = () => {
   const [expanded, setExpanded] = useState(false);
@@ -20,17 +22,26 @@ export const HiddenPassword = () => {
 
   const handleToggle = () => {
     setExpanded((prev) => !prev);
-    expandedProgress.value = withTiming(expanded ? 100 : 50, {
+    expandedProgress.value = withTiming(expanded ? 100 : 0, {
       duration: ANIMATION_DURATION,
     });
   };
 
-  const animatedBgStyle = useAnimatedStyle(() => ({
-    width: `${expandedProgress.value}%`,
-    height: `${expandedProgress.value}%`,
-    backgroundColor: "red",
-    borderRadius: BOX_RADIUS,
-  }));
+  const animatedBgStyle = useAnimatedStyle(() => {
+    const size =
+      MIN_SIZE + (MAX_SIZE - MIN_SIZE) * (expandedProgress.value / 100);
+    return {
+      width: size,
+      height: size,
+      backgroundColor: "red",
+      borderRadius: BOX_RADIUS,
+      position: "absolute",
+      right: 30,
+      top: "50%",
+      transform: [{ translateX: -size / 2 }, { translateY: -size / 2 }],
+      zIndex: 1,
+    };
+  });
 
   return (
     <View
@@ -46,14 +57,7 @@ export const HiddenPassword = () => {
         margin: 16,
       }}
     >
-      <Animated.View
-        style={[
-          {
-            zIndex: 1,
-          },
-          animatedBgStyle,
-        ]}
-      />
+      <Animated.View style={[animatedBgStyle]} />
       <View style={{ zIndex: 2, marginRight: 16 }}>
         <Ionicons name="lock-closed" size={28} color="#fff" />
       </View>
