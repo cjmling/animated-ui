@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Dimensions, Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -39,7 +39,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
   onSelect,
 
   buttonFontSize = 16,
-  buttonsContainerWidth = 400,
+  buttonsContainerWidth = Dimensions.get("window").width,
 }) => {
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
   const BUTTON_WIDTH = buttonsContainerWidth / labels.length;
@@ -101,7 +101,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
                 style={{
                   width: BUTTON_WIDTH,
                   height: BUTTON_HEIGHT,
-                  backgroundColor: isSelected ? "red" : "green",
+                  backgroundColor: isSelected ? "transparent" : "green",
                   justifyContent: "center",
                   alignItems: "center",
                   borderTopRightRadius: isAdjacentLeft ? 25 : 0,
