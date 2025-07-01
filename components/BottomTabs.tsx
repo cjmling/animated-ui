@@ -87,12 +87,13 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
       style={[
         {
           width: buttonsContainerWidth,
-          backgroundColor: "red",
           flexDirection: "row",
         },
       ]}
     >
       {labels.map((label, index) => {
+        const isSelected = index === localSelectedIndex;
+
         const textAnimatedStyle = useAnimatedStyle(() => ({
           transform: [{ translateY: textPositions[index].value }],
         }));
@@ -104,7 +105,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
               {
                 width: BUTTON_WIDTH,
                 height: BUTTON_HEIGHT,
-                zIndex: 100,
                 backgroundColor: "blue",
                 justifyContent: "center",
               },
@@ -116,7 +116,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
                 textAnimatedStyle,
                 {
                   fontSize: buttonFontSize,
-                  zIndex: 100,
                   fontWeight: "600",
                   textAlign: "center",
                   color:
@@ -132,8 +131,18 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
         );
       })}
       <Animated.View
-        style={[{ position: "absolute", zIndex: 1 }, animatedStyles]}
-      />
+        style={[
+          {
+            position: "absolute",
+            zIndex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          },
+          animatedStyles,
+        ]}
+      >
+        <Animated.Text>{labels[localSelectedIndex]}</Animated.Text>
+      </Animated.View>
     </View>
   );
 };
