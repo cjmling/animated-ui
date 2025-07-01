@@ -49,6 +49,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
   const BUTTON_WIDTH = buttonsContainerWidth / labels.length;
   const BUTTON_HEIGHT = BUTTON_WIDTH;
+  const LABELS_BACKGROUND_COUNT = (labels.length - 1) * 2 + labels.length;
 
   const translateX = useSharedValue<number>(0);
 
@@ -95,7 +96,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
             movingBackgroundAniamtedStyles,
           ]}
         >
-          {labels.map((label, index) => {
+          {Array.from({ length: LABELS_BACKGROUND_COUNT }).map((_, index) => {
             const isSelected = index === localSelectedIndex;
             const isAdjacentLeft = index === localSelectedIndex - 1;
             const isAdjacentRight = index === localSelectedIndex + 1;
