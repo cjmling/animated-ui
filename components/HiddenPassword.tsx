@@ -9,9 +9,10 @@ import Animated, {
 
 const BOX_HEIGHT = 64;
 const BOX_RADIUS = 20;
-const ANIMATION_DURATION = 200;
+const ANIMATION_DURATION = 300;
 const MIN_SIZE = 20;
-const MAX_SIZE = 450;
+const MAX_WIDTH = 450;
+const MAX_HEIGHT = BOX_HEIGHT + 10;
 const RIGHT_START_POSITION = 25;
 
 export const HiddenPassword = () => {
@@ -28,18 +29,22 @@ export const HiddenPassword = () => {
   };
 
   const animatedBgStyle = useAnimatedStyle(() => {
-    const size =
-      MIN_SIZE + (MAX_SIZE - MIN_SIZE) * (expandedProgress.value / 100);
+    const width =
+      MIN_SIZE + (MAX_WIDTH - MIN_SIZE) * (expandedProgress.value / 100);
+
+    const height =
+      MIN_SIZE + (MAX_HEIGHT - MIN_SIZE) * (expandedProgress.value / 100);
+
     const translateX = RIGHT_START_POSITION * (expandedProgress.value / 100);
-    const translateY = -BOX_HEIGHT * 2 * (expandedProgress.value / 100);
+    const translateY = (-height / 3) * (expandedProgress.value / 100);
     return {
-      width: size,
-      height: size,
+      width: width,
+      height: height,
       backgroundColor: "#fff",
       borderRadius: BOX_RADIUS,
       position: "absolute",
       right: RIGHT_START_POSITION,
-      top: BOX_HEIGHT / 4,
+      top: BOX_HEIGHT / 2 - MIN_SIZE / 2,
       transform: [{ translateX: translateX }, { translateY: translateY }],
       zIndex: 1,
     };
