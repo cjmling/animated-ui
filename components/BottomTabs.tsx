@@ -3,7 +3,6 @@ import { Pressable, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 
@@ -58,9 +57,8 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
   const textPositions = labels.map(() => useSharedValue(0));
 
   const handlePress = (index: number) => {
-    translateX.value = withSpring(BUTTON_WIDTH * index, {
-      damping: 20,
-      stiffness: 150,
+    translateX.value = withTiming(BUTTON_WIDTH * index, {
+      duration: 200,
     });
 
     // Animate all text positions
@@ -78,7 +76,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
     transform: [{ translateX: translateX.value }, { translateY: -10 }],
     width: BUTTON_WIDTH,
     height: BUTTON_HEIGHT,
-    backgroundColor: selectedButtonBackgroundColor,
+
     borderRadius: BORDER_RADIUS * 2,
   }));
 
@@ -93,6 +91,8 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
     >
       {labels.map((label, index) => {
         const isSelected = index === localSelectedIndex;
+        const isAdjacentLeft = index === localSelectedIndex - 1;
+        const isAdjacentRight = index === localSelectedIndex + 1;
 
         const textAnimatedStyle = useAnimatedStyle(() => ({
           transform: [{ translateY: textPositions[index].value }],
@@ -107,6 +107,8 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
                 height: BUTTON_HEIGHT,
                 backgroundColor: "blue",
                 justifyContent: "center",
+                borderTopRightRadius: isAdjacentLeft ? 25 : 0,
+                borderTopLeftRadius: isAdjacentRight ? 25 : 0,
               },
             ]}
             onPress={() => handlePress(index)}
@@ -137,11 +139,25 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
             zIndex: 1,
             justifyContent: "center",
             alignItems: "center",
+            backgroundColor: "#222",
+            borderTopRightRadius: 0,
+            borderTopLeftRadius: 0,
           },
           animatedStyles,
         ]}
       >
-        <Animated.Text>{labels[localSelectedIndex]}</Animated.Text>
+        <View
+          style={{
+            width: BUTTON_WIDTH / 1.4,
+            height: BUTTON_HEIGHT / 1.4,
+            backgroundColor: "#FFF",
+            borderRadius: BORDER_RADIUS * 2,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Animated.Text>{labels[localSelectedIndex]}</Animated.Text>
+        </View>
       </Animated.View>
     </View>
   );
