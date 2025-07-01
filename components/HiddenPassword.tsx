@@ -10,15 +10,15 @@ import { Colors } from "../constants/Colors";
 
 const BOX_HEIGHT = 64;
 const BOX_RADIUS = 20;
-const ANIMATION_DURATION = 200;
+const ANIMATION_DURATION = 2000;
 const MIN_SIZE = 20;
-const MAX_SIZE = 320;
+const MAX_SIZE = 450;
+const RIGHT_START_POSITION = 25;
 
 export const HiddenPassword = () => {
   const [expanded, setExpanded] = useState(false);
   const [password, setPassword] = useState("");
   const expandedProgress = useSharedValue(0);
-  //   const heightExpanded = useSharedValue(0);
 
   const handleToggle = () => {
     setExpanded((prev) => !prev);
@@ -30,15 +30,17 @@ export const HiddenPassword = () => {
   const animatedBgStyle = useAnimatedStyle(() => {
     const size =
       MIN_SIZE + (MAX_SIZE - MIN_SIZE) * (expandedProgress.value / 100);
+    const translateX = RIGHT_START_POSITION * (expandedProgress.value / 100);
+    const translateY = -BOX_HEIGHT * 2 * (expandedProgress.value / 100);
     return {
       width: size,
       height: size,
-      backgroundColor: "red",
+      backgroundColor: "#fff",
       borderRadius: BOX_RADIUS,
       position: "absolute",
-      right: 30,
-      top: "50%",
-      transform: [{ translateX: -size / 2 }, { translateY: -size / 2 }],
+      right: RIGHT_START_POSITION,
+      top: BOX_HEIGHT / 4,
+      transform: [{ translateX: translateX }, { translateY: translateY }],
       zIndex: 1,
     };
   });
