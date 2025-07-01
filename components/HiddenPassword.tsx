@@ -10,7 +10,7 @@ import { Colors } from "../constants/Colors";
 
 const BOX_HEIGHT = 64;
 const BOX_RADIUS = 20;
-const ANIMATION_DURATION = 2000;
+const ANIMATION_DURATION = 200;
 const MIN_SIZE = 20;
 const MAX_SIZE = 450;
 const RIGHT_START_POSITION = 25;
