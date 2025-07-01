@@ -53,19 +53,9 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
 
   const translateX = useSharedValue<number>(0);
 
-  // Create animated values for each button's text position
-  const textPositions = labels.map(() => useSharedValue(0));
-
   const handlePress = (index: number) => {
     translateX.value = withTiming(BUTTON_WIDTH * index, {
       duration: 1000,
-    });
-
-    // Animate all text positions
-    textPositions.forEach((textPos, i) => {
-      textPos.value = withTiming(i === index ? -10 : 0, {
-        duration: 200,
-      });
     });
 
     setLocalSelectedIndex(index);
@@ -95,35 +85,35 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
         const isAdjacentRight = index === localSelectedIndex + 1;
 
         return (
-          <Pressable
-            key={index}
-            style={[
-              {
-                width: BUTTON_WIDTH,
-                height: BUTTON_HEIGHT,
-                backgroundColor: "blue",
-                justifyContent: "center",
-                borderTopRightRadius: isAdjacentLeft ? 25 : 0,
-                borderTopLeftRadius: isAdjacentRight ? 25 : 0,
-              },
-            ]}
-            onPress={() => handlePress(index)}
-          >
-            <Animated.Text
+          <Pressable key={index} onPress={() => handlePress(index)}>
+            <Animated.View
               style={[
                 {
-                  fontSize: buttonFontSize,
-                  fontWeight: "600",
-                  textAlign: "center",
-                  color:
-                    index === localSelectedIndex
-                      ? selectedButtonTextColor
-                      : unselectedButtonTextColor,
+                  width: BUTTON_WIDTH,
+                  height: BUTTON_HEIGHT,
+                  backgroundColor: "blue",
+                  justifyContent: "center",
+                  borderTopRightRadius: isAdjacentLeft ? 25 : 0,
+                  borderTopLeftRadius: isAdjacentRight ? 25 : 0,
                 },
               ]}
             >
-              {label}
-            </Animated.Text>
+              <Animated.Text
+                style={[
+                  {
+                    fontSize: buttonFontSize,
+                    fontWeight: "600",
+                    textAlign: "center",
+                    color:
+                      index === localSelectedIndex
+                        ? selectedButtonTextColor
+                        : unselectedButtonTextColor,
+                  },
+                ]}
+              >
+                {label}
+              </Animated.Text>
+            </Animated.View>
           </Pressable>
         );
       })}
