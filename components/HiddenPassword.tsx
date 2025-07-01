@@ -9,7 +9,7 @@ import Animated, {
 
 const BOX_HEIGHT = 64;
 const BOX_RADIUS = 20;
-const ANIMATION_DURATION = 2000;
+const ANIMATION_DURATION = 500;
 const MIN_SIZE = 20;
 const MAX_WIDTH = 450;
 const MAX_HEIGHT = BOX_HEIGHT + 10;
@@ -36,7 +36,7 @@ export const HiddenPassword = () => {
       MIN_SIZE + (MAX_HEIGHT - MIN_SIZE) * (expandedProgress.value / 100);
 
     const translateX = RIGHT_START_POSITION * (expandedProgress.value / 100);
-    const translateY = (-height / 2.3) * (expandedProgress.value / 100);
+    const translateY = -((height - MIN_SIZE) / 2);
     return {
       width: width,
       height: height,
