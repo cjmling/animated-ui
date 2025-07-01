@@ -37,14 +37,9 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
   labels,
   selectedIndex,
   onSelect,
-  containerPadding = 3,
 
   buttonFontSize = 16,
-  buttonsContainerHeight = 60,
   buttonsContainerWidth = 400,
-  selectedButtonTextColor = "#000",
-  unselectedButtonTextColor = "#fff",
-  selectedButtonBackgroundColor = "#FFF",
 }) => {
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
   const BUTTON_WIDTH = buttonsContainerWidth / labels.length;
@@ -66,10 +61,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
 
   const movingBackgroundAniamtedStyles = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
-    // width: BUTTON_WIDTH,
-    // height: BUTTON_HEIGHT,
-
-    // borderRadius: BORDER_RADIUS * 2,
   }));
 
   return (
