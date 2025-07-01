@@ -55,7 +55,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
 
   const handlePress = (index: number) => {
     translateX.value = withTiming(BUTTON_WIDTH * index, {
-      duration: 1000,
+      duration: 200,
     });
 
     setLocalSelectedIndex(index);
@@ -80,9 +80,15 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
       ]}
     >
       {labels.map((label, index) => {
-        // const isSelected = index === localSelectedIndex;
-        const isAdjacentLeft = index === localSelectedIndex - 1;
-        const isAdjacentRight = index === localSelectedIndex + 1;
+        // Create animated style for border radius
+        const buttonAnimatedStyle = useAnimatedStyle(() => ({
+          borderTopRightRadius: withTiming(
+            index === localSelectedIndex - 1 ? 25 : 0
+          ),
+          borderTopLeftRadius: withTiming(
+            index === localSelectedIndex + 1 ? 25 : 0
+          ),
+        }));
 
         return (
           <Pressable key={index} onPress={() => handlePress(index)}>
@@ -93,9 +99,8 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
                   height: BUTTON_HEIGHT,
                   backgroundColor: "blue",
                   justifyContent: "center",
-                  borderTopRightRadius: isAdjacentLeft ? 25 : 0,
-                  borderTopLeftRadius: isAdjacentRight ? 25 : 0,
                 },
+                buttonAnimatedStyle,
               ]}
             >
               <Animated.Text
