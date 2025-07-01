@@ -58,7 +58,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
 
   const handlePress = (index: number) => {
     translateX.value = withTiming(BUTTON_WIDTH * index, {
-      duration: 200,
+      duration: 1000,
     });
 
     // Animate all text positions
@@ -90,7 +90,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
       ]}
     >
       {labels.map((label, index) => {
-        const isSelected = index === localSelectedIndex;
+        // const isSelected = index === localSelectedIndex;
         const isAdjacentLeft = index === localSelectedIndex - 1;
         const isAdjacentRight = index === localSelectedIndex + 1;
 
