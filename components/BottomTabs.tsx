@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -85,10 +85,10 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
   return (
     <View
       style={[
-        styles.container,
         {
           width: buttonsContainerWidth,
           backgroundColor: "red",
+          flexDirection: "row",
         },
       ]}
     >
@@ -98,26 +98,27 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
         }));
 
         return (
-          <TouchableOpacity
+          <Pressable
             key={index}
             style={[
-              styles.button,
               {
                 width: BUTTON_WIDTH,
                 height: BUTTON_HEIGHT,
                 zIndex: 100,
                 backgroundColor: "blue",
+                justifyContent: "center",
               },
             ]}
             onPress={() => handlePress(index)}
           >
             <Animated.Text
               style={[
-                styles.buttonText,
                 textAnimatedStyle,
                 {
                   fontSize: buttonFontSize,
                   zIndex: 100,
+                  fontWeight: "600",
+                  textAlign: "center",
                   color:
                     index === localSelectedIndex
                       ? selectedButtonTextColor
@@ -127,31 +128,12 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
             >
               {label}
             </Animated.Text>
-          </TouchableOpacity>
+          </Pressable>
         );
       })}
-      <Animated.View style={[styles.slidingBackground, animatedStyles]} />
+      <Animated.View
+        style={[{ position: "absolute", zIndex: 1 }, animatedStyles]}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-  },
-  button: {
-    justifyContent: "center",
-  },
-  unselectedButton: {
-    backgroundColor: "transparent",
-  },
-  buttonText: {
-    fontWeight: "600",
-    color: "black",
-    textAlign: "center",
-  },
-  slidingBackground: {
-    position: "absolute",
-    zIndex: 1,
-  },
-});
