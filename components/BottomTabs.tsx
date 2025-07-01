@@ -72,7 +72,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
     onSelect(index);
   };
 
-  const animatedStyles = useAnimatedStyle(() => ({
+  const movingBackgroundAniamtedStyles = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }, { translateY: -10 }],
     width: BUTTON_WIDTH,
     height: BUTTON_HEIGHT,
@@ -94,10 +94,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
         const isAdjacentLeft = index === localSelectedIndex - 1;
         const isAdjacentRight = index === localSelectedIndex + 1;
 
-        const textAnimatedStyle = useAnimatedStyle(() => ({
-          transform: [{ translateY: textPositions[index].value }],
-        }));
-
         return (
           <Pressable
             key={index}
@@ -115,7 +111,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
           >
             <Animated.Text
               style={[
-                textAnimatedStyle,
                 {
                   fontSize: buttonFontSize,
                   fontWeight: "600",
@@ -143,7 +138,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
             borderTopRightRadius: 0,
             borderTopLeftRadius: 0,
           },
-          animatedStyles,
+          movingBackgroundAniamtedStyles,
         ]}
       >
         <View
