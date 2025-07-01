@@ -54,11 +54,22 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
 
   const translateX = useSharedValue<number>(0);
 
+  // Create animated values for each button's text position
+  const textPositions = labels.map(() => useSharedValue(0));
+
   const handlePress = (index: number) => {
     translateX.value = withSpring(BUTTON_WIDTH * index, {
       damping: 20,
       stiffness: 150,
     });
+
+    // Animate all text positions
+    textPositions.forEach((textPos, i) => {
+      textPos.value = withTiming(i === index ? -10 : 0, {
+        duration: 200,
+      });
+    });
+
     setLocalSelectedIndex(index);
     onSelect(index);
   };
@@ -73,20 +84,20 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
 
   return (
     <View
-      style={{
-        backgroundColor: "red",
-      }}
+      style={[
+        styles.container,
+        {
+          width: buttonsContainerWidth,
+          backgroundColor: "red",
+        },
+      ]}
     >
-      <View
-        style={[
-          styles.container,
-          {
-            width: buttonsContainerWidth,
-          },
-        ]}
-      >
-        <Animated.View style={[styles.slidingBackground, animatedStyles]} />
-        {labels.map((label, index) => (
+      {labels.map((label, index) => {
+        const textAnimatedStyle = useAnimatedStyle(() => ({
+          transform: [{ translateY: textPositions[index].value }],
+        }));
+
+        return (
           <TouchableOpacity
             key={index}
             style={[
@@ -94,6 +105,8 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
               {
                 width: BUTTON_WIDTH,
                 height: BUTTON_HEIGHT,
+                zIndex: 100,
+                backgroundColor: "blue",
               },
             ]}
             onPress={() => handlePress(index)}
@@ -101,24 +114,23 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
             <Animated.Text
               style={[
                 styles.buttonText,
+                textAnimatedStyle,
                 {
                   fontSize: buttonFontSize,
+                  zIndex: 100,
                   color:
                     index === localSelectedIndex
                       ? selectedButtonTextColor
                       : unselectedButtonTextColor,
-
-                  top: withTiming(index === localSelectedIndex ? -10 : 0, {
-                    duration: 100,
-                  }),
                 },
               ]}
             >
               {label}
             </Animated.Text>
           </TouchableOpacity>
-        ))}
-      </View>
+        );
+      })}
+      <Animated.View style={[styles.slidingBackground, animatedStyles]} />
     </View>
   );
 };
@@ -140,5 +152,6 @@ const styles = StyleSheet.create({
   },
   slidingBackground: {
     position: "absolute",
+    zIndex: 1,
   },
 });

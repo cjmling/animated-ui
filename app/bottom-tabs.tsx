@@ -8,6 +8,7 @@ export default function BottomTabsScreen() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#222",
       }}
     >
       <BottomTabs
