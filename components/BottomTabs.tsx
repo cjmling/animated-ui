@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -49,7 +49,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
   const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex);
   const BUTTON_WIDTH = buttonsContainerWidth / labels.length;
   const BUTTON_HEIGHT = BUTTON_WIDTH;
-  const BORDER_RADIUS = buttonsContainerHeight / 2;
 
   const translateX = useSharedValue<number>(0);
 
@@ -57,98 +56,116 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
     translateX.value = withTiming(BUTTON_WIDTH * index, {
       duration: 200,
     });
+    console.log(BUTTON_WIDTH, index, BUTTON_WIDTH * index);
 
     setLocalSelectedIndex(index);
     onSelect(index);
+    console.log(index);
   };
 
   const movingBackgroundAniamtedStyles = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }, { translateY: -10 }],
-    width: BUTTON_WIDTH,
-    height: BUTTON_HEIGHT,
+    transform: [{ translateX: translateX.value }],
+    // width: BUTTON_WIDTH,
+    // height: BUTTON_HEIGHT,
 
-    borderRadius: BORDER_RADIUS * 2,
+    // borderRadius: BORDER_RADIUS * 2,
   }));
 
   return (
-    <View
-      style={[
-        {
-          width: buttonsContainerWidth,
-          flexDirection: "row",
-        },
-      ]}
-    >
-      {labels.map((label, index) => {
-        // Create animated style for border radius
-        const buttonAnimatedStyle = useAnimatedStyle(() => ({
-          borderTopRightRadius: withTiming(
-            index === localSelectedIndex - 1 ? 25 : 0
-          ),
-          borderTopLeftRadius: withTiming(
-            index === localSelectedIndex + 1 ? 25 : 0
-          ),
-        }));
-
-        return (
-          <Pressable key={index} onPress={() => handlePress(index)}>
-            <Animated.View
-              style={[
-                {
-                  width: BUTTON_WIDTH,
-                  height: BUTTON_HEIGHT,
-                  backgroundColor: "blue",
-                  justifyContent: "center",
-                },
-                buttonAnimatedStyle,
-              ]}
-            >
-              <Animated.Text
-                style={[
-                  {
-                    fontSize: buttonFontSize,
-                    fontWeight: "600",
-                    textAlign: "center",
-                    color:
-                      index === localSelectedIndex
-                        ? selectedButtonTextColor
-                        : unselectedButtonTextColor,
-                  },
-                ]}
-              >
-                {label}
-              </Animated.Text>
-            </Animated.View>
-          </Pressable>
-        );
-      })}
-      <Animated.View
+    <View>
+      <Text>{localSelectedIndex}</Text>
+      <View
         style={[
           {
-            position: "absolute",
-            zIndex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#222",
-            borderTopRightRadius: 0,
-            borderTopLeftRadius: 0,
+            width: buttonsContainerWidth,
+            flexDirection: "row",
+            backgroundColor: "red",
           },
-          movingBackgroundAniamtedStyles,
         ]}
       >
-        <View
-          style={{
-            width: BUTTON_WIDTH / 1.4,
-            height: BUTTON_HEIGHT / 1.4,
-            backgroundColor: "#FFF",
-            borderRadius: BORDER_RADIUS * 2,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        <Animated.View
+          style={[
+            {
+              position: "absolute",
+              zIndex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+            },
+            movingBackgroundAniamtedStyles,
+          ]}
         >
-          <Animated.Text>{labels[localSelectedIndex]}</Animated.Text>
+          {labels.map((label, index) => {
+            const isSelected = index === localSelectedIndex;
+            const isAdjacentLeft = index === localSelectedIndex - 1;
+            const isAdjacentRight = index === localSelectedIndex + 1;
+
+            return (
+              <Pressable
+                key={index}
+                style={{
+                  width: BUTTON_WIDTH,
+                  height: BUTTON_HEIGHT,
+                  backgroundColor: isSelected ? "red" : "green",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderTopRightRadius: isAdjacentLeft ? 25 : 0,
+                  borderTopLeftRadius: isAdjacentRight ? 25 : 0,
+                }}
+                // onPress={() => handlePress(index)}
+              >
+                <View
+                  style={{
+                    width: BUTTON_WIDTH / 1.2,
+                    height: BUTTON_HEIGHT / 1.2,
+                    backgroundColor: "white",
+                    borderRadius: BUTTON_WIDTH / 2,
+                  }}
+                />
+              </Pressable>
+            );
+          })}
+        </Animated.View>
+        <View
+          style={[
+            {
+              position: "absolute",
+              zIndex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+            },
+          ]}
+        >
+          {labels.map((label, index) => {
+            return (
+              <Pressable key={index} onPress={() => handlePress(index)}>
+                <Animated.View
+                  style={[
+                    {
+                      width: BUTTON_WIDTH,
+                      height: BUTTON_HEIGHT,
+                      justifyContent: "center",
+                    },
+                  ]}
+                >
+                  <Animated.Text
+                    style={[
+                      {
+                        fontSize: buttonFontSize,
+                        fontWeight: "600",
+                        textAlign: "center",
+                      },
+                    ]}
+                  >
+                    {label}
+                  </Animated.Text>
+                </Animated.View>
+              </Pressable>
+            );
+          })}
         </View>
-      </Animated.View>
+      </View>
     </View>
   );
 };
