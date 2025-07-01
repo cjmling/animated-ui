@@ -89,7 +89,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
           const isAdjacentRight = index === labels.length;
 
           return (
-            <Pressable
+            <View
               key={index}
               style={{
                 width: BUTTON_WIDTH,
@@ -124,7 +124,7 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
                   ></View>
                 </View>
               )}
-            </Pressable>
+            </View>
           );
         })}
       </Animated.View>
@@ -132,7 +132,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
         style={[
           {
             position: "absolute",
-            zIndex: 1,
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "row",
