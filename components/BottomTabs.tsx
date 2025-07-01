@@ -107,7 +107,6 @@ export const BottomTabs: React.FC<BottomTabsProps> = ({
                   borderTopRightRadius: isAdjacentLeft ? 25 : 0,
                   borderTopLeftRadius: isAdjacentRight ? 25 : 0,
                 }}
-                // onPress={() => handlePress(index)}
               >
                 <View
                   style={{
