@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -17,12 +17,13 @@ const RIGHT_START_POSITION = 25;
 
 export const HiddenPassword = () => {
   const [expanded, setExpanded] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("u8F2x34ij");
   const expandedProgress = useSharedValue(0);
 
   const handleToggle = () => {
-    setExpanded((prev) => !prev);
-    expandedProgress.value = withTiming(expanded ? 100 : 0, {
+    const newExpanded = !expanded;
+    setExpanded(newExpanded);
+    expandedProgress.value = withTiming(newExpanded ? 100 : 0, {
       duration: ANIMATION_DURATION,
     });
   };
@@ -73,21 +74,15 @@ export const HiddenPassword = () => {
           minHeight: 24,
         }}
       >
-        {Array(Math.max(password.length, 8))
-          .fill(0)
-          .map((_, i) => (
-            <View
-              key={i}
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                backgroundColor: "#7B7BFF",
-                marginHorizontal: 4,
-                opacity: i < password.length ? 1 : 0.3,
-              }}
-            />
-          ))}
+        <Text
+          style={{
+            color: expanded ? "#000" : "#fff",
+            fontSize: 16,
+            fontWeight: "bold",
+          }}
+        >
+          {expanded ? password : "************"}
+        </Text>
       </View>
       <TouchableOpacity
         style={{ zIndex: 2, marginLeft: 16 }}
@@ -115,27 +110,6 @@ export const HiddenPassword = () => {
           />
         </View>
       </TouchableOpacity>
-      {/* Hidden input for password entry */}
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={!expanded}
-        style={{
-          position: "absolute",
-          opacity: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: 10,
-          left: 0,
-          top: 0,
-          color: "#fff",
-        }}
-        autoCapitalize="none"
-        autoCorrect={false}
-        textContentType="password"
-        placeholder="Password"
-        placeholderTextColor="#aaa"
-      />
     </View>
   );
 };
