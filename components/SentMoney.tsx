@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -14,13 +15,15 @@ import Animated, {
 import { Colors } from "../constants/Colors";
 import { useColorScheme } from "../hooks/useColorScheme";
 
-const { width } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const AVATAR_SIZE = 64;
 const AMOUNT = "$4.50";
-const SWIPE_THRESHOLD = 120;
+const SWIPE_THRESHOLD = 200;
 const AVATAR_TOP_POSITION = 80;
 const SHOOT_UP_TO_BY_DISTANCE = 200;
 const SHOOT_DURATION = 350;
+const GRADIENT_BASE_SIZE = 120;
+const GRADIENT_MAX_SIZE = 300;
 
 export default function SentMoney() {
   const colorScheme = useColorScheme() || "light";
@@ -31,6 +34,7 @@ export default function SentMoney() {
   const dragX = useSharedValue(0);
   const shootUp = useSharedValue(false);
   const bumpScale = useSharedValue(1);
+  const gradientSize = useSharedValue(GRADIENT_BASE_SIZE);
 
   const [showDone, setShowDone] = useState(false);
 
@@ -40,7 +44,7 @@ export default function SentMoney() {
     let y = dragY.value * 0.5;
     // Add rotation based on dragX, max ±15deg
     const maxRotation = 15; // degrees
-    const rotate = (dragX.value / (width / 2)) * maxRotation;
+    const rotate = (dragX.value / (SCREEN_WIDTH / 2)) * maxRotation;
     if (shootUp.value) {
       y = withTiming(-SHOOT_UP_TO_BY_DISTANCE, {
         duration: 350,
@@ -72,8 +76,24 @@ export default function SentMoney() {
     opacity: shootUp.value ? withTiming(0, { duration: SHOOT_DURATION }) : 1,
     alignItems: "center",
     justifyContent: "center",
-    width: width,
+    width: SCREEN_WIDTH,
   }));
+
+  // Gradient backdrop animated style
+  const gradientStyle = useAnimatedStyle(() => {
+    const size = Math.max(GRADIENT_BASE_SIZE, gradientSize.value);
+    const scale = size / GRADIENT_BASE_SIZE;
+
+    return {
+      width: SCREEN_WIDTH,
+      height: SCREEN_WIDTH / 1.5,
+      borderRadius: SCREEN_WIDTH / 2,
+      transform: [{ scale: scale / 1 }],
+      opacity: shootUp.value
+        ? withTiming(0, { duration: SHOOT_DURATION })
+        : 0.6,
+    };
+  });
 
   // Gesture
   const gesture = Gesture.Pan()
@@ -81,6 +101,13 @@ export default function SentMoney() {
       if (shootUp.value) return;
       dragY.value = e.translationY;
       dragX.value = e.translationX;
+
+      // Update gradient size based on drag
+      const dragProgress = Math.max(0, e.translationY) / SWIPE_THRESHOLD;
+      const newSize =
+        GRADIENT_BASE_SIZE +
+        (GRADIENT_MAX_SIZE - GRADIENT_BASE_SIZE) * dragProgress;
+      gradientSize.value = newSize;
     })
     .onEnd(() => {
       if (shootUp.value) return;
@@ -88,6 +115,7 @@ export default function SentMoney() {
         shootUp.value = true;
         dragY.value = withTiming(0, { duration: 200 });
         dragX.value = withTiming(0, { duration: 200 });
+        gradientSize.value = withTiming(GRADIENT_BASE_SIZE, { duration: 200 });
         // Trigger bump animation
         bumpScale.value = withDelay(
           SHOOT_DURATION / 1.5,
@@ -99,6 +127,7 @@ export default function SentMoney() {
       } else {
         dragY.value = withSpring(0);
         dragX.value = withSpring(0);
+        gradientSize.value = withSpring(GRADIENT_BASE_SIZE);
       }
     });
 
@@ -116,6 +145,29 @@ export default function SentMoney() {
         backgroundColor: theme.background,
       }}
     >
+      {/* Gradient backdrop */}
+      <Animated.View
+        style={[
+          {
+            position: "absolute",
+            zIndex: 1,
+          },
+          gradientStyle,
+        ]}
+      >
+        <LinearGradient
+          colors={[
+            "rgba(0, 255, 0, 0.8)",
+            "rgba(0, 255, 0, 0.4)",
+            "rgba(0, 255, 0, 0.1)",
+            "transparent",
+          ]}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </Animated.View>
       <View
         style={{
           alignItems: "center",
