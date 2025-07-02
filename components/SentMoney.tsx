@@ -16,6 +16,8 @@ const AVATAR_SIZE = 64;
 const AMOUNT = "$4.50";
 const SWIPE_THRESHOLD = 120;
 const AVATAR_TOP_POSITION = 80;
+const SHOOT_UP_TO_BY_DISTANCE = 200;
+const SHOOT_DURATION = 350;
 
 export default function SentMoney() {
   const colorScheme = useColorScheme() || "light";
@@ -34,15 +36,22 @@ export default function SentMoney() {
     const maxRotation = 15; // degrees
     const rotate = (dragX.value / (width / 2)) * maxRotation;
     if (shootUp.value) {
-      y = withTiming(-height * 0.5, { duration: 350 });
+      y = withTiming(-SHOOT_UP_TO_BY_DISTANCE, {
+        duration: 350,
+      });
     }
     return {
       transform: [
         { translateY: y },
         { translateX: x },
         { rotate: `${rotate}deg` },
+        {
+          scale: shootUp.value
+            ? withTiming(0.3, { duration: SHOOT_DURATION })
+            : 1,
+        },
       ],
-      opacity: shootUp.value ? withTiming(0, { duration: 350 }) : 1,
+      opacity: shootUp.value ? withTiming(0, { duration: SHOOT_DURATION }) : 1,
       fontSize: 48,
       fontWeight: "bold",
       letterSpacing: 2,
@@ -54,7 +63,7 @@ export default function SentMoney() {
   // SWIPE DOWN text animated style
   const swipeStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: dragY.value }, { translateX: dragX.value }],
-    opacity: shootUp.value ? withTiming(0, { duration: 200 }) : 1,
+    opacity: shootUp.value ? withTiming(0, { duration: SHOOT_DURATION }) : 1,
     alignItems: "center",
     justifyContent: "center",
     width: width,
@@ -103,6 +112,8 @@ export default function SentMoney() {
             justifyContent: "center",
             alignItems: "center",
             borderWidth: 2,
+            backgroundColor: "#FFF",
+            zIndex: 2,
           }}
         >
           <MaterialCommunityIcons
