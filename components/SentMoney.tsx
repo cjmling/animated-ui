@@ -5,6 +5,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withDelay,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
@@ -27,6 +28,7 @@ export default function SentMoney() {
   const dragY = useSharedValue(0);
   const dragX = useSharedValue(0);
   const shootUp = useSharedValue(false);
+  const bumpScale = useSharedValue(1);
 
   // Amount animated style
   const amountStyle = useAnimatedStyle(() => {
@@ -82,11 +84,23 @@ export default function SentMoney() {
         shootUp.value = true;
         dragY.value = withTiming(0, { duration: 200 });
         dragX.value = withTiming(0, { duration: 200 });
+        // Trigger bump animation
+        bumpScale.value = withDelay(
+          SHOOT_DURATION / 1.5,
+          withTiming(1.2, { duration: 200 }, () => {
+            bumpScale.value = withTiming(1, { duration: 200 });
+          })
+        );
       } else {
         dragY.value = withSpring(0);
         dragX.value = withSpring(0);
       }
     });
+
+  // Avatar animated style
+  const avatarStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: bumpScale.value }],
+  }));
 
   return (
     <View
@@ -104,17 +118,20 @@ export default function SentMoney() {
           marginTop: 80,
         }}
       >
-        <View
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 50,
-            justifyContent: "center",
-            alignItems: "center",
-            borderWidth: 2,
-            backgroundColor: "#FFF",
-            zIndex: 2,
-          }}
+        <Animated.View
+          style={[
+            {
+              width: 80,
+              height: 80,
+              borderRadius: 50,
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: 2,
+              backgroundColor: "#FFF",
+              zIndex: 2,
+            },
+            avatarStyle,
+          ]}
         >
           <MaterialCommunityIcons
             name="account"
@@ -125,7 +142,7 @@ export default function SentMoney() {
               height: AVATAR_SIZE,
             }}
           />
-        </View>
+        </Animated.View>
         <Text
           style={{
             fontSize: 16,
