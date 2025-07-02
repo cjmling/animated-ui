@@ -1,8 +1,10 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
-import { Dimensions, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
+  SlideInDown,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -12,7 +14,7 @@ import Animated, {
 import { Colors } from "../constants/Colors";
 import { useColorScheme } from "../hooks/useColorScheme";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 const AVATAR_SIZE = 64;
 const AMOUNT = "$4.50";
 const SWIPE_THRESHOLD = 120;
@@ -29,6 +31,8 @@ export default function SentMoney() {
   const dragX = useSharedValue(0);
   const shootUp = useSharedValue(false);
   const bumpScale = useSharedValue(1);
+
+  const [showDone, setShowDone] = useState(false);
 
   // Amount animated style
   const amountStyle = useAnimatedStyle(() => {
@@ -91,6 +95,7 @@ export default function SentMoney() {
             bumpScale.value = withTiming(1, { duration: 200 });
           })
         );
+        runOnJS(setShowDone)(true);
       } else {
         dragY.value = withSpring(0);
         dragX.value = withSpring(0);
@@ -188,6 +193,30 @@ export default function SentMoney() {
           </Animated.View>
         </View>
       </GestureDetector>
+      {showDone && (
+        <Animated.View
+          style={{ bottom: 100, position: "absolute", alignSelf: "center" }}
+          entering={SlideInDown.duration(SHOOT_DURATION).delay(SHOOT_DURATION)}
+        >
+          <TouchableOpacity
+            onPress={() => {}}
+            style={{
+              backgroundColor: "#FFF",
+              borderColor: "#000",
+              borderWidth: 1,
+              borderRadius: 20,
+              paddingVertical: 10,
+              paddingHorizontal: 32,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "#000", fontWeight: "bold", fontSize: 16 }}>
+              DONE
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+      )}
     </View>
   );
 }
