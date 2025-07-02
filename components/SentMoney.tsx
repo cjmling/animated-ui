@@ -86,12 +86,13 @@ export default function SentMoney() {
 
     return {
       width: SCREEN_WIDTH,
-      height: SCREEN_WIDTH / 1.5,
+      height: SCREEN_WIDTH * 1.2,
       borderRadius: SCREEN_WIDTH / 2,
       transform: [{ scale: scale }],
       opacity: shootUp.value
         ? withTiming(0, { duration: SHOOT_DURATION })
         : 0.6,
+      zIndex: 0,
     };
   });
 
@@ -168,7 +169,8 @@ export default function SentMoney() {
           }}
         />
       </Animated.View>
-      <View
+
+      <Animated.View
         style={{
           alignItems: "center",
           justifyContent: "center",
@@ -210,7 +212,8 @@ export default function SentMoney() {
         >
           Dave
         </Text>
-      </View>
+      </Animated.View>
+
       <Animated.Text style={[amountStyle, { top: AVATAR_TOP_POSITION }]}>
         {AMOUNT}
       </Animated.Text>
