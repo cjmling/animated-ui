@@ -88,7 +88,7 @@ export default function SentMoney() {
       width: SCREEN_WIDTH,
       height: SCREEN_WIDTH / 1.5,
       borderRadius: SCREEN_WIDTH / 2,
-      transform: [{ scale: scale / 1 }],
+      transform: [{ scale: scale }],
       opacity: shootUp.value
         ? withTiming(0, { duration: SHOOT_DURATION })
         : 0.6,
