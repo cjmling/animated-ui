@@ -1,5 +1,6 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { Dimensions, Image, Text, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
@@ -88,17 +89,26 @@ export default function SentMoney() {
       }}
     >
       <View style={{ alignItems: "center", justifyContent: "center" }}>
-        <Image
-          source={require("../assets/images/coffee/coffee1.png")}
+        <View
           style={{
-            width: AVATAR_SIZE,
-            height: AVATAR_SIZE,
-            borderRadius: AVATAR_SIZE / 2,
-            marginBottom: 8,
+            width: 80,
+            height: 80,
+            borderRadius: 50,
+            justifyContent: "center",
+            alignItems: "center",
             borderWidth: 2,
-            borderColor: "#fff",
           }}
-        />
+        >
+          <MaterialCommunityIcons
+            name="account"
+            size={AVATAR_SIZE}
+            color={theme.text}
+            style={{
+              width: AVATAR_SIZE,
+              height: AVATAR_SIZE,
+            }}
+          />
+        </View>
         <Text
           style={{
             fontSize: 16,
