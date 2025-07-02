@@ -28,11 +28,18 @@ export default function SentMoney() {
   const amountStyle = useAnimatedStyle(() => {
     const x = dragX.value * 0.3;
     let y = dragY.value * 0.5;
+    // Add rotation based on dragX, max ±15deg
+    const maxRotation = 15; // degrees
+    const rotate = (dragX.value / (width / 2)) * maxRotation;
     if (shootUp.value) {
       y = withTiming(-height * 0.5, { duration: 350 });
     }
     return {
-      transform: [{ translateY: y }, { translateX: x }],
+      transform: [
+        { translateY: y },
+        { translateX: x },
+        { rotate: `${rotate}deg` },
+      ],
       opacity: shootUp.value ? withTiming(0, { duration: 350 }) : 1,
       fontSize: 48,
       fontWeight: "bold",
@@ -103,7 +110,9 @@ export default function SentMoney() {
           Dave
         </Text>
       </View>
-      <Animated.Text style={amountStyle}>{AMOUNT}</Animated.Text>
+      <Animated.Text style={[amountStyle, { marginTop: 100 }]}>
+        {AMOUNT}
+      </Animated.Text>
       <GestureDetector gesture={gesture}>
         <View
           style={{
