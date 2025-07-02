@@ -15,6 +15,7 @@ const { width, height } = Dimensions.get("window");
 const AVATAR_SIZE = 64;
 const AMOUNT = "$4.50";
 const SWIPE_THRESHOLD = 120;
+const AVATAR_TOP_POSITION = 80;
 
 export default function SentMoney() {
   const colorScheme = useColorScheme() || "light";
@@ -84,11 +85,16 @@ export default function SentMoney() {
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start",
-        paddingTop: 80,
         backgroundColor: theme.background,
       }}
     >
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 80,
+        }}
+      >
         <View
           style={{
             width: 80,
@@ -120,7 +126,7 @@ export default function SentMoney() {
           Dave
         </Text>
       </View>
-      <Animated.Text style={[amountStyle, { marginTop: 100 }]}>
+      <Animated.Text style={[amountStyle, { top: AVATAR_TOP_POSITION }]}>
         {AMOUNT}
       </Animated.Text>
       <GestureDetector gesture={gesture}>
