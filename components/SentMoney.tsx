@@ -121,10 +121,18 @@ export default function SentMoney() {
             alignItems: "center",
           }}
         >
-          <Animated.View style={[swipeStyle]}>
+          <Animated.View style={[swipeStyle, { gap: 10 }]}>
+            <View
+              style={{
+                backgroundColor: theme.text,
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+              }}
+            ></View>
             <Text
               style={{
-                fontSize: 22,
+                fontSize: 10,
                 fontWeight: "500",
                 letterSpacing: 4,
                 opacity: 0.7,
