@@ -18,6 +18,7 @@ interface CircularClockProps {
   armColor?: string;
   hideCircleBorder?: boolean;
   hideMinuteDashes?: boolean;
+  dashSpacingFromBorder?: number;
 }
 
 export const CircularClock: React.FC<CircularClockProps> = ({
@@ -29,18 +30,22 @@ export const CircularClock: React.FC<CircularClockProps> = ({
   armColor = "#fff",
   hideCircleBorder = false,
   hideMinuteDashes = false,
+  dashSpacingFromBorder = 16,
 }) => {
   const center = size / 2;
   const radius = size / 2 - 16;
   const circleStrokeWidth = 2;
   const minuteArmLength = radius - 20;
   const hourArmLength = radius - 30;
+
   const minuteArmWidth = size / 80;
   const hourArmWidth = size / 40;
+
   const hourDashWidth = 2;
   const minuteDashWidth = 1.5;
-  const minuteDashLength = 12;
-  const hourDashLength = 8;
+
+  const hourDashLength = 6;
+  const minuteDashLength = hourDashLength / 2;
 
   // Calculate angles
   const minuteAngle = useSharedValue((minute / 60) * 360);
@@ -75,11 +80,13 @@ export const CircularClock: React.FC<CircularClockProps> = ({
   // Dashes
   const dashes = Array.from({ length: 60 }).map((_, i) => {
     const angle = (i * 6 - 90) * (Math.PI / 180);
-    const dashLength = i % 5 === 0 ? minuteDashLength : hourDashLength;
-    const x1 = center + (radius - dashLength) * Math.cos(angle);
-    const y1 = center + (radius - dashLength) * Math.sin(angle);
-    const x2 = center + radius * Math.cos(angle);
-    const y2 = center + radius * Math.sin(angle);
+    const dashLength = i % 5 === 0 ? hourDashLength : minuteDashLength;
+    const x1 =
+      center + (radius - dashSpacingFromBorder - dashLength) * Math.cos(angle);
+    const y1 =
+      center + (radius - dashSpacingFromBorder - dashLength) * Math.sin(angle);
+    const x2 = center + (radius - dashSpacingFromBorder) * Math.cos(angle);
+    const y2 = center + (radius - dashSpacingFromBorder) * Math.sin(angle);
     return (
       <Line
         key={i}

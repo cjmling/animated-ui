@@ -8,7 +8,7 @@ export const TimeSelector = () => {
       style={{
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#181C27",
+        backgroundColor: "#1A1A1A",
         flexDirection: "row",
         borderRadius: 30,
         padding: 35,
@@ -17,12 +17,13 @@ export const TimeSelector = () => {
       <CircularClock
         hour={2}
         minute={30}
-        backgroundColor="#181C27"
+        backgroundColor="#212121"
         lineColor="#555"
         armColor="#fff"
         size={150}
         hideCircleBorder={true}
         hideMinuteDashes={true}
+        dashSpacingFromBorder={10}
       />
       <VerticalScrollSelect
         selected={0}
