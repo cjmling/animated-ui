@@ -26,6 +26,9 @@ export const CircularClock: React.FC<CircularClockProps> = ({
 }) => {
   const center = size / 2;
   const radius = size / 2 - 16;
+  const circleStrokeWidth = size / 30;
+  const minuteArmLength = radius - 16 - circleStrokeWidth;
+  const hourArmLength = radius - 40 - circleStrokeWidth;
 
   // Calculate angles
   const minuteAngle = useSharedValue((minute / 60) * 360);
@@ -40,9 +43,6 @@ export const CircularClock: React.FC<CircularClockProps> = ({
       { duration: 500 }
     );
   }, [hour, minute]);
-
-  const minuteArmLength = radius - 16;
-  const hourArmLength = radius - 40;
 
   const minuteAnimatedProps = useAnimatedProps(() => {
     const angleRad = (minuteAngle.value - 90) * (Math.PI / 180);
@@ -97,7 +97,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
           cy={center}
           r={radius}
           stroke={lineColor}
-          strokeWidth={6}
+          strokeWidth={circleStrokeWidth}
           fill={backgroundColor}
         />
         {dashes}
