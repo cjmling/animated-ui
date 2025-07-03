@@ -56,7 +56,7 @@ export default function SentMoney() {
         {
           scale: shootUp.value
             ? withTiming(0.3, { duration: SHOOT_DURATION })
-            : 1 * dragProgress.value,
+            : 1 + dragProgress.value,
         },
       ],
       opacity: shootUp.value ? withTiming(0, { duration: SHOOT_DURATION }) : 1,
@@ -87,6 +87,7 @@ export default function SentMoney() {
         ? withTiming(0, { duration: SHOOT_DURATION })
         : 0.6,
       zIndex: 0,
+      top: 0,
     };
   });
 
@@ -134,7 +135,7 @@ export default function SentMoney() {
       style={{
         flex: 1,
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "center",
         backgroundColor: theme.background,
       }}
     >
@@ -234,7 +235,7 @@ export default function SentMoney() {
                 color: theme.text,
               }}
             >
-              SWIPE DOWN
+              DRAG DOWN TO SEND
             </Text>
           </Animated.View>
         </View>
