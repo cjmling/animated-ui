@@ -30,15 +30,17 @@ function TimeLabel({
     const opacity = interpolate(
       scrollYSelected.value,
       inputRange,
-      [0.2, 0.5, 1, 0.5, 0.2],
+      [0.2, 0.99, 1, 0.99, 0.2],
       "clamp"
     );
-    const fontSize = interpolate(
-      scrollYSelected.value,
-      inputRange,
-      [16, 18, 24, 18, 16],
-      "clamp"
-    );
+
+    // If you want to animate the font size uncomment the below code
+    // const fontSize = interpolate(
+    //   scrollYSelected.value,
+    //   inputRange,
+    //   [16, 18, 24, 18, 16],
+    //   "clamp"
+    // );
     const color = interpolateColor(
       scrollYSelected.value,
       [index - 1, index, index + 1],
@@ -46,12 +48,13 @@ function TimeLabel({
     );
     return {
       opacity,
-      fontSize,
+      //   fontSize,
       color,
       textAlign: "center",
       height: ITEM_HEIGHT,
       lineHeight: ITEM_HEIGHT,
       fontWeight: "600",
+      fontSize: 20,
     };
   });
   return (
