@@ -15,10 +15,10 @@ export const TimeSelector = () => {
       }}
     >
       <CircularClock
-        hour={0}
-        minute={0}
+        hour={2}
+        minute={30}
         backgroundColor="#181C27"
-        lineColor="#fff"
+        lineColor="#555"
         size={150}
       />
       <VerticalScrollSelect

@@ -26,9 +26,15 @@ export const CircularClock: React.FC<CircularClockProps> = ({
 }) => {
   const center = size / 2;
   const radius = size / 2 - 16;
-  const circleStrokeWidth = size / 30;
-  const minuteArmLength = radius - 16 - circleStrokeWidth;
-  const hourArmLength = radius - 40 - circleStrokeWidth;
+  const circleStrokeWidth = 2;
+  const minuteArmLength = radius - 20;
+  const hourArmLength = radius - 30;
+  const minuteArmWidth = size / 80;
+  const hourArmWidth = size / 40;
+  const hourDashWidth = 2;
+  const minuteDashWidth = 1.5;
+  const minuteDashLength = 12;
+  const hourDashLength = 8;
 
   // Calculate angles
   const minuteAngle = useSharedValue((minute / 60) * 360);
@@ -63,7 +69,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
   // Dashes
   const dashes = Array.from({ length: 60 }).map((_, i) => {
     const angle = (i * 6 - 90) * (Math.PI / 180);
-    const dashLength = i % 5 === 0 ? 12 : 8;
+    const dashLength = i % 5 === 0 ? minuteDashLength : hourDashLength;
     const x1 = center + (radius - dashLength) * Math.cos(angle);
     const y1 = center + (radius - dashLength) * Math.sin(angle);
     const x2 = center + radius * Math.cos(angle);
@@ -76,7 +82,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
         x2={x2}
         y2={y2}
         stroke={i % 5 === 0 ? lineColor : lineColor}
-        strokeWidth={i % 5 === 0 ? 3 : 1.5}
+        strokeWidth={i % 5 === 0 ? hourDashWidth : minuteDashWidth}
         strokeLinecap="round"
       />
     );
@@ -107,7 +113,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
           y1={center}
           animatedProps={hourAnimatedProps}
           stroke={lineColor}
-          strokeWidth={6}
+          strokeWidth={hourArmWidth}
           strokeLinecap="round"
         />
         {/* Minute arm */}
@@ -116,7 +122,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
           y1={center}
           animatedProps={minuteAnimatedProps}
           stroke={lineColor}
-          strokeWidth={4}
+          strokeWidth={minuteArmWidth}
           strokeLinecap="round"
         />
         {/* Center dot */}
