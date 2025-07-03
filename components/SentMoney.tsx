@@ -56,7 +56,7 @@ export default function SentMoney() {
         {
           scale: shootUp.value
             ? withTiming(0.3, { duration: SHOOT_DURATION })
-            : 1,
+            : 1 * dragProgress.value,
         },
       ],
       opacity: shootUp.value ? withTiming(0, { duration: SHOOT_DURATION }) : 1,
@@ -99,6 +99,7 @@ export default function SentMoney() {
 
       // Update gradient size based on drag
       const newDragProgress = Math.max(0, e.translationY) / SWIPE_THRESHOLD;
+      console.log(newDragProgress);
       dragProgress.value = newDragProgress;
     })
     .onEnd(() => {
@@ -119,6 +120,7 @@ export default function SentMoney() {
       } else {
         dragY.value = withSpring(0);
         dragX.value = withSpring(0);
+        dragProgress.value = withSpring(0);
       }
     });
 
