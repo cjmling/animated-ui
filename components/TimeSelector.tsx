@@ -11,7 +11,8 @@ export const TimeSelector = () => {
         backgroundColor: "#1A1A1A",
         flexDirection: "row",
         borderRadius: 30,
-        padding: 35,
+        padding: 10,
+        width: "90%",
       }}
     >
       <CircularClock
@@ -20,7 +21,7 @@ export const TimeSelector = () => {
         backgroundColor="#212121"
         lineColor="#555"
         armColor="#fff"
-        size={150}
+        size={200}
         hideCircleBorder={true}
         hideMinuteDashes={true}
         dashSpacingFromBorder={10}
