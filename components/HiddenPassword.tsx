@@ -95,7 +95,7 @@ export const HiddenPassword = () => {
       <TouchableOpacity
         style={{ zIndex: 2, marginLeft: 16 }}
         onPress={handleToggle}
-        activeOpacity={0.8}
+        activeOpacity={1}
       >
         <View
           style={{
