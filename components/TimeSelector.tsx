@@ -19,7 +19,9 @@ export const TimeSelector = () => {
         minute={30}
         backgroundColor="#181C27"
         lineColor="#555"
+        armColor="#fff"
         size={150}
+        hideCircleBorder={true}
       />
       <VerticalScrollSelect
         selected={0}

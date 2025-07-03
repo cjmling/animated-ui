@@ -15,6 +15,8 @@ interface CircularClockProps {
   size?: number;
   backgroundColor?: string;
   lineColor?: string;
+  armColor?: string;
+  hideCircleBorder?: boolean;
 }
 
 export const CircularClock: React.FC<CircularClockProps> = ({
@@ -23,6 +25,8 @@ export const CircularClock: React.FC<CircularClockProps> = ({
   size = 240,
   backgroundColor = "#fff",
   lineColor = "#222",
+  armColor = "#fff",
+  hideCircleBorder = false,
 }) => {
   const center = size / 2;
   const radius = size / 2 - 16;
@@ -102,7 +106,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
           cx={center}
           cy={center}
           r={radius}
-          stroke={lineColor}
+          stroke={hideCircleBorder ? "transparent" : lineColor}
           strokeWidth={circleStrokeWidth}
           fill={backgroundColor}
         />
@@ -112,7 +116,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
           x1={center}
           y1={center}
           animatedProps={hourAnimatedProps}
-          stroke={lineColor}
+          stroke={armColor}
           strokeWidth={hourArmWidth}
           strokeLinecap="round"
         />
@@ -121,12 +125,12 @@ export const CircularClock: React.FC<CircularClockProps> = ({
           x1={center}
           y1={center}
           animatedProps={minuteAnimatedProps}
-          stroke={lineColor}
+          stroke={armColor}
           strokeWidth={minuteArmWidth}
           strokeLinecap="round"
         />
         {/* Center dot */}
-        <Circle cx={center} cy={center} r={8} fill={lineColor} />
+        <Circle cx={center} cy={center} r={8} fill={armColor} />
       </Svg>
     </View>
   );
