@@ -22,8 +22,6 @@ const SWIPE_THRESHOLD = 200;
 const AVATAR_TOP_POSITION = 80;
 const SHOOT_UP_TO_BY_DISTANCE = 200;
 const SHOOT_DURATION = 350;
-const GRADIENT_BASE_SIZE = 120;
-const GRADIENT_MAX_SIZE = 300;
 
 export default function SentMoney() {
   const colorScheme = useColorScheme() || "light";
@@ -32,9 +30,9 @@ export default function SentMoney() {
   // Shared values for gesture and animation
   const dragY = useSharedValue(0);
   const dragX = useSharedValue(0);
+  const dragProgress = useSharedValue(0);
   const shootUp = useSharedValue(false);
   const bumpScale = useSharedValue(1);
-  const gradientSize = useSharedValue(GRADIENT_BASE_SIZE);
 
   const [showDone, setShowDone] = useState(false);
 
@@ -81,14 +79,10 @@ export default function SentMoney() {
 
   // Gradient backdrop animated style
   const gradientStyle = useAnimatedStyle(() => {
-    const size = Math.max(GRADIENT_BASE_SIZE, gradientSize.value);
-    const scale = size / GRADIENT_BASE_SIZE;
-
     return {
       width: SCREEN_WIDTH,
-      height: SCREEN_WIDTH * 1.2,
+      height: SCREEN_WIDTH * dragProgress.value,
       borderRadius: SCREEN_WIDTH / 2,
-      transform: [{ scale: scale }],
       opacity: shootUp.value
         ? withTiming(0, { duration: SHOOT_DURATION })
         : 0.6,
@@ -104,11 +98,8 @@ export default function SentMoney() {
       dragX.value = e.translationX;
 
       // Update gradient size based on drag
-      const dragProgress = Math.max(0, e.translationY) / SWIPE_THRESHOLD;
-      const newSize =
-        GRADIENT_BASE_SIZE +
-        (GRADIENT_MAX_SIZE - GRADIENT_BASE_SIZE) * dragProgress;
-      gradientSize.value = newSize;
+      const newDragProgress = Math.max(0, e.translationY) / SWIPE_THRESHOLD;
+      dragProgress.value = newDragProgress;
     })
     .onEnd(() => {
       if (shootUp.value) return;
@@ -116,7 +107,7 @@ export default function SentMoney() {
         shootUp.value = true;
         dragY.value = withTiming(0, { duration: 200 });
         dragX.value = withTiming(0, { duration: 200 });
-        gradientSize.value = withTiming(GRADIENT_BASE_SIZE, { duration: 200 });
+
         // Trigger bump animation
         bumpScale.value = withDelay(
           SHOOT_DURATION / 1.5,
@@ -128,7 +119,6 @@ export default function SentMoney() {
       } else {
         dragY.value = withSpring(0);
         dragX.value = withSpring(0);
-        gradientSize.value = withSpring(GRADIENT_BASE_SIZE);
       }
     });
 
@@ -151,7 +141,6 @@ export default function SentMoney() {
         style={[
           {
             position: "absolute",
-            zIndex: 1,
           },
           gradientStyle,
         ]}
