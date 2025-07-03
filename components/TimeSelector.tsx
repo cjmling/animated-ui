@@ -22,6 +22,7 @@ export const TimeSelector = () => {
         armColor="#fff"
         size={150}
         hideCircleBorder={true}
+        hideMinuteDashes={true}
       />
       <VerticalScrollSelect
         selected={0}

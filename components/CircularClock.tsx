@@ -17,6 +17,7 @@ interface CircularClockProps {
   lineColor?: string;
   armColor?: string;
   hideCircleBorder?: boolean;
+  hideMinuteDashes?: boolean;
 }
 
 export const CircularClock: React.FC<CircularClockProps> = ({
@@ -27,6 +28,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
   lineColor = "#222",
   armColor = "#fff",
   hideCircleBorder = false,
+  hideMinuteDashes = false,
 }) => {
   const center = size / 2;
   const radius = size / 2 - 16;
@@ -85,7 +87,9 @@ export const CircularClock: React.FC<CircularClockProps> = ({
         y1={y1}
         x2={x2}
         y2={y2}
-        stroke={i % 5 === 0 ? lineColor : lineColor}
+        stroke={
+          i % 5 === 0 ? lineColor : hideMinuteDashes ? "transparent" : lineColor
+        }
         strokeWidth={i % 5 === 0 ? hourDashWidth : minuteDashWidth}
         strokeLinecap="round"
       />
