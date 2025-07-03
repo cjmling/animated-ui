@@ -6,6 +6,10 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Welcome to the Demo</Text>
       <View style={styles.menuContainer}>
+        <MenuItem
+          href="/vertical-scroll-select"
+          label="Vertical Scroll Select Demo"
+        />
         <MenuItem href="/sent-money" label="Sent Money Demo" />
         <MenuItem href="/hidden-password" label="Hidden Password Demo" />
         <MenuItem href="/circular-clock" label="Circular Clock Demo" />
