@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
@@ -6,6 +6,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
   SlideInDown,
+  SlideInUp,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -100,7 +101,6 @@ export default function SentMoney() {
 
       // Update gradient size based on drag
       const newDragProgress = Math.max(0, e.translationY) / SWIPE_THRESHOLD;
-      console.log(newDragProgress);
       dragProgress.value = newDragProgress;
     })
     .onEnd(() => {
@@ -262,6 +262,31 @@ export default function SentMoney() {
               DONE
             </Text>
           </TouchableOpacity>
+        </Animated.View>
+      )}
+
+      {showDone && (
+        <Animated.View
+          entering={SlideInUp.duration(SHOOT_DURATION).delay(
+            SHOOT_DURATION * 1.5
+          )}
+          style={{
+            position: "absolute",
+            top: 300,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Ionicons name="checkmark-circle-sharp" size={75} color="green" />
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "bold",
+              color: theme.text,
+            }}
+          >
+            SENT
+          </Text>
         </Animated.View>
       )}
     </View>
