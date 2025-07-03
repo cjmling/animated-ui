@@ -14,6 +14,7 @@ const MIN_SIZE = 20;
 const MAX_WIDTH = 450;
 const MAX_HEIGHT = BOX_HEIGHT + 10;
 const RIGHT_START_POSITION = 25;
+const BACKGROUND_COLOR = "#181C27";
 
 export const HiddenPassword = () => {
   const [expanded, setExpanded] = useState(false);
@@ -55,7 +56,7 @@ export const HiddenPassword = () => {
       style={{
         height: BOX_HEIGHT,
         borderRadius: BOX_RADIUS,
-        backgroundColor: "#181C27",
+        backgroundColor: BACKGROUND_COLOR,
         flexDirection: "row",
         alignItems: "center",
         paddingHorizontal: 20,
@@ -69,7 +70,7 @@ export const HiddenPassword = () => {
         <Ionicons
           name={expanded ? "lock-open" : "lock-closed"}
           size={28}
-          color={expanded ? "#000" : "#fff"}
+          color={expanded ? BACKGROUND_COLOR : "#fff"}
         />
       </View>
       <View
@@ -84,7 +85,7 @@ export const HiddenPassword = () => {
       >
         <Text
           style={{
-            color: expanded ? "#000" : "#fff",
+            color: expanded ? BACKGROUND_COLOR : "#fff",
             fontSize: 16,
             fontWeight: "bold",
           }}
@@ -110,7 +111,7 @@ export const HiddenPassword = () => {
           <Ionicons
             name={expanded ? "eye" : "eye-off"}
             size={28}
-            color={expanded ? "#000" : "#000"}
+            color={BACKGROUND_COLOR}
           />
         </View>
       </TouchableOpacity>
