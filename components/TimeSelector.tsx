@@ -3,6 +3,17 @@ import { View } from "react-native";
 import { CircularClock } from "./CircularClock";
 import { VerticalScrollSelect } from "./VerticalScrollSelect";
 
+function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
 export const TimeSelector = () => {
   const [selectedTime, setSelectedTime] = useState<{
     hour: number;
@@ -52,9 +63,9 @@ export const TimeSelector = () => {
       />
       <VerticalScrollSelect
         selected={0}
-        setSelected={(index) => {
+        setSelected={debounce((index: number) => {
           setSelectedTime(SELECT_LABELS[index].value);
-        }}
+        }, 100)}
         labels={SELECT_LABELS}
       />
     </View>
