@@ -20,10 +20,14 @@ function TimeLabel({
   item,
   index,
   scrollYSelected,
+  fontColor,
+  fadedFontColor,
 }: {
   item: { label: string; value: any };
   index: number;
   scrollYSelected: SharedValue<number>;
+  fontColor: string;
+  fadedFontColor: string;
 }) {
   const animatedStyle = useAnimatedStyle(() => {
     const inputRange = [index - 2, index - 1, index, index + 1, index + 2];
@@ -44,7 +48,7 @@ function TimeLabel({
     const color = interpolateColor(
       scrollYSelected.value,
       [index - 1, index, index + 1],
-      ["#888", "#fff", "#888"]
+      [fadedFontColor, fontColor, fadedFontColor]
     );
     return {
       opacity,
@@ -64,7 +68,6 @@ function TimeLabel({
           width: "100%",
           textAlign: "center",
         },
-        ,
         animatedStyle,
       ]}
       key={index}
@@ -78,10 +81,16 @@ export const VerticalScrollSelect = ({
   selected,
   setSelected,
   labels,
+  backgroundColor = "#181818",
+  fontColor = "#fff",
+  fadedFontColor = "#888",
 }: {
   selected: number;
   setSelected: (index: number) => void;
   labels: { label: string; value: any }[];
+  backgroundColor?: string;
+  fontColor?: string;
+  fadedFontColor?: string;
 }) => {
   const scrollYSelected = useSharedValue(selected);
 
@@ -104,7 +113,7 @@ export const VerticalScrollSelect = ({
       style={{
         height: CONTAINER_HEIGHT,
         width: 120,
-        backgroundColor: "#181818",
+        backgroundColor: backgroundColor,
         borderRadius: 18,
         justifyContent: "center",
         alignItems: "center",
@@ -118,6 +127,8 @@ export const VerticalScrollSelect = ({
             item={item}
             index={index}
             scrollYSelected={scrollYSelected}
+            fontColor={fontColor}
+            fadedFontColor={fadedFontColor}
           />
         )}
         keyExtractor={(item) => item.label.toString()}
