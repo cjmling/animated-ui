@@ -3,6 +3,13 @@ import { CircularClock } from "./CircularClock";
 import { VerticalScrollSelect } from "./VerticalScrollSelect";
 
 export const TimeSelector = () => {
+  const SELECT_LABELS = [
+    { label: "12:00", value: 0 },
+    { label: "1:00", value: 1 },
+    { label: "2:00", value: 2 },
+    { label: "3:00", value: 3 },
+    { label: "4:00", value: 4 },
+  ];
   return (
     <View
       style={{
@@ -29,7 +36,7 @@ export const TimeSelector = () => {
       <VerticalScrollSelect
         selected={0}
         setSelected={() => {}}
-        labels={["12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00"]}
+        labels={SELECT_LABELS}
       />
     </View>
   );

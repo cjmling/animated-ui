@@ -17,11 +17,11 @@ const VISIBLE_ITEMS = 5;
 const CONTAINER_HEIGHT = TOTAL_HEIGHT * VISIBLE_ITEMS;
 
 function TimeLabel({
-  label,
+  item,
   index,
   scrollYSelected,
 }: {
-  label: string;
+  item: { label: string; value: any };
   index: number;
   scrollYSelected: SharedValue<number>;
 }) {
@@ -59,7 +59,7 @@ function TimeLabel({
   });
   return (
     <Animated.Text style={[styles.label, animatedStyle]} key={index}>
-      {label}
+      {item.label}
     </Animated.Text>
   );
 }
@@ -71,7 +71,7 @@ export const VerticalScrollSelect = ({
 }: {
   selected: number;
   setSelected: (index: number) => void;
-  labels: string[];
+  labels: { label: string; value: any }[];
 }) => {
   const scrollYSelected = useSharedValue(selected);
 
@@ -95,12 +95,12 @@ export const VerticalScrollSelect = ({
         data={labels}
         renderItem={({ item, index }) => (
           <TimeLabel
-            label={item}
+            item={item}
             index={index}
             scrollYSelected={scrollYSelected}
           />
         )}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.label.toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingVertical: (CONTAINER_HEIGHT - TOTAL_HEIGHT) / 2,
