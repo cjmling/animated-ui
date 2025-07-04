@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
@@ -17,13 +17,17 @@ const VISIBLE_ITEMS = 5;
 const CONTAINER_HEIGHT = TOTAL_HEIGHT * VISIBLE_ITEMS;
 
 function TimeLabel({
-  label,
+  item,
   index,
   scrollYSelected,
+  fontColor,
+  fadedFontColor,
 }: {
-  label: string;
+  item: { label: string; value: any };
   index: number;
   scrollYSelected: SharedValue<number>;
+  fontColor: string;
+  fadedFontColor: string;
 }) {
   const animatedStyle = useAnimatedStyle(() => {
     const inputRange = [index - 2, index - 1, index, index + 1, index + 2];
@@ -44,7 +48,7 @@ function TimeLabel({
     const color = interpolateColor(
       scrollYSelected.value,
       [index - 1, index, index + 1],
-      ["#888", "#fff", "#888"]
+      [fadedFontColor, fontColor, fadedFontColor]
     );
     return {
       opacity,
@@ -58,8 +62,17 @@ function TimeLabel({
     };
   });
   return (
-    <Animated.Text style={[styles.label, animatedStyle]} key={index}>
-      {label}
+    <Animated.Text
+      style={[
+        {
+          width: "100%",
+          textAlign: "center",
+        },
+        animatedStyle,
+      ]}
+      key={index}
+    >
+      {item.label}
     </Animated.Text>
   );
 }
@@ -68,10 +81,16 @@ export const VerticalScrollSelect = ({
   selected,
   setSelected,
   labels,
+  backgroundColor = "#181818",
+  fontColor = "#fff",
+  fadedFontColor = "#888",
 }: {
   selected: number;
   setSelected: (index: number) => void;
-  labels: string[];
+  labels: { label: string; value: any }[];
+  backgroundColor?: string;
+  fontColor?: string;
+  fadedFontColor?: string;
 }) => {
   const scrollYSelected = useSharedValue(selected);
 
@@ -90,17 +109,29 @@ export const VerticalScrollSelect = ({
   });
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        height: CONTAINER_HEIGHT,
+        width: 120,
+        backgroundColor: backgroundColor,
+        borderRadius: 18,
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
       <Animated.FlatList
         data={labels}
         renderItem={({ item, index }) => (
           <TimeLabel
-            label={item}
+            item={item}
             index={index}
             scrollYSelected={scrollYSelected}
+            fontColor={fontColor}
+            fadedFontColor={fadedFontColor}
           />
         )}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.label.toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingVertical: (CONTAINER_HEIGHT - TOTAL_HEIGHT) / 2,
@@ -121,19 +152,3 @@ export const VerticalScrollSelect = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: CONTAINER_HEIGHT,
-    width: 120,
-    backgroundColor: "#181818",
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  label: {
-    width: "100%",
-    textAlign: "center",
-  },
-});

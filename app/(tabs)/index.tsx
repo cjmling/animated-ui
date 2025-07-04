@@ -6,6 +6,7 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Welcome to the Demo</Text>
       <View style={styles.menuContainer}>
+        <MenuItem href="/time-selector" label="Time Selector Demo" />
         <MenuItem
           href="/vertical-scroll-select"
           label="Vertical Scroll Select Demo"
