@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
@@ -58,7 +58,17 @@ function TimeLabel({
     };
   });
   return (
-    <Animated.Text style={[styles.label, animatedStyle]} key={index}>
+    <Animated.Text
+      style={[
+        {
+          width: "100%",
+          textAlign: "center",
+        },
+        ,
+        animatedStyle,
+      ]}
+      key={index}
+    >
       {item.label}
     </Animated.Text>
   );
@@ -90,7 +100,17 @@ export const VerticalScrollSelect = ({
   });
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        height: CONTAINER_HEIGHT,
+        width: 120,
+        backgroundColor: "#181818",
+        borderRadius: 18,
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
       <Animated.FlatList
         data={labels}
         renderItem={({ item, index }) => (
@@ -121,19 +141,3 @@ export const VerticalScrollSelect = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: CONTAINER_HEIGHT,
-    width: 120,
-    backgroundColor: "#181818",
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  label: {
-    width: "100%",
-    textAlign: "center",
-  },
-});
