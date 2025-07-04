@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { View } from "react-native";
 import Animated, {
   useAnimatedProps,
@@ -53,12 +53,38 @@ export const CircularClock: React.FC<CircularClockProps> = ({
     ((hour % 12) / 12) * 360 + (minute / 60) * 30
   );
 
+  // Track previous values
+  const prevMinuteRef = useRef(minute);
+  const prevHourRef = useRef(hour);
+
   useEffect(() => {
-    minuteAngle.value = withTiming((minute / 60) * 360, { duration: 500 });
-    hourAngle.value = withTiming(
-      ((hour % 12) / 12) * 360 + (minute / 60) * 30,
-      { duration: 500 }
-    );
+    // --- MINUTE ARM ---
+    const prevMinute = prevMinuteRef.current;
+    let newMinuteAngle = (minute / 60) * 360;
+    let prevMinuteAngle = (prevMinute / 60) * 360;
+    let minDiff = newMinuteAngle - prevMinuteAngle;
+    // Handle wrap-around (e.g., 59 -> 0 or 0 -> 59)
+    if (minDiff > 180) minDiff -= 360;
+    if (minDiff < -180) minDiff += 360;
+    const targetMinuteAngle = minuteAngle.value + minDiff;
+    minuteAngle.value = withTiming(targetMinuteAngle, { duration: 500 }, () => {
+      // After animation, snap to the correct angle (in case of wrap-around)
+      minuteAngle.value = newMinuteAngle;
+    });
+    prevMinuteRef.current = minute;
+
+    // --- HOUR ARM ---
+    const prevHour = prevHourRef.current;
+    let newHourAngle = ((hour % 12) / 12) * 360 + (minute / 60) * 30;
+    let prevHourAngle = ((prevHour % 12) / 12) * 360 + (prevMinute / 60) * 30;
+    let hourDiff = newHourAngle - prevHourAngle;
+    if (hourDiff > 180) hourDiff -= 360;
+    if (hourDiff < -180) hourDiff += 360;
+    const targetHourAngle = hourAngle.value + hourDiff;
+    hourAngle.value = withTiming(targetHourAngle, { duration: 500 }, () => {
+      hourAngle.value = newHourAngle;
+    });
+    prevHourRef.current = hour;
   }, [hour, minute]);
 
   const minuteAnimatedProps = useAnimatedProps(() => {
