@@ -53,7 +53,7 @@ export const CircularClock: React.FC<CircularClockProps> = ({
     ((hour % 12) / 12) * 360 + (minute / 60) * 30
   );
 
-  // Track previous values
+  // Track previous  so we can handle should it rotate clockwise or counterclockwise
   const prevMinuteRef = useRef(minute);
   const prevHourRef = useRef(hour);
 
