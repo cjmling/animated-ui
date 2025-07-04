@@ -5,14 +5,14 @@ import { Text, View } from "react-native";
 export default function VerticalScrollSelectScreen() {
   const [selected, setSelected] = useState(2);
   const LABELS = [
-    "6:00 pm",
-    "6:30 pm",
-    "7:00 pm",
-    "7:30 pm",
-    "8:00 pm",
-    "8:30 pm",
-    "9:00 pm",
-    "9:30 pm",
+    { label: "6:00 pm", value: 0 },
+    { label: "6:30 pm", value: 1 },
+    { label: "7:00 pm", value: 2 },
+    { label: "7:30 pm", value: 3 },
+    { label: "8:00 pm", value: 4 },
+    { label: "8:30 pm", value: 5 },
+    { label: "9:00 pm", value: 6 },
+    { label: "9:30 pm", value: 7 },
   ];
   return (
     <View
@@ -24,7 +24,7 @@ export default function VerticalScrollSelectScreen() {
       }}
     >
       <View style={{}}>
-        <Text style={{ color: "#000" }}>{LABELS[selected]}</Text>
+        <Text style={{ color: "#000" }}>{LABELS[selected].label}</Text>
       </View>
       <VerticalScrollSelect
         selected={selected}
