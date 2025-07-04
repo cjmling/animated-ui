@@ -67,6 +67,7 @@ export const TimeSelector = () => {
           setSelectedTime(SELECT_LABELS[index].value);
         }, 100)}
         labels={SELECT_LABELS}
+        backgroundColor="#1A1A1A"
       />
     </View>
   );
